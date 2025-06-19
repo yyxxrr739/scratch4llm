@@ -97,30 +97,18 @@
 
 .progress-container {
   display: flex;
+  justify-content: center;
   align-items: center;
-  gap: 1rem;
-}
-
-.progress-bar {
-  flex: 1;
-  height: 8px;
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 4px;
-  overflow: hidden;
-}
-
-.progress-fill {
-  height: 100%;
-  background: linear-gradient(90deg, #4CAF50, #45a049);
-  border-radius: 4px;
-  transition: width 0.1s ease;
+  padding: 1rem;
 }
 
 .progress-text {
-  font-size: 14px;
-  font-weight: 600;
+  font-size: 48px;
+  font-weight: 700;
   color: white;
-  min-width: 40px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  min-width: 120px;
+  text-align: center;
 }
 
 .status {

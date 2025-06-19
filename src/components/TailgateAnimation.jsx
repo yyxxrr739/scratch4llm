@@ -7,7 +7,7 @@ const TailgateAnimation = () => {
   const bodyRef = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
-  const [animationProgress, setAnimationProgress] = useState(0);
+  const [rotationAngle, setRotationAngle] = useState(0);
   const tl = useRef(null);
 
   useEffect(() => {
@@ -17,8 +17,12 @@ const TailgateAnimation = () => {
     tl.current = gsap.timeline({ 
       paused: true,
       onUpdate: () => {
-        if (tl.current) {
-          setAnimationProgress(tl.current.progress() * 100);
+        if (tl.current && tailgateRef.current) {
+          // 获取尾门元素的实际旋转角度
+          const transform = window.getComputedStyle(tailgateRef.current).transform;
+          const matrix = new DOMMatrix(transform);
+          const angle = Math.atan2(matrix.b, matrix.a) * (180 / Math.PI);
+          setRotationAngle(Math.abs(angle));
         }
       },
       onComplete: () => {
@@ -31,7 +35,7 @@ const TailgateAnimation = () => {
 
     // 设置尾门动画
     tl.current.to(tailgateRef.current, {
-      rotation: -70,
+      rotation: -95,
       transformOrigin: "left top",
       duration: 2,
       ease: "power2.inOut"
@@ -110,13 +114,7 @@ const TailgateAnimation = () => {
         </div>
 
         <div className="progress-container">
-          <div className="progress-bar">
-            <div 
-              className="progress-fill"
-              style={{ width: `${animationProgress}%` }}
-            ></div>
-          </div>
-          <span className="progress-text">{Math.round(animationProgress)}%</span>
+          <span className="progress-text">{Math.round(rotationAngle)}°</span>
         </div>
 
         <div className="status">
