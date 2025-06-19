@@ -1,164 +1,115 @@
 .animation-manager {
   width: 100%;
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 2rem;
+  height: 100vh;
+  margin: 0;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
 }
 
 .header {
   text-align: center;
-  margin-bottom: 3rem;
+  margin-bottom: 1rem;
+  flex-shrink: 0;
 }
 
 .title {
-  font-size: 2.5rem;
+  font-size: 2rem;
   font-weight: 700;
   color: white;
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 1rem;
+  gap: 0.75rem;
 }
 
 .title-icon {
-  font-size: 3rem;
+  font-size: 2.5rem;
 }
 
 .subtitle {
-  font-size: 1.2rem;
+  font-size: 1rem;
   color: rgba(255, 255, 255, 0.8);
-  max-width: 600px;
+  max-width: 500px;
   margin: 0 auto;
 }
 
 .main-content {
   display: grid;
-  grid-template-columns: 300px 1fr;
-  gap: 2rem;
-  align-items: start;
+  grid-template-columns: 400px 1fr;
+  gap: 1.5rem;
+  flex: 1;
+  min-height: 0;
 }
 
-.sidebar {
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-}
-
-.component-list {
+.controls-panel {
   background: rgba(255, 255, 255, 0.1);
   border-radius: 16px;
   padding: 1.5rem;
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-.sidebar-title {
-  color: white;
-  font-size: 1.2rem;
-  font-weight: 600;
-  margin-bottom: 1rem;
-}
-
-.component-item {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  width: 100%;
-  padding: 1rem;
-  background: transparent;
-  border: none;
-  border-radius: 12px;
-  color: white;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  text-align: left;
-  margin-bottom: 0.5rem;
-}
-
-.component-item:hover {
-  background: rgba(255, 255, 255, 0.1);
-}
-
-.component-item.active {
-  background: rgba(255, 255, 255, 0.2);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-}
-
-.component-icon {
-  font-size: 2rem;
-  min-width: 40px;
-}
-
-.component-info {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-}
-
-.component-name {
-  font-weight: 600;
-  font-size: 1rem;
-}
-
-.component-desc {
-  font-size: 0.875rem;
-  opacity: 0.8;
-  line-height: 1.3;
-}
-
-.info-panel {
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 16px;
-  padding: 1.5rem;
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-.info-toggle {
-  width: 100%;
-  padding: 0.75rem;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 8px;
-  color: white;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.info-toggle:hover {
-  background: rgba(255, 255, 255, 0.2);
-}
-
-.info-content {
-  margin-top: 1rem;
-  padding-top: 1rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-.info-content h4 {
-  color: white;
-  font-size: 1rem;
-  font-weight: 600;
-  margin-bottom: 0.5rem;
-}
-
-.info-content ul {
-  list-style: none;
-  padding: 0;
-  margin-bottom: 1.5rem;
-}
-
-.info-content li {
-  color: rgba(255, 255, 255, 0.8);
-  font-size: 0.875rem;
-  margin-bottom: 0.25rem;
-  padding-left: 0;
+  overflow-y: auto;
+  max-height: 100%;
 }
 
 .animation-area {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 600px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.animation-display {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.car-body {
+  position: absolute;
+  z-index: 1;
+  left: 50px;
+  top: 60px;
+}
+
+.body-image {
+  width: 900px;
+  height: auto;
+}
+
+.tailgate {
+  position: absolute;
+  z-index: 2;
+  transform-origin: bottom center;
+  left: 800px;
+  top: 221px;
+}
+
+.tailgate-image {
+  width: 108px;
+  height: auto;
+}
+
+/* 删除不需要的样式 */
+.component-list,
+.sidebar,
+.info-panel,
+.sidebar-title,
+.component-item,
+.component-icon,
+.component-info,
+.component-name,
+.component-desc,
+.info-toggle,
+.info-content {
+  display: none;
 } 
