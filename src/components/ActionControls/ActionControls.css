@@ -1,25 +1,28 @@
 /* 控制组件基础样式 */
 .action-controls {
   padding: 20px;
-  background: #f8f9fa;
+  background: rgba(255, 255, 255, 0.25);
   border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
 }
 
 /* 控制区域 */
 .control-section {
   margin-bottom: 24px;
   padding: 16px;
-  background: white;
+  background: rgba(255, 255, 255, 0.3);
   border-radius: 8px;
-  border: 1px solid #e9ecef;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(10px);
 }
 
 .section-title {
   margin: 0 0 16px 0;
   font-size: 16px;
   font-weight: 600;
-  color: #495057;
+  color: #2c3e50;
   display: flex;
   align-items: center;
   gap: 8px;
@@ -29,7 +32,7 @@
   content: '';
   width: 4px;
   height: 16px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
   border-radius: 2px;
 }
 
@@ -43,7 +46,7 @@
   margin-bottom: 8px;
   font-size: 14px;
   font-weight: 500;
-  color: #495057;
+  color: #2c3e50;
 }
 
 /* 按钮样式 */
@@ -66,6 +69,7 @@
   transition: all 0.2s ease;
   min-width: 100px;
   justify-content: center;
+  backdrop-filter: blur(10px);
 }
 
 .control-btn:disabled {
@@ -87,8 +91,9 @@
 
 /* 按钮类型 */
 .control-btn.primary {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
   color: white;
+  border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 .control-btn.primary:hover:not(:disabled) {
@@ -97,52 +102,57 @@
 }
 
 .control-btn.secondary {
-  background: #6c757d;
+  background: rgba(108, 117, 125, 0.8);
   color: white;
+  border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 .control-btn.secondary:hover:not(:disabled) {
-  background: #5a6268;
+  background: rgba(90, 98, 104, 0.9);
   transform: translateY(-1px);
 }
 
 .control-btn.success {
-  background: #28a745;
+  background: rgba(40, 167, 69, 0.8);
   color: white;
+  border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 .control-btn.success:hover:not(:disabled) {
-  background: #218838;
+  background: rgba(33, 136, 56, 0.9);
   transform: translateY(-1px);
 }
 
 .control-btn.warning {
-  background: #ffc107;
-  color: #212529;
+  background: rgba(255, 193, 7, 0.8);
+  color: #2c3e50;
+  border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 .control-btn.warning:hover:not(:disabled) {
-  background: #e0a800;
+  background: rgba(224, 168, 0, 0.9);
   transform: translateY(-1px);
 }
 
 .control-btn.danger {
-  background: #dc3545;
+  background: rgba(220, 53, 69, 0.8);
   color: white;
+  border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 .control-btn.danger:hover:not(:disabled) {
-  background: #c82333;
+  background: rgba(200, 35, 51, 0.9);
   transform: translateY(-1px);
 }
 
 .control-btn.reset {
-  background: #6f42c1;
+  background: rgba(111, 66, 193, 0.8);
   color: white;
+  border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 .control-btn.reset:hover:not(:disabled) {
-  background: #5a32a3;
+  background: rgba(90, 50, 163, 0.9);
   transform: translateY(-1px);
 }
 
@@ -162,7 +172,7 @@
   flex: 1;
   height: 6px;
   border-radius: 3px;
-  background: #e9ecef;
+  background: rgba(255, 255, 255, 0.3);
   outline: none;
   -webkit-appearance: none;
 }
@@ -173,7 +183,7 @@
   width: 18px;
   height: 18px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
   cursor: pointer;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
@@ -182,7 +192,7 @@
   width: 18px;
   height: 18px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
   cursor: pointer;
   border: none;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
@@ -190,7 +200,7 @@
 
 .speed-value {
   font-weight: 600;
-  color: #495057;
+  color: #2c3e50;
   min-width: 40px;
   text-align: center;
 }
@@ -202,17 +212,19 @@
 
 .speed-preset-btn {
   padding: 6px 12px;
-  border: 1px solid #dee2e6;
-  background: white;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.3);
   border-radius: 4px;
   font-size: 12px;
   cursor: pointer;
   transition: all 0.2s ease;
+  color: #2c3e50;
+  backdrop-filter: blur(10px);
 }
 
 .speed-preset-btn:hover {
-  background: #f8f9fa;
-  border-color: #adb5bd;
+  background: rgba(255, 255, 255, 0.4);
+  border-color: rgba(255, 255, 255, 0.6);
 }
 
 /* 角度控制 */
@@ -230,10 +242,13 @@
 
 .angle-input {
   padding: 8px 12px;
-  border: 1px solid #dee2e6;
+  border: 1px solid rgba(255, 255, 255, 0.4);
   border-radius: 4px;
   font-size: 14px;
   width: 100px;
+  background: rgba(255, 255, 255, 0.3);
+  color: #2c3e50;
+  backdrop-filter: blur(10px);
 }
 
 .angle-input.small {
@@ -244,6 +259,7 @@
   outline: none;
   border-color: #667eea;
   box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.2);
+  background: rgba(255, 255, 255, 0.4);
 }
 
 .angle-presets {
@@ -253,17 +269,19 @@
 
 .angle-preset-btn {
   padding: 6px 12px;
-  border: 1px solid #dee2e6;
-  background: white;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.3);
   border-radius: 4px;
   font-size: 12px;
   cursor: pointer;
   transition: all 0.2s ease;
+  color: #2c3e50;
+  backdrop-filter: blur(10px);
 }
 
 .angle-preset-btn:hover {
-  background: #f8f9fa;
-  border-color: #adb5bd;
+  background: rgba(255, 255, 255, 0.4);
+  border-color: rgba(255, 255, 255, 0.6);
 }
 
 /* 相对移动控制 */
@@ -281,7 +299,7 @@
 
 .unit {
   font-size: 14px;
-  color: #6c757d;
+  color: #34495e;
 }
 
 .move-buttons {
@@ -300,9 +318,10 @@
 .status-section {
   margin-top: 20px;
   padding: 16px;
-  background: #f8f9fa;
+  background: rgba(255, 255, 255, 0.2);
   border-radius: 8px;
-  border: 1px solid #e9ecef;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(10px);
 }
 
 .status-display {
@@ -316,7 +335,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 8px 0;
-  border-bottom: 1px solid #e9ecef;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .status-item:last-child {
@@ -325,13 +344,13 @@
 
 .status-label {
   font-size: 14px;
-  color: #6c757d;
+  color: #34495e;
   font-weight: 500;
 }
 
 .status-value {
   font-size: 14px;
-  color: #495057;
+  color: #2c3e50;
   font-weight: 600;
 }
 
@@ -350,34 +369,34 @@
 }
 
 .status-indicator.open .status-dot {
-  background: #28a745;
+  background: #27ae60;
 }
 
 .status-indicator.closed .status-dot {
-  background: #dc3545;
+  background: #e74c3c;
 }
 
 .status-indicator.animating .status-dot {
-  background: #ffc107;
+  background: #f39c12;
   animation: pulse 1s infinite;
 }
 
 .status-indicator.idle .status-dot {
-  background: #6c757d;
+  background: #95a5a6;
 }
 
 .status-indicator.emergency .status-dot {
-  background: #dc3545;
+  background: #e74c3c;
   animation: blink 0.5s infinite;
 }
 
 .status-indicator.executing .status-dot {
-  background: #007bff;
+  background: #3498db;
   animation: pulse 1s infinite;
 }
 
 .status-indicator.paused .status-dot {
-  background: #ffc107;
+  background: #f39c12;
 }
 
 /* 进度条 */
@@ -391,21 +410,21 @@
 .progress-bar {
   flex: 1;
   height: 8px;
-  background: #e9ecef;
+  background: rgba(255, 255, 255, 0.3);
   border-radius: 4px;
   overflow: hidden;
 }
 
 .progress-fill {
   height: 100%;
-  background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(90deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
   transition: width 0.3s ease;
 }
 
 .progress-text {
   font-size: 14px;
   font-weight: 600;
-  color: #495057;
+  color: #2c3e50;
   min-width: 40px;
   text-align: center;
 }
@@ -419,23 +438,25 @@
 
 .category-btn {
   padding: 8px 16px;
-  border: 1px solid #dee2e6;
-  background: white;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.3);
   border-radius: 6px;
   font-size: 14px;
   cursor: pointer;
   transition: all 0.2s ease;
+  color: #2c3e50;
+  backdrop-filter: blur(10px);
 }
 
 .category-btn.active {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
   color: white;
-  border-color: #667eea;
+  border-color: rgba(255, 255, 255, 0.6);
 }
 
 .category-btn:hover:not(.active) {
-  background: #f8f9fa;
-  border-color: #adb5bd;
+  background: rgba(255, 255, 255, 0.4);
+  border-color: rgba(255, 255, 255, 0.6);
 }
 
 .scenario-list {
@@ -448,21 +469,23 @@
 
 .scenario-item {
   padding: 12px;
-  border: 1px solid #dee2e6;
+  border: 1px solid rgba(255, 255, 255, 0.4);
   border-radius: 6px;
-  background: white;
+  background: rgba(255, 255, 255, 0.3);
   cursor: pointer;
   transition: all 0.2s ease;
+  backdrop-filter: blur(10px);
 }
 
 .scenario-item:hover {
-  border-color: #adb5bd;
+  border-color: rgba(255, 255, 255, 0.6);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.4);
 }
 
 .scenario-item.selected {
   border-color: #667eea;
-  background: #f8f9ff;
+  background: rgba(255, 255, 255, 0.5);
   box-shadow: 0 2px 8px rgba(102, 126, 234, 0.2);
 }
 
@@ -475,28 +498,29 @@
 
 .scenario-name {
   font-weight: 600;
-  color: #495057;
+  color: #2c3e50;
 }
 
 .scenario-action-count {
   font-size: 12px;
-  color: #6c757d;
-  background: #e9ecef;
+  color: #34495e;
+  background: rgba(255, 255, 255, 0.4);
   padding: 2px 6px;
   border-radius: 10px;
 }
 
 .scenario-description {
   font-size: 13px;
-  color: #6c757d;
+  color: #34495e;
   line-height: 1.4;
 }
 
 .scenario-details {
-  background: #f8f9fa;
+  background: rgba(255, 255, 255, 0.2);
   padding: 16px;
   border-radius: 6px;
-  border: 1px solid #e9ecef;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(10px);
 }
 
 .detail-item {
@@ -508,11 +532,11 @@
 
 .detail-label {
   font-weight: 500;
-  color: #495057;
+  color: #2c3e50;
 }
 
 .detail-value {
-  color: #6c757d;
+  color: #34495e;
 }
 
 .action-sequence {
@@ -523,10 +547,11 @@
   margin-top: 8px;
   max-height: 200px;
   overflow-y: auto;
-  background: white;
-  border: 1px solid #e9ecef;
+  background: rgba(255, 255, 255, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.4);
   border-radius: 4px;
   padding: 8px;
+  backdrop-filter: blur(10px);
 }
 
 .sequence-item {
@@ -537,13 +562,13 @@
 }
 
 .sequence-index {
-  color: #6c757d;
+  color: #34495e;
   font-weight: 500;
   min-width: 20px;
 }
 
 .sequence-action {
-  color: #495057;
+  color: #2c3e50;
   font-family: 'Courier New', monospace;
 }
 
@@ -554,10 +579,11 @@
 }
 
 .execution-status {
-  background: white;
+  background: rgba(255, 255, 255, 0.3);
   padding: 16px;
   border-radius: 6px;
-  border: 1px solid #e9ecef;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(10px);
 }
 
 /* 动画 */
@@ -604,7 +630,7 @@
   }
   
   .category-selector {
-    flex-wrap: wrap;
+    flex-direction: column;
   }
   
   .scenario-header {
