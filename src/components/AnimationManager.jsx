@@ -1,17 +1,20 @@
 import { useState, useEffect } from "react";
 import TailgateAnimation from "./animations/TailgateAnimation";
 import WheelControls from "./ActionControls/WheelControls";
+import useWheelKeyboardControl from "../hooks/useWheelKeyboardControl";
 import "./AnimationManager.css";
 
 const AnimationManager = () => {
   const ActiveComponent = TailgateAnimation;
-  const [wheelSpeed, setWheelSpeed] = useState(1);
-
-  // 处理车轮速度变化
-  const handleWheelSpeedChange = (newSpeed) => {
-    setWheelSpeed(newSpeed);
-    updateWheelAnimation(newSpeed);
-  };
+  
+  // 使用新的键盘控制hook
+  const {
+    currentSpeedKmh,
+    currentAngularVelocity,
+    isAccelerating,
+    isDecelerating,
+    getAnimationSpeed
+  } = useWheelKeyboardControl();
 
   // 更新车轮动画速度
   const updateWheelAnimation = (speed) => {
@@ -29,10 +32,11 @@ const AnimationManager = () => {
     });
   };
 
-  // 初始化车轮动画
+  // 监听速度变化，更新动画
   useEffect(() => {
-    updateWheelAnimation(wheelSpeed);
-  }, []);
+    const animationSpeed = getAnimationSpeed();
+    updateWheelAnimation(animationSpeed);
+  }, [currentSpeedKmh, getAnimationSpeed]);
 
   return (
     <div className="animation-manager">
@@ -49,8 +53,7 @@ const AnimationManager = () => {
       <div className="main-content">
         <div className="controls-panel">
           <WheelControls 
-            wheelSpeed={wheelSpeed}
-            onWheelSpeedChange={handleWheelSpeedChange}
+            currentSpeedKmh={currentSpeedKmh}
           />
           <ActiveComponent />
         </div>

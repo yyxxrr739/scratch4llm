@@ -792,4 +792,59 @@
     width: 18px;
     height: 18px;
   }
+}
+
+/* 删除滑块相关样式，添加键盘控制样式 */
+.keyboard-controls {
+  margin-bottom: 16px;
+}
+
+.control-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.control-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: #2c3e50;
+}
+
+.key-instructions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.key-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(10px);
+}
+
+.key-icon {
+  font-size: 16px;
+  width: 24px;
+  text-align: center;
+}
+
+.key-text {
+  font-size: 13px;
+  color: #2c3e50;
+  font-weight: 500;
+}
+
+/* 删除原有的滑块样式 */
+.speed-control,
+.speed-slider,
+.slider-container,
+.slider-labels {
+  display: none;
 } 
