@@ -847,4 +847,47 @@
 .slider-container,
 .slider-labels {
   display: none;
+}
+
+/* 重置控制 */
+.reset-control {
+  margin-top: 16px;
+  text-align: center;
+}
+
+.reset-buttons {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
+.reset-btn {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  font-size: 12px;
+}
+
+.stop-btn {
+  background: linear-gradient(135deg, #ff6b6b 0%, #feca57 100%);
+  color: white;
+}
+
+.full-reset-btn {
+  background: linear-gradient(135deg, #48dbfb 0%, #0abde3 100%);
+  color: white;
+}
+
+.reset-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.reset-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 } 

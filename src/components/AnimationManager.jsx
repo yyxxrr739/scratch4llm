@@ -1,42 +1,21 @@
 import { useState, useEffect } from "react";
 import TailgateAnimation from "./animations/TailgateAnimation";
 import WheelControls from "./ActionControls/WheelControls";
-import useWheelKeyboardControl from "../hooks/useWheelKeyboardControl";
+import useWheelPhysicsEngine from "../hooks/useWheelPhysicsEngine";
 import "./AnimationManager.css";
 
 const AnimationManager = () => {
   const ActiveComponent = TailgateAnimation;
   
-  // 使用新的键盘控制hook
+  // 使用新的物理引擎hook
   const {
     currentSpeedKmh,
-    currentAngularVelocity,
     isAccelerating,
     isDecelerating,
-    getAnimationSpeed
-  } = useWheelKeyboardControl();
-
-  // 更新车轮动画速度
-  const updateWheelAnimation = (speed) => {
-    const tires = document.querySelectorAll('.tire-image');
-    tires.forEach(tire => {
-      if (speed <= 0) {
-        // 当速度为0时，停止动画
-        tire.style.animationPlayState = 'paused';
-      } else {
-        // 当速度大于0时，恢复动画并设置速度
-        tire.style.animationPlayState = 'running';
-        const duration = 2 / speed;
-        tire.style.animationDuration = `${duration}s`;
-      }
-    });
-  };
-
-  // 监听速度变化，更新动画
-  useEffect(() => {
-    const animationSpeed = getAnimationSpeed();
-    updateWheelAnimation(animationSpeed);
-  }, [currentSpeedKmh, getAnimationSpeed]);
+    getCurrentAngularVelocity,
+    getCurrentRotation,
+    resetPhysics
+  } = useWheelPhysicsEngine();
 
   return (
     <div className="animation-manager">
@@ -54,6 +33,9 @@ const AnimationManager = () => {
         <div className="controls-panel">
           <WheelControls 
             currentSpeedKmh={currentSpeedKmh}
+            currentAngularVelocity={getCurrentAngularVelocity()}
+            currentRotation={getCurrentRotation()}
+            resetPhysics={resetPhysics}
           />
           <ActiveComponent />
         </div>

@@ -8,28 +8,24 @@ const useWheelKeyboardControl = () => {
   
   const lastUpdateTime = useRef(Date.now());
   
-  // 角加速度配置 (rad/s²)
-  const ACCELERATION_RATE = 5; // 按住上键时的加速度
-  const DECELERATION_RATE = 10; // 按住下键时的减速度
-  const NATURAL_DECELERATION_RATE = 2; // 松开按键时的自然减速度
+  // 车辆物理参数配置
+  const MAX_SPEED_KMH = 30; // 最高速度30km/h
+  const WHEEL_RADIUS = 0.3; // 米
   
-  // 最大角速度限制 (对应30km/h)
-  // 假设车轮半径为0.3米，30km/h = 8.33m/s
-  // 角速度 = 线速度 / 半径 = 8.33 / 0.3 ≈ 27.8 rad/s
-  const MAX_ANGULAR_VELOCITY = 27.8; // rad/s
+  // 新的加速减速配置
+  const ACCELERATION_RATE = 3; // km/h/s - 每秒加速3km/h
+  const DECELERATION_RATE = 3; // km/h/s - 每秒减速3km/h
   
   // 将角速度转换为km/h用于显示
   const angularVelocityToKmh = useCallback((angularVelocity) => {
-    const wheelRadius = 0.3; // 米
-    const linearVelocity = angularVelocity * wheelRadius; // m/s
+    const linearVelocity = angularVelocity * WHEEL_RADIUS; // m/s
     return linearVelocity * 3.6; // 转换为km/h
   }, []);
   
   // 将km/h转换为角速度
   const kmhToAngularVelocity = useCallback((kmh) => {
-    const wheelRadius = 0.3; // 米
     const linearVelocity = kmh / 3.6; // m/s
-    return linearVelocity / wheelRadius; // rad/s
+    return linearVelocity / WHEEL_RADIUS; // rad/s
   }, []);
 
   // 处理键盘按下事件
@@ -83,32 +79,24 @@ const useWheelKeyboardControl = () => {
     
     const updateAngularVelocity = () => {
       const now = Date.now();
-      const deltaTime = (now - lastUpdateTime.current) / 1000; // 转换为秒
+      const deltaTime = Math.min((now - lastUpdateTime.current) / 1000, 0.1); // 转换为秒，限制最大时间步长
       lastUpdateTime.current = now;
       
       let newAngularVelocity = currentAngularVelocity;
+      const currentSpeedKmh = angularVelocityToKmh(currentAngularVelocity);
       
       if (isAccelerating) {
-        // 加速：按照5rad/s²的加速度加速
-        newAngularVelocity = Math.min(
-          currentAngularVelocity + ACCELERATION_RATE * deltaTime, 
-          MAX_ANGULAR_VELOCITY
-        );
+        // 按住上键：每秒加速3km/h
+        const speedIncrease = ACCELERATION_RATE * deltaTime; // km/h
+        const newSpeedKmh = Math.min(currentSpeedKmh + speedIncrease, MAX_SPEED_KMH);
+        newAngularVelocity = kmhToAngularVelocity(newSpeedKmh);
       } else if (isDecelerating) {
-        // 减速：按照10rad/s²的加速度减速
-        newAngularVelocity = Math.max(
-          currentAngularVelocity - DECELERATION_RATE * deltaTime, 
-          0
-        );
-      } else {
-        // 自然减速：按照2rad/s²的加速度减速
-        if (currentAngularVelocity > 0) {
-          newAngularVelocity = Math.max(
-            currentAngularVelocity - NATURAL_DECELERATION_RATE * deltaTime, 
-            0
-          );
-        }
+        // 按住下键：每秒减速3km/h
+        const speedDecrease = DECELERATION_RATE * deltaTime; // km/h
+        const newSpeedKmh = Math.max(currentSpeedKmh - speedDecrease, 0);
+        newAngularVelocity = kmhToAngularVelocity(newSpeedKmh);
       }
+      // 松开按键时：维持当前旋转速度，不做任何变化
       
       // 确保角速度不会变为负数（防止反转）
       newAngularVelocity = Math.max(newAngularVelocity, 0);
@@ -129,7 +117,7 @@ const useWheelKeyboardControl = () => {
         cancelAnimationFrame(animationId);
       }
     };
-  }, [currentAngularVelocity, isAccelerating, isDecelerating, angularVelocityToKmh]);
+  }, [currentAngularVelocity, isAccelerating, isDecelerating, angularVelocityToKmh, kmhToAngularVelocity]);
 
   // 计算动画速度倍数（用于CSS动画）
   const getAnimationSpeed = useCallback(() => {
@@ -139,7 +127,10 @@ const useWheelKeyboardControl = () => {
     // 假设最大角速度27.8 rad/s对应2秒一圈的动画
     // 基础动画：2秒一圈 = 0.5圈/秒 = π rad/s
     // 所以动画速度倍数 = 当前角速度 / π
-    return currentAngularVelocity / Math.PI;
+    const speedMultiplier = currentAngularVelocity / Math.PI;
+    
+    // 确保速度倍数不为负数，防止方向问题
+    return Math.max(0, speedMultiplier);
   }, [currentAngularVelocity]);
 
   return {

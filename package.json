@@ -9,9 +9,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "gsap": "^3.12.2",
+    "matter-js": "^0.20.0",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "gsap": "^3.12.2"
+    "react-dom": "^18.2.0"
   },
   "devDependencies": {
     "@types/react": "^18.2.43",
@@ -19,4 +20,4 @@
     "@vitejs/plugin-react": "^4.2.1",
     "vite": "^5.0.8"
   }
-} 
+}
