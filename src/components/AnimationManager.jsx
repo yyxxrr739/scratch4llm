@@ -39,6 +39,22 @@ const AnimationManager = () => {
                 className="tailgate-image"
               />
             </div>
+
+            <div className="tire tire-1">
+              <img 
+                src="/static/images/tire.png" 
+                alt="轮胎" 
+                className="tire-image"
+              />
+            </div>
+
+            <div className="tire tire-2">
+              <img 
+                src="/static/images/tire.png" 
+                alt="轮胎" 
+                className="tire-image"
+              />
+            </div>
           </div>
         </div>
       </div>

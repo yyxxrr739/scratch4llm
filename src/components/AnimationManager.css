@@ -104,6 +104,40 @@
   height: auto;
 }
 
+.tire {
+  position: absolute;
+  z-index: 3;
+  width: 165px;
+  height: 165px;
+}
+
+.tire-1 {
+  /* You can adjust this */
+  left: 175px; 
+  top: 358px;
+}
+
+.tire-2 {
+  /* You can adjust this */
+  left: 660px; 
+  top: 358px;
+}
+
+.tire-image {
+  width: 100%;
+  height: 100%;
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(-360deg);
+  }
+}
+
 /* 删除不需要的样式 */
 .component-list,
 .sidebar,
