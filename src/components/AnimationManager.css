@@ -127,6 +127,7 @@
   width: 100%;
   height: 100%;
   animation: spin 2s linear infinite;
+  /* 动画持续时间将由JavaScript动态设置 */
 }
 
 @keyframes spin {

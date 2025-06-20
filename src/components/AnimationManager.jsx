@@ -1,9 +1,38 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import TailgateAnimation from "./animations/TailgateAnimation";
+import WheelControls from "./ActionControls/WheelControls";
 import "./AnimationManager.css";
 
 const AnimationManager = () => {
   const ActiveComponent = TailgateAnimation;
+  const [wheelSpeed, setWheelSpeed] = useState(1);
+
+  // 处理车轮速度变化
+  const handleWheelSpeedChange = (newSpeed) => {
+    setWheelSpeed(newSpeed);
+    updateWheelAnimation(newSpeed);
+  };
+
+  // 更新车轮动画速度
+  const updateWheelAnimation = (speed) => {
+    const tires = document.querySelectorAll('.tire-image');
+    tires.forEach(tire => {
+      if (speed <= 0) {
+        // 当速度为0时，停止动画
+        tire.style.animationPlayState = 'paused';
+      } else {
+        // 当速度大于0时，恢复动画并设置速度
+        tire.style.animationPlayState = 'running';
+        const duration = 2 / speed;
+        tire.style.animationDuration = `${duration}s`;
+      }
+    });
+  };
+
+  // 初始化车轮动画
+  useEffect(() => {
+    updateWheelAnimation(wheelSpeed);
+  }, []);
 
   return (
     <div className="animation-manager">
@@ -19,6 +48,10 @@ const AnimationManager = () => {
 
       <div className="main-content">
         <div className="controls-panel">
+          <WheelControls 
+            wheelSpeed={wheelSpeed}
+            onWheelSpeedChange={handleWheelSpeedChange}
+          />
           <ActiveComponent />
         </div>
         
