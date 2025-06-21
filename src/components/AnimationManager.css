@@ -126,24 +126,12 @@
 .tire-image {
   width: 100%;
   height: 100%;
-  /* 移除CSS动画，由物理引擎控制 */
-  /* animation: spin 2s linear infinite; */
   transform-origin: center center;
   /* 添加平滑过渡效果，但不要太慢以免影响响应性 */
   transition: transform 0.05s linear;
   /* 确保车轮图片正确显示 */
   object-fit: contain;
 }
-
-/* 移除原来的spin动画，因为现在由物理引擎控制 */
-/* @keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(-360deg);
-  }
-} */
 
 /* 删除不需要的样式 */
 .component-list,

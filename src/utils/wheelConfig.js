@@ -37,20 +37,6 @@ export const unitConverters = {
   kmhPerSecondToRadPerSecondSquared: (kmhPerSecond) => {
     const linearAcceleration = kmhPerSecond / 3.6; // m/s²
     return linearAcceleration / WHEEL_CONFIG.WHEEL_RADIUS; // rad/s²
-  },
-  
-  // 计算动画速度倍数（用于CSS动画）
-  getAnimationSpeed: (angularVelocity) => {
-    if (angularVelocity <= 0) return 0;
-    
-    // 将角速度转换为动画速度倍数
-    // 假设最大角速度27.8 rad/s对应2秒一圈的动画
-    // 基础动画：2秒一圈 = 0.5圈/秒 = π rad/s
-    // 所以动画速度倍数 = 当前角速度 / π
-    const speedMultiplier = angularVelocity / Math.PI;
-    
-    // 确保速度倍数不为负数，防止方向问题
-    return Math.max(0, speedMultiplier);
   }
 };
 
