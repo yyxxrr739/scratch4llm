@@ -6,6 +6,7 @@ export const TailgateScenarios = {
     description: "简单的尾门开启和关闭动作",
     sequence: [
       { action: "open", params: { speed: 1 } },
+      { wait: { type: "duration", value: 3000 } },
       { action: "close", params: { speed: 1 } }
     ]
   },
@@ -16,7 +17,7 @@ export const TailgateScenarios = {
     description: "以慢速展示尾门开启关闭过程",
     sequence: [
       { action: "open", params: { speed: 0.5 } },
-      { wait: { type: "duration", value: 2000 } },
+      { wait: { type: "duration", value: 4000 } },
       { action: "close", params: { speed: 0.5 } }
     ]
   },
@@ -27,7 +28,7 @@ export const TailgateScenarios = {
     description: "尾门连续开启关闭循环",
     sequence: [
       { action: "open", params: { speed: 1 } },
-      { wait: { type: "duration", value: 1500 } },
+      { wait: { type: "duration", value: 2000 } },
       { action: "close", params: { speed: 1 } },
       { wait: { type: "duration", value: 1000 } }
     ],
@@ -41,9 +42,9 @@ export const TailgateScenarios = {
     description: "展示精确角度控制功能",
     sequence: [
       { action: "moveToAngle", params: { angle: 30, speed: 0.8 } },
-      { wait: { type: "duration", value: 1000 } },
+      { wait: { type: "duration", value: 1500 } },
       { action: "moveToAngle", params: { angle: 60, speed: 0.8 } },
-      { wait: { type: "duration", value: 1000 } },
+      { wait: { type: "duration", value: 1500 } },
       { action: "moveToAngle", params: { angle: 95, speed: 0.8 } },
       { wait: { type: "duration", value: 2000 } },
       { action: "close", params: { speed: 1 } }
@@ -56,13 +57,13 @@ export const TailgateScenarios = {
     description: "分步骤渐进开启尾门",
     sequence: [
       { action: "moveToAngle", params: { angle: 25, speed: 0.7 } },
-      { wait: { type: "duration", value: 800 } },
+      { wait: { type: "duration", value: 1000 } },
       { action: "moveToAngle", params: { angle: 50, speed: 0.7 } },
-      { wait: { type: "duration", value: 800 } },
+      { wait: { type: "duration", value: 1000 } },
       { action: "moveToAngle", params: { angle: 75, speed: 0.7 } },
-      { wait: { type: "duration", value: 800 } },
+      { wait: { type: "duration", value: 1000 } },
       { action: "moveToAngle", params: { angle: 95, speed: 0.7 } },
-      { wait: { type: "duration", value: 1500 } },
+      { wait: { type: "duration", value: 2000 } },
       { action: "close", params: { speed: 1 } }
     ]
   },
@@ -73,7 +74,7 @@ export const TailgateScenarios = {
     description: "快速展示尾门功能",
     sequence: [
       { action: "open", params: { speed: 1.5 } },
-      { wait: { type: "duration", value: 500 } },
+      { wait: { type: "duration", value: 1000 } },
       { action: "close", params: { speed: 1.5 } }
     ]
   },

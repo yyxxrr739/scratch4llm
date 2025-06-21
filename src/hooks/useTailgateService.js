@@ -169,6 +169,14 @@ export function useTailgateService() {
 
   // 动作方法
   const actions = {
+    // 编排器接口 - 必须的start方法
+    start: useCallback((params = {}) => {
+      if (actionServiceRef.current) {
+        return actionServiceRef.current.start(params);
+      }
+      return false;
+    }, []),
+
     // 基础动作
     startOpen: useCallback((speed = 1) => {
       if (actionServiceRef.current) {

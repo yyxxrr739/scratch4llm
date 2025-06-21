@@ -45,6 +45,8 @@ class TailgateActionService {
 
   // 启动动作
   start(params = {}) {
+    console.log('TailgateActionService: start called', params);
+    
     if (this.isEmergencyStopped) {
       this.eventService.emit('tailgate:error', { message: 'Emergency stop active' });
       return false;
@@ -52,16 +54,23 @@ class TailgateActionService {
 
     const { action, speed = this.currentSpeed, angle } = params;
     
+    console.log('TailgateActionService: Processing action', { action, speed, angle });
+    
     switch (action) {
       case 'open':
+        console.log('TailgateActionService: Executing open action');
         return this.startOpen(speed);
       case 'close':
+        console.log('TailgateActionService: Executing close action');
         return this.startClose(speed);
       case 'moveToAngle':
+        console.log('TailgateActionService: Executing moveToAngle action', { angle, speed });
         return this.moveToAngle(angle, speed);
       case 'moveByAngle':
+        console.log('TailgateActionService: Executing moveByAngle action', { angle, speed });
         return this.moveByAngle(angle, speed);
       default:
+        console.error('TailgateActionService: Unknown action', action);
         this.eventService.emit('tailgate:error', { message: 'Unknown action' });
         return false;
     }

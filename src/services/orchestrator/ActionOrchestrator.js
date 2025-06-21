@@ -49,6 +49,8 @@ class ActionOrchestrator {
 
   // 执行动作序列
   async executeSequence(service, options = {}) {
+    console.log('ActionOrchestrator: executeSequence called', { service, options });
+    
     if (this.isExecuting) {
       this.eventService.emit('orchestrator:error', { message: 'Sequence already executing' });
       return false;
@@ -58,6 +60,8 @@ class ActionOrchestrator {
       this.eventService.emit('orchestrator:warning', { message: 'No actions in queue' });
       return false;
     }
+
+    console.log('ActionOrchestrator: Starting sequence execution', { queueLength: this.actionQueue.length });
 
     this.isExecuting = true;
     this.currentSequence = {
@@ -74,6 +78,7 @@ class ActionOrchestrator {
     try {
       await this.executeActions(service);
     } catch (error) {
+      console.error('ActionOrchestrator: Sequence execution error', error);
       this.eventService.emit('orchestrator:error', { message: error.message });
     } finally {
       this.isExecuting = false;
@@ -132,20 +137,83 @@ class ActionOrchestrator {
   // 执行单个动作
   async executeAction(service, action) {
     const { action: actionType, params = {}, wait } = action;
+    
+    console.log('ActionOrchestrator: executeAction', { actionType, params, wait, service });
 
     // 执行动作
     if (service && typeof service.start === 'function') {
+      console.log('ActionOrchestrator: Calling service.start', { actionType, params });
       const result = service.start({ action: actionType, ...params });
+      
+      console.log('ActionOrchestrator: service.start result', result);
       
       if (!result) {
         throw new Error(`Failed to execute action: ${actionType}`);
       }
+
+      // 等待动画完成
+      await this.waitForAnimationComplete(service);
+    } else {
+      console.error('ActionOrchestrator: Service not available or missing start method', { service });
+      throw new Error('Service not available or missing start method');
     }
 
     // 处理等待
     if (wait) {
+      console.log('ActionOrchestrator: Handling wait', wait);
       await this.handleWait(wait, service);
     }
+  }
+
+  // 等待动画完成
+  waitForAnimationComplete(service) {
+    return new Promise((resolve, reject) => {
+      const timeout = setTimeout(() => {
+        reject(new Error('Animation completion timeout'));
+      }, 30000); // 30秒超时
+
+      const checkAnimationComplete = () => {
+        if (!this.isExecuting) {
+          clearTimeout(timeout);
+          reject(new Error('Sequence stopped'));
+          return;
+        }
+
+        try {
+          // 检查服务是否还在动画中
+          if (service && typeof service.getStatus === 'function') {
+            const status = service.getStatus();
+            console.log('ActionOrchestrator: Animation status', status);
+            
+            if (!status.isAnimating) {
+              clearTimeout(timeout);
+              resolve();
+              return;
+            }
+          } else if (service && typeof service.isAnimating === 'function') {
+            if (!service.isAnimating()) {
+              clearTimeout(timeout);
+              resolve();
+              return;
+            }
+          } else {
+            // 如果没有状态检查方法，等待一段时间后继续
+            clearTimeout(timeout);
+            resolve();
+            return;
+          }
+
+          // 继续检查
+          setTimeout(checkAnimationComplete, 100);
+        } catch (error) {
+          clearTimeout(timeout);
+          reject(error);
+        }
+      };
+
+      // 开始检查
+      setTimeout(checkAnimationComplete, 100);
+    });
   }
 
   // 处理等待

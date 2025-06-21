@@ -158,11 +158,6 @@ const AnimationManager = () => {
         {/* 右侧控制面板 */}
         <div className="controls-panel">
           <ActiveComponent onStateChange={setTailgateState} />
-          
-          {/* 这里可以添加其他控制组件 */}
-          {/* <BasicControls /> */}
-          {/* <AdvancedControls /> */}
-          {/* <ScenarioControls /> */}
         </div>
       </div>
 
