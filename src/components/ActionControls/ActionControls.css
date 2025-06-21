@@ -1,7 +1,7 @@
 /* 控制组件基础样式 */
 /* 删除未使用的 .action-controls 类 */
 
-/* 控制区域 */
+/* 控制区域 - 所有控制面板的基础容器 */
 .control-section {
   margin-bottom: 24px;
   padding: 16px;
@@ -11,6 +11,7 @@
   backdrop-filter: blur(10px);
 }
 
+/* 区域标题样式 - 如"基础控制"、"高级控制"、"场景控制"等 */
 .section-title {
   margin: 0 0 16px 0;
   font-size: 16px;
@@ -29,11 +30,12 @@
   border-radius: 2px;
 }
 
-/* 控制组 */
+/* 控制组 - 包含相关控件的容器 */
 .control-group {
   margin-bottom: 20px;
 }
 
+/* 控制标签 - 如"速度"、"角度"、"相对移动"等标签文字 */
 .control-label {
   display: block;
   margin-bottom: 8px;
@@ -42,13 +44,21 @@
   color: #2c3e50;
 }
 
-/* 按钮样式 */
+/* 大号控制标签 - 用于重要标签 */
+.control-label.large {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+/* 按钮容器 - 包含多个按钮的容器 */
 .control-buttons {
   display: flex;
   gap: 12px;
   flex-wrap: wrap;
 }
 
+/* 控制按钮基础样式 - 所有按钮的基础样式 */
 .control-btn {
   display: flex;
   align-items: center;
@@ -70,19 +80,21 @@
   cursor: not-allowed;
 }
 
+/* 小号按钮 - 如"暂停"、"继续"等小按钮 */
 .control-btn.small {
   padding: 6px 12px;
   font-size: 12px;
   min-width: 80px;
 }
 
+/* 大号按钮 - 如"开始执行"、"停止"等重要按钮 */
 .control-btn.large {
   padding: 12px 24px;
   font-size: 16px;
   min-width: 120px;
 }
 
-/* 按钮类型 */
+/* 主要按钮 - 如"开始执行"、"打开"、"关闭"等主要操作按钮 */
 .control-btn.primary {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
   color: white;
@@ -94,6 +106,7 @@
   box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
 }
 
+/* 次要按钮 - 如"暂停"、"继续"等次要操作按钮 */
 .control-btn.secondary {
   background: rgba(108, 117, 125, 0.8);
   color: white;
@@ -105,6 +118,7 @@
   transform: translateY(-1px);
 }
 
+/* 成功按钮 - 如"完成"、"确认"等成功状态按钮 */
 .control-btn.success {
   background: rgba(40, 167, 69, 0.8);
   color: white;
@@ -116,6 +130,7 @@
   transform: translateY(-1px);
 }
 
+/* 警告按钮 - 如"警告"、"注意"等警告状态按钮 */
 .control-btn.warning {
   background: rgba(255, 193, 7, 0.8);
   color: #2c3e50;
@@ -127,6 +142,7 @@
   transform: translateY(-1px);
 }
 
+/* 危险按钮 - 如"停止"、"紧急停止"等危险操作按钮 */
 .control-btn.danger {
   background: rgba(220, 53, 69, 0.8);
   color: white;
@@ -138,6 +154,7 @@
   transform: translateY(-1px);
 }
 
+/* 重置按钮 - 如"重置"、"清除"等重置操作按钮 */
 .control-btn.reset {
   background: rgba(111, 66, 193, 0.8);
   color: white;
@@ -149,6 +166,7 @@
   transform: translateY(-1px);
 }
 
+/* 信息按钮 - 如"帮助"、"信息"等信息类按钮 */
 .control-btn.info {
   background: rgba(23, 162, 184, 0.8);
   color: white;
@@ -160,11 +178,12 @@
   transform: translateY(-1px);
 }
 
+/* 按钮图标样式 */
 .btn-icon {
   font-size: 16px;
 }
 
-/* 速度控制 */
+/* 速度控制区域 - 包含速度滑块和预设按钮 */
 .speed-control {
   display: flex;
   align-items: center;
@@ -172,6 +191,7 @@
   margin-bottom: 8px;
 }
 
+/* 速度滑块 - 用于调节速度的滑动条 */
 .speed-slider {
   flex: 1;
   height: 6px;
@@ -202,6 +222,7 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
+/* 速度数值显示 - 显示当前速度值 */
 .speed-value {
   font-weight: 600;
   color: #2c3e50;
@@ -209,11 +230,13 @@
   text-align: center;
 }
 
+/* 速度预设按钮容器 - 包含"慢速"、"中速"、"快速"等预设按钮 */
 .speed-presets {
   display: flex;
-  gap: 8px;
+  gap: 4px;
 }
 
+/* 速度预设按钮 - 如"慢速"、"中速"、"快速"等按钮 */
 .speed-preset-btn {
   padding: 6px 12px;
   border: 1px solid rgba(255, 255, 255, 0.4);
@@ -231,19 +254,21 @@
   border-color: rgba(255, 255, 255, 0.6);
 }
 
-/* 角度控制 */
+/* 角度控制区域 - 包含角度输入框和预设按钮 */
 .angle-control {
   display: flex;
   flex-direction: column;
   gap: 12px;
 }
 
+/* 角度输入组 - 包含角度输入框和单位标签 */
 .angle-input-group {
   display: flex;
   gap: 8px;
   align-items: center;
 }
 
+/* 角度输入框 - 用于输入角度值的文本框 */
 .angle-input {
   padding: 8px 12px;
   border: 1px solid rgba(255, 255, 255, 0.4);
@@ -266,59 +291,76 @@
   background: rgba(255, 255, 255, 0.4);
 }
 
+/* 角度预设按钮容器 - 包含角度预设按钮 */
 .angle-presets {
   display: flex;
   gap: 8px;
+  flex-wrap: wrap;
 }
 
+/* 角度预设按钮行 - 用于排列角度预设按钮 */
+.angle-presets-row {
+  display: flex;
+  gap: 4px;
+  justify-content: space-between;
+}
+
+/* 角度预设按钮 - 如"0°"、"45°"、"90°"、"180°"等按钮 */
 .angle-preset-btn {
-  padding: 6px 12px;
+  padding: 8px 16px;
   border: 1px solid rgba(255, 255, 255, 0.4);
   background: rgba(255, 255, 255, 0.3);
-  border-radius: 4px;
+  border-radius: 6px;
   font-size: 12px;
+  font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease;
   color: #2c3e50;
   backdrop-filter: blur(10px);
+  min-width: 50px;
+  text-align: center;
 }
 
 .angle-preset-btn:hover {
-  background: rgba(255, 255, 255, 0.4);
-  border-color: rgba(255, 255, 255, 0.6);
+  background: rgba(255, 255, 255, 0.5);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* 相对移动控制 */
+/* 相对移动控制区域 - 包含相对角度输入和移动按钮 */
 .relative-move-control {
   display: flex;
   flex-direction: column;
   gap: 12px;
 }
 
+/* 增量角度输入组 - 包含相对角度输入框和单位 */
 .delta-angle-input {
   display: flex;
   align-items: center;
   gap: 8px;
 }
 
+/* 单位标签 - 如"度"、"°"等单位显示 */
 .unit {
   font-size: 14px;
   color: #34495e;
 }
 
+/* 移动按钮容器 - 包含"前进"、"后退"等移动按钮 */
 .move-buttons {
   display: flex;
   gap: 8px;
 }
 
-/* 运动控制 */
+/* 运动控制区域 - 包含运动相关控件 */
 .motion-controls {
   display: flex;
   flex-direction: column;
   gap: 12px;
 }
 
-/* 状态显示 */
+/* 状态显示区域 - 显示当前状态信息 */
 .status-section {
   margin-top: 20px;
   padding: 16px;
@@ -328,12 +370,14 @@
   backdrop-filter: blur(10px);
 }
 
+/* 状态显示容器 - 包含状态项的容器 */
 .status-display {
   display: flex;
   flex-direction: column;
   gap: 6px;
 }
 
+/* 状态项 - 单个状态信息项，如"当前角度"、"当前速度"等 */
 .status-item {
   display: flex;
   justify-content: space-between;
@@ -345,12 +389,14 @@
   backdrop-filter: blur(10px);
 }
 
+/* 状态标签 - 如"当前角度"、"当前速度"、"状态"等标签 */
 .status-label {
   font-size: 11px;
   font-weight: 500;
   color: #2c3e50;
 }
 
+/* 状态值 - 显示具体的状态数值或文字 */
 .status-value {
   font-size: 11px;
   font-weight: 600;
@@ -361,6 +407,7 @@
   border: 1px solid rgba(102, 126, 234, 0.2);
 }
 
+/* 状态指示器 - 包含状态点和状态文字 */
 .status-indicator {
   display: flex;
   align-items: center;
@@ -369,59 +416,70 @@
   font-weight: 500;
 }
 
+/* 状态点 - 不同颜色的圆点表示不同状态 */
 .status-dot {
   width: 6px;
   height: 6px;
   border-radius: 50%;
 }
 
+/* 打开状态指示器 - 绿色圆点表示打开状态 */
 .status-indicator.open .status-dot {
   background: #27ae60;
 }
 
+/* 关闭状态指示器 - 红色圆点表示关闭状态 */
 .status-indicator.closed .status-dot {
   background: #e74c3c;
 }
 
+/* 动画中状态指示器 - 橙色圆点表示正在动画中 */
 .status-indicator.animating .status-dot {
   background: #f39c12;
   animation: pulse 1s infinite;
 }
 
+/* 空闲状态指示器 - 灰色圆点表示空闲状态 */
 .status-indicator.idle .status-dot {
   background: #6c757d;
 }
 
+/* 紧急状态指示器 - 红色圆点表示紧急状态 */
 .status-indicator.emergency .status-dot {
   background: #dc3545;
   animation: emergencyProcessBlink 1s infinite;
 }
 
+/* 紧急处理状态指示器 - 黄色圆点表示紧急处理中 */
 .status-indicator.emergency-process .status-dot {
   background: #ffc107;
   animation: emergencyProcessBlink 0.5s infinite;
 }
 
+/* 执行中状态指示器 - 绿色圆点表示正在执行 */
 .status-indicator.executing .status-dot {
   background: #28a745;
   animation: pulse 1s infinite;
 }
 
+/* 暂停状态指示器 - 黄色圆点表示暂停状态 */
 .status-indicator.paused .status-dot {
   background: #ffc107;
   animation: blink 1s infinite;
 }
 
+/* 就绪状态指示器 - 绿色圆点表示就绪状态 */
 .status-indicator.ready .status-dot {
   background: #28a745;
 }
 
+/* 初始化状态指示器 - 蓝色圆点表示正在初始化 */
 .status-indicator.initializing .status-dot {
   background: #17a2b8;
   animation: pulse 1s infinite;
 }
 
-/* 进度条 */
+/* 进度条容器 - 包含进度条和进度文字 */
 .progress-container {
   display: flex;
   align-items: center;
@@ -429,6 +487,7 @@
   margin-bottom: 16px;
 }
 
+/* 进度条 - 显示执行进度的条形图 */
 .progress-bar {
   flex: 1;
   height: 8px;
@@ -437,12 +496,14 @@
   overflow: hidden;
 }
 
+/* 进度条填充 - 进度条的前进部分 */
 .progress-fill {
   height: 100%;
   background: linear-gradient(90deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
   transition: width 0.3s ease;
 }
 
+/* 进度文字 - 显示进度百分比 */
 .progress-text {
   font-size: 14px;
   font-weight: 600;
@@ -451,7 +512,7 @@
   text-align: center;
 }
 
-/* 下拉菜单样式 */
+/* 场景选择下拉菜单 - 用于选择不同场景 */
 .scenario-select {
   width: 100%;
   padding: 10px 12px;
@@ -485,7 +546,7 @@
   font-size: 12px;
 }
 
-/* 紧凑的动作序列样式 */
+/* 紧凑的动作序列列表 - 显示动作序列的紧凑版本 */
 .sequence-list.compact {
   margin-top: 8px;
   max-height: 150px;
@@ -497,6 +558,7 @@
   backdrop-filter: blur(10px);
 }
 
+/* 紧凑的动作序列项 - 单个动作序列项的紧凑样式 */
 .sequence-item.compact {
   display: flex;
   gap: 6px;
@@ -505,6 +567,7 @@
   line-height: 1.3;
 }
 
+/* 紧凑的序列索引 - 动作序列的序号 */
 .sequence-index.compact {
   color: #34495e;
   font-weight: 500;
@@ -512,6 +575,7 @@
   font-size: 6px;
 }
 
+/* 紧凑的序列动作 - 动作序列的具体动作描述 */
 .sequence-action.compact {
   color: #2c3e50;
   font-family: 'Courier New', monospace;
@@ -519,17 +583,18 @@
   flex: 1;
 }
 
+/* 执行控制区域 - 包含执行相关的按钮 */
 .execution-controls {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
 }
 
 .execution-controls .control-buttons {
   display: flex;
-  gap: 8px;
+  gap: 2px;
   flex-wrap: nowrap;
-  justify-content: space-between;
+  justify-content: center;
 }
 
 .execution-controls .control-btn.small {
@@ -540,6 +605,7 @@
   max-width: none;
 }
 
+/* 执行状态区域 - 显示执行状态信息 */
 .execution-status {
   background: rgba(255, 255, 255, 0.3);
   padding: 16px;
@@ -548,7 +614,7 @@
   backdrop-filter: blur(10px);
 }
 
-/* 车轮控制组件样式 */
+/* 车轮控制组件样式 - 车轮相关的控制面板 */
 .wheel-controls {
   margin-bottom: 24px;
 }
@@ -562,7 +628,7 @@
   background: linear-gradient(135deg, #ff6b6b 0%, #feca57 50%, #48dbfb 100%);
 }
 
-/* 新的紧凑布局样式 */
+/* 新的紧凑布局样式 - 用于并排显示控制面板 */
 .controls-layout {
   display: flex;
   gap: 16px;
@@ -574,14 +640,14 @@
   min-width: 0;
 }
 
-/* 紧凑标题样式 */
+/* 紧凑标题样式 - 用于节省空间的标题 */
 .section-title.compact {
   font-size: 14px;
   padding: 8px 12px;
   margin-bottom: 8px;
 }
 
-/* 场景控制特定样式 */
+/* 场景控制特定样式 - 场景控制面板的特殊样式 */
 .scenario-controls .control-label {
   font-size: 18px;
   margin-bottom: 4px;
@@ -592,7 +658,7 @@
   padding: 6px 8px;
 }
 
-/* 场景头部行布局 */
+/* 场景头部行布局 - 场景控制面板的头部布局 */
 .scenario-header-row {
   display: flex;
   gap: 16px;
@@ -604,6 +670,7 @@
   margin-bottom: 0;
 }
 
+/* 场景控制中的执行控制按钮样式 */
 .scenario-controls .execution-controls .control-btn {
   border-radius: 4px;
   font-weight: 600;
@@ -611,37 +678,42 @@
   letter-spacing: 0.5px;
 }
 
+/* 场景控制中的主要按钮 - 如"开始执行" */
 .scenario-controls .execution-controls .control-btn.primary {
   background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
   color: white;
   border: 1px solid rgba(76, 175, 80, 0.3);
 }
 
+/* 场景控制中的警告按钮 - 如"暂停" */
 .scenario-controls .execution-controls .control-btn.warning {
   background: linear-gradient(135deg, #FF9800 0%, #F57C00 100%);
   color: white;
   border: 1px solid rgba(255, 152, 0, 0.3);
 }
 
+/* 场景控制中的成功按钮 - 如"继续" */
 .scenario-controls .execution-controls .control-btn.success {
   background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
   color: white;
   border: 1px solid rgba(33, 150, 243, 0.3);
 }
 
+/* 场景控制中的次要按钮 - 如"停止" */
 .scenario-controls .execution-controls .control-btn.secondary {
   background: linear-gradient(135deg, #9E9E9E 0%, #757575 100%);
   color: white;
   border: 1px solid rgba(158, 158, 158, 0.3);
 }
 
+/* 场景控制中的重置按钮 - 如"重置" */
 .scenario-controls .execution-controls .control-btn.reset {
   background: linear-gradient(135deg, #E91E63 0%, #C2185B 100%);
   color: white;
   border: 1px solid rgba(233, 30, 99, 0.3);
 }
 
-/* 动画 */
+/* 动画效果 */
 @keyframes pulse {
   0%, 100% {
     transform: scale(1);
@@ -675,7 +747,7 @@
   }
 }
 
-/* 响应式设计 */
+/* 响应式设计 - 移动设备适配 */
 @media (max-width: 768px) {
   .control-buttons {
     flex-direction: column;

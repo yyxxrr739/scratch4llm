@@ -9,15 +9,12 @@ const AdvancedControls = ({
   isEmergencyStopInProcess,
   onSpeedChange,
   onMoveToAngle,
-  onMoveByAngle,
   onPause,
   onResume,
   onStop,
   onEmergencyStop,
   onResetEmergencyStop
 }) => {
-  const [targetAngle, setTargetAngle] = useState(0);
-  const [deltaAngle, setDeltaAngle] = useState(10);
   const [speed, setSpeed] = useState(currentSpeed);
 
   const handleSpeedChange = (newSpeed) => {
@@ -25,27 +22,12 @@ const AdvancedControls = ({
     onSpeedChange(newSpeed);
   };
 
-  const handleMoveToAngle = () => {
-    if (targetAngle >= 0 && targetAngle <= 95) {
-      onMoveToAngle(targetAngle, speed);
-    }
-  };
-
-  const handleMoveByAngle = (direction) => {
-    const newAngle = currentAngle + (direction === 'positive' ? deltaAngle : -deltaAngle);
-    if (newAngle >= 0 && newAngle <= 95) {
-      onMoveByAngle(direction === 'positive' ? deltaAngle : -deltaAngle, speed);
-    }
-  };
-
   return (
     <div className="advanced-controls">
       <div className="control-section">
-        <h3 className="section-title">高级控制</h3>
-        
         {/* 速度控制 */}
         <div className="control-group">
-          <label className="control-label">速度控制</label>
+          <label className="control-label large">速度控制</label>
           <div className="speed-control">
             <input
               type="range"
@@ -86,142 +68,86 @@ const AdvancedControls = ({
 
         {/* 角度控制 */}
         <div className="control-group">
-          <label className="control-label">角度控制</label>
-          <div className="angle-control">
-            <div className="angle-input-group">
-              <input
-                type="number"
-                min="0"
-                max="95"
-                value={targetAngle}
-                onChange={(e) => setTargetAngle(parseFloat(e.target.value) || 0)}
-                className="angle-input"
-                placeholder="目标角度"
-                disabled={isEmergencyStopped}
-              />
-              <button 
-                onClick={handleMoveToAngle}
-                disabled={isAnimating || isEmergencyStopped}
-                className="control-btn small"
-              >
-                移动到
-              </button>
-            </div>
-            
-            <div className="angle-presets">
-              <button 
-                onClick={() => onMoveToAngle(30, speed)}
-                disabled={isAnimating || isEmergencyStopped}
-                className="angle-preset-btn"
-              >
-                30°
-              </button>
-              <button 
-                onClick={() => onMoveToAngle(60, speed)}
-                disabled={isAnimating || isEmergencyStopped}
-                className="angle-preset-btn"
-              >
-                60°
-              </button>
-              <button 
-                onClick={() => onMoveToAngle(90, speed)}
-                disabled={isAnimating || isEmergencyStopped}
-                className="angle-preset-btn"
-              >
-                90°
-              </button>
-            </div>
-          </div>
-        </div>
-
-        {/* 相对角度移动 */}
-        <div className="control-group">
-          <label className="control-label">相对移动</label>
-          <div className="relative-move-control">
-            <div className="delta-angle-input">
-              <input
-                type="number"
-                min="1"
-                max="45"
-                value={deltaAngle}
-                onChange={(e) => setDeltaAngle(parseFloat(e.target.value) || 10)}
-                className="angle-input small"
-                placeholder="角度"
-                disabled={isEmergencyStopped}
-              />
-              <span className="unit">°</span>
-            </div>
-            
-            <div className="move-buttons">
-              <button 
-                onClick={() => handleMoveByAngle('negative')}
-                disabled={isAnimating || isEmergencyStopped}
-                className="control-btn small"
-              >
-                ← 减少
-              </button>
-              <button 
-                onClick={() => handleMoveByAngle('positive')}
-                disabled={isAnimating || isEmergencyStopped}
-                className="control-btn small"
-              >
-                增加 →
-              </button>
-            </div>
+          <label className="control-label large">角度控制</label>
+          <div className="angle-presets-row">
+            <button 
+              onClick={() => onMoveToAngle(0, speed)}
+              disabled={isAnimating || isEmergencyStopped}
+              className="angle-preset-btn"
+            >
+              0°
+            </button>
+            <button 
+              onClick={() => onMoveToAngle(30, speed)}
+              disabled={isAnimating || isEmergencyStopped}
+              className="angle-preset-btn"
+            >
+              30°
+            </button>
+            <button 
+              onClick={() => onMoveToAngle(60, speed)}
+              disabled={isAnimating || isEmergencyStopped}
+              className="angle-preset-btn"
+            >
+              60°
+            </button>
+            <button 
+              onClick={() => onMoveToAngle(90, speed)}
+              disabled={isAnimating || isEmergencyStopped}
+              className="angle-preset-btn"
+            >
+              90°
+            </button>
           </div>
         </div>
       </div>
 
       {/* 运动控制 */}
       <div className="control-section">
-        <h3 className="section-title">运动控制</h3>
-        
-        <div className="motion-controls">
-          <button 
-            onClick={onPause}
-            disabled={!isAnimating || isEmergencyStopped}
-            className="control-btn warning"
-          >
-            <span className="btn-icon">⏸️</span>
-            暂停
-          </button>
-          
-          <button 
-            onClick={onResume}
-            disabled={isAnimating || isEmergencyStopped}
-            className="control-btn success"
-          >
-            <span className="btn-icon">▶️</span>
-            恢复
-          </button>
-          
-          <button 
-            onClick={onStop}
-            disabled={!isAnimating || isEmergencyStopped}
-            className="control-btn secondary"
-          >
-            <span className="btn-icon">⏹️</span>
-            停止
-          </button>
-          
-          <button 
-            onClick={onEmergencyStop}
-            disabled={isEmergencyStopped}
-            className="control-btn danger"
-          >
-            <span className="btn-icon">🛑</span>
-            紧急停止
-          </button>
-          
-          {isEmergencyStopped && (
+        <div className="execution-controls">
+          <div className="control-buttons">
             <button 
-              onClick={onResetEmergencyStop}
-              className="control-btn reset"
+              onClick={onPause}
+              disabled={!isAnimating || isEmergencyStopped}
+              className="control-btn warning small"
             >
-              <span className="btn-icon">🔄</span>
-              重置紧急停止
+              暂停
             </button>
-          )}
+            
+            <button 
+              onClick={onResume}
+              disabled={isAnimating || isEmergencyStopped}
+              className="control-btn success small"
+            >
+              恢复
+            </button>
+            
+            <button 
+              onClick={onStop}
+              disabled={!isAnimating || isEmergencyStopped}
+              className="control-btn secondary small"
+            >
+              停止
+            </button>
+            
+            <button 
+              onClick={onEmergencyStop}
+              disabled={isEmergencyStopped}
+              className="control-btn danger small"
+            >
+              紧急停止
+            </button>
+            
+            {isEmergencyStopped && (
+              <button 
+                onClick={onResetEmergencyStop}
+                className="control-btn reset small"
+              >
+                <span className="btn-icon">🔄</span>
+                重置紧急停止
+              </button>
+            )}
+          </div>
         </div>
       </div>
     </div>
