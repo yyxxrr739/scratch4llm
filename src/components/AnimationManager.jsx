@@ -19,8 +19,6 @@ const AnimationManager = () => {
     currentSpeedKmh,
     isAccelerating,
     isDecelerating,
-    getCurrentAngularVelocity,
-    getCurrentRotation,
     resetPhysics
   } = useWheelPhysicsEngine();
 
@@ -96,14 +94,6 @@ const AnimationManager = () => {
                   <span className="status-dot"></span>
                   {tailgateState.isAnimating ? '进行中' : '空闲'}
                 </span>
-              </div>
-              <div className="status-item">
-                <span className="status-label">角速度:</span>
-                <span className="status-value">{getCurrentAngularVelocity().toFixed(2)} rad/s</span>
-              </div>
-              <div className="status-item">
-                <span className="status-label">旋转角度:</span>
-                <span className="status-value">{getCurrentRotation().toFixed(1)}°</span>
               </div>
             </div>
           </div>

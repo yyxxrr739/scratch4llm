@@ -112,16 +112,6 @@ const useWheelPhysicsEngine = () => {
     });
   }, []);
 
-  // 获取当前角速度
-  const getCurrentAngularVelocity = useCallback(() => {
-    return physicsState.current.angularVelocity;
-  }, []);
-
-  // 获取当前旋转角度（度）
-  const getCurrentRotation = useCallback(() => {
-    return (physicsState.current.rotation * 180) / Math.PI;
-  }, []);
-
   // 重置物理引擎
   const resetPhysics = useCallback((resetRotation = false) => {
     physicsState.current = {
@@ -143,8 +133,6 @@ const useWheelPhysicsEngine = () => {
     currentSpeedKmh,
     isAccelerating,
     isDecelerating,
-    getCurrentAngularVelocity,
-    getCurrentRotation,
     resetPhysics
   };
 };
