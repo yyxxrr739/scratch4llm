@@ -19,7 +19,7 @@ const HelpModal = ({ isOpen, onClose }) => {
         
         <div className="help-modal-content">
           <div className="help-section">
-            <h3 className="help-section-title">控制说明</h3>
+            <h3 className="help-section-title">车速控制</h3>
             
             <div className="key-instructions">
               <div className="key-item">
@@ -33,6 +33,18 @@ const HelpModal = ({ isOpen, onClose }) => {
               <div className="key-item">
                 <span className="key-icon">🔄</span>
                 <span className="key-text">松开按键：自然减速</span>
+              </div>
+            </div>
+
+            <h4 className="help-subsection-title">尾门控制</h4>
+            <div className="key-instructions">
+              <div className="key-item">
+                <span className="key-icon">O</span>
+                <span className="key-text">开启尾门</span>
+              </div>
+              <div className="key-item">
+                <span className="key-icon">C</span>
+                <span className="key-text">关闭尾门</span>
               </div>
             </div>
           </div>

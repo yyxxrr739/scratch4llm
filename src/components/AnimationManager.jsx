@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import TailgateAnimation from "./animations/TailgateAnimation";
 import WheelControls from "./ActionControls/WheelControls";
-import BasicControls from "./ActionControls/BasicControls";
 import AdvancedControls from "./ActionControls/AdvancedControls";
 import ScenarioControls from "./ActionControls/ScenarioControls";
 import HelpModal from "./HelpModal";
@@ -90,10 +89,27 @@ const AnimationManager = () => {
               </div>
               <div className="status-item">
                 <span className="status-label">尾门状态:</span>
-                <span className={`status-indicator ${tailgateState.isOpen ? 'open' : 'closed'}`}>
-                  <span className="status-dot"></span>
-                  {tailgateState.isOpen ? '已开启' : '已关闭'}
-                </span>
+                {tailgateState.isEmergencyStopped ? (
+                  <span className="status-indicator emergency">
+                    <span className="status-dot"></span>
+                    紧急停止
+                  </span>
+                ) : tailgateState.isEmergencyStopInProcess ? (
+                  <span className="status-indicator emergency-process">
+                    <span className="status-dot"></span>
+                    紧急停止中...
+                  </span>
+                ) : tailgateState.isAnimating ? (
+                  <span className="status-indicator animating">
+                    <span className="status-dot"></span>
+                    {tailgateState.isOpen ? '关门中' : '开门中'}
+                  </span>
+                ) : (
+                  <span className={`status-indicator ${tailgateState.isOpen ? 'open' : 'closed'}`}>
+                    <span className="status-dot"></span>
+                    {tailgateState.isOpen ? '已开启' : '已关闭'}
+                  </span>
+                )}
               </div>
               <div className="status-item">
                 <span className="status-label">动画:</span>
@@ -111,28 +127,6 @@ const AnimationManager = () => {
                   {tailgateState.isInitialized ? '就绪' : '初始化中...'}
                 </span>
               </div>
-              
-              {/* 紧急停止状态显示 */}
-              {tailgateState.isEmergencyStopped && (
-                <div className="status-item">
-                  <span className="status-label">尾门状态:</span>
-                  <span className="status-indicator emergency">
-                    <span className="status-dot"></span>
-                    紧急停止
-                  </span>
-                </div>
-              )}
-              
-              {/* 紧急停止过程中状态显示 */}
-              {tailgateState.isEmergencyStopInProcess && (
-                <div className="status-item">
-                  <span className="status-label">尾门状态:</span>
-                  <span className="status-indicator emergency-process">
-                    <span className="status-dot"></span>
-                    紧急停止中...
-                  </span>
-                </div>
-              )}
               
               {/* 障碍物检测状态显示 */}
               {tailgateState.isObstacleDetected && (

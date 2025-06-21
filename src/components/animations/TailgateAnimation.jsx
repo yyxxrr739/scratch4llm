@@ -1,13 +1,12 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { useTailgateService } from '../../hooks/useTailgateService.js';
 import { useActionOrchestrator } from '../../hooks/useActionOrchestrator.js';
-import BasicControls from '../ActionControls/BasicControls.jsx';
 import AdvancedControls from '../ActionControls/AdvancedControls.jsx';
 import ScenarioControls from '../ActionControls/ScenarioControls.jsx';
 import './TailgateAnimation.css';
 
 const TailgateAnimation = ({ onStateChange }) => {
-  const [activeControlTab, setActiveControlTab] = useState('basic');
+  const [activeControlTab, setActiveControlTab] = useState('advanced');
   const [isObstacleDetected, setIsObstacleDetected] = useState(false);
   
   // 使用尾门服务Hook
@@ -43,6 +42,22 @@ const TailgateAnimation = ({ onStateChange }) => {
   // 向父组件传递状态信息
   useEffect(() => {
     if (onStateChange) {
+      // 确定当前动作类型
+      let currentActionType = null;
+      if (isAnimating) {
+        if (status.currentAction === 'opening') {
+          currentActionType = '开门中';
+        } else if (status.currentAction === 'closing') {
+          currentActionType = '关门中';
+        } else if (status.currentAction === 'moving') {
+          currentActionType = '移动中';
+        } else if (status.currentAction === 'paused') {
+          currentActionType = '已暂停';
+        } else if (status.currentAction === 'resumed') {
+          currentActionType = '恢复中';
+        }
+      }
+
       onStateChange({
         isOpen,
         isAnimating,
@@ -53,13 +68,13 @@ const TailgateAnimation = ({ onStateChange }) => {
         isInitialized,
         isExecuting,
         isPaused,
-        currentAction: orchestratorAction,
+        currentAction: currentActionType ? { action: currentActionType } : null,
         actionProgress,
         loopInfo,
         isObstacleDetected
       });
     }
-  }, [isOpen, isAnimating, currentAngle, currentSpeed, isEmergencyStopped, status.isEmergencyStopInProcess, isInitialized, isExecuting, isPaused, orchestratorAction, actionProgress, loopInfo, isObstacleDetected, onStateChange]);
+  }, [isOpen, isAnimating, currentAngle, currentSpeed, isEmergencyStopped, status.isEmergencyStopInProcess, status.currentAction, isInitialized, isExecuting, isPaused, actionProgress, loopInfo, isObstacleDetected, onStateChange]);
 
   // 初始化服务
   useEffect(() => {
@@ -76,6 +91,38 @@ const TailgateAnimation = ({ onStateChange }) => {
     };
   }, [cleanup]);
 
+  // 键盘控制处理
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      // 如果正在执行场景或紧急停止，忽略键盘输入
+      if (isExecuting || isEmergencyStopped) {
+        return;
+      }
+
+      switch (event.code) {
+        case 'KeyO':
+          event.preventDefault();
+          if (!isOpen && !isAnimating) {
+            actions.startOpen(currentSpeed);
+          }
+          break;
+        case 'KeyC':
+          event.preventDefault();
+          if (isOpen && !isAnimating) {
+            actions.startClose(currentSpeed);
+          }
+          break;
+        default:
+          break;
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isOpen, isAnimating, isExecuting, isEmergencyStopped, actions, currentSpeed]);
+
   // 障碍物检测事件处理
   const handleObstacleDetected = () => {
     setIsObstacleDetected(true);
@@ -89,19 +136,6 @@ const TailgateAnimation = ({ onStateChange }) => {
     setIsObstacleDetected(false);
     // 重置紧急停止状态
     actions.resetEmergencyStop();
-  };
-
-  // 基础控制事件处理
-  const handleOpen = () => {
-    actions.startOpen(currentSpeed);
-  };
-
-  const handleClose = () => {
-    actions.startClose(currentSpeed);
-  };
-
-  const handleReset = () => {
-    actions.startClose(currentSpeed);
   };
 
   // 高级控制事件处理
@@ -160,26 +194,12 @@ const TailgateAnimation = ({ onStateChange }) => {
 
   // 控制标签页
   const controlTabs = [
-    { id: 'basic', name: '基础控制', icon: '🎮' },
     { id: 'advanced', name: '高级控制', icon: '⚙️' },
     { id: 'scenario', name: '场景控制', icon: '🎬' }
   ];
 
   const renderControlContent = () => {
     switch (activeControlTab) {
-      case 'basic':
-        return (
-          <BasicControls
-            isOpen={isOpen}
-            isAnimating={isAnimating}
-            currentAngle={currentAngle}
-            isEmergencyStopped={isEmergencyStopped}
-            onOpen={handleOpen}
-            onClose={handleClose}
-            onReset={handleReset}
-          />
-        );
-      
       case 'advanced':
         return (
           <AdvancedControls
