@@ -1,6 +1,9 @@
 import { useState, useEffect } from "react";
 import TailgateAnimation from "./animations/TailgateAnimation";
 import WheelControls from "./ActionControls/WheelControls";
+import BasicControls from "./ActionControls/BasicControls";
+import AdvancedControls from "./ActionControls/AdvancedControls";
+import ScenarioControls from "./ActionControls/ScenarioControls";
 import HelpModal from "./HelpModal";
 import useWheelPhysicsEngine from "../hooks/useWheelPhysicsEngine";
 import "./AnimationManager.css";
@@ -63,17 +66,69 @@ const AnimationManager = () => {
       </div>
 
       <div className="main-content">
-        <div className="controls-panel">
-          <WheelControls 
-            currentSpeedKmh={currentSpeedKmh}
-            currentAngularVelocity={getCurrentAngularVelocity()}
-            currentRotation={getCurrentRotation()}
-            resetPhysics={resetPhysics}
-            tailgateState={tailgateState}
-          />
-          <ActiveComponent onStateChange={setTailgateState} />
+        {/* 左侧状态信息栏 */}
+        <div className="status-panel">
+          <div className="status-section">
+            <h3 className="section-title">状态信息</h3>
+            
+            <div className="status-display">
+              {/* 车辆状态 */}
+              <div className="status-item">
+                <span className="status-label">车速:</span>
+                <span className="status-value">{currentSpeedKmh.toFixed(1)} km/h</span>
+              </div>
+              
+              {/* 尾门状态 */}
+              <div className="status-item">
+                <span className="status-label">尾门角度:</span>
+                <span className="status-value">{Math.round(tailgateState.currentAngle || 0)}°</span>
+              </div>
+              <div className="status-item">
+                <span className="status-label">尾门状态:</span>
+                <span className={`status-indicator ${tailgateState.isOpen ? 'open' : 'closed'}`}>
+                  <span className="status-dot"></span>
+                  {tailgateState.isOpen ? '已开启' : '已关闭'}
+                </span>
+              </div>
+              <div className="status-item">
+                <span className="status-label">动画:</span>
+                <span className={`status-indicator ${tailgateState.isAnimating ? 'animating' : 'idle'}`}>
+                  <span className="status-dot"></span>
+                  {tailgateState.isAnimating ? '进行中' : '空闲'}
+                </span>
+              </div>
+              <div className="status-item">
+                <span className="status-label">角速度:</span>
+                <span className="status-value">{getCurrentAngularVelocity().toFixed(2)} rad/s</span>
+              </div>
+              <div className="status-item">
+                <span className="status-label">旋转角度:</span>
+                <span className="status-value">{getCurrentRotation().toFixed(1)}°</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="reset-control">
+            <div className="reset-buttons">
+              <button 
+                className="reset-btn stop-btn"
+                onClick={() => resetPhysics(false)}
+                title="停止运动但保持当前位置"
+              >
+                ⏹️ 停止运动
+              </button>
+              <button 
+                className="reset-btn full-reset-btn"
+                onClick={() => resetPhysics(true)}
+                title="完全重置到初始位置"
+              >
+                🔄 完全重置
+              </button>
+            </div>
+          </div>
         </div>
-        
+
+        {/* 中间动画区域 */}
         <div className="animation-area">
           <div className="animation-display">
             <div className="car-body">
@@ -108,6 +163,16 @@ const AnimationManager = () => {
               />
             </div>
           </div>
+        </div>
+
+        {/* 右侧控制面板 */}
+        <div className="controls-panel">
+          <ActiveComponent onStateChange={setTailgateState} />
+          
+          {/* 这里可以添加其他控制组件 */}
+          {/* <BasicControls /> */}
+          {/* <AdvancedControls /> */}
+          {/* <ScenarioControls /> */}
         </div>
       </div>
 

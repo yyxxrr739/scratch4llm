@@ -80,13 +80,14 @@
 
 .main-content {
   display: grid;
-  grid-template-columns: 400px 1fr;
+  grid-template-columns: 300px 1fr 350px;
   gap: 1.5rem;
   flex: 1;
   min-height: 0;
 }
 
-.controls-panel {
+/* 左侧状态信息栏 */
+.status-panel {
   background: rgba(255, 255, 255, 0.25);
   border-radius: 16px;
   padding: 1.5rem;
@@ -95,8 +96,139 @@
   overflow-y: auto;
   max-height: 100%;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
 }
 
+.status-section {
+  flex: 1;
+}
+
+.section-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #1a252f;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid rgba(102, 126, 234, 0.3);
+}
+
+.status-display {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.status-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.status-label {
+  font-size: 0.9rem;
+  color: #2c3e50;
+  font-weight: 500;
+}
+
+.status-value {
+  font-size: 0.9rem;
+  color: #1a252f;
+  font-weight: 600;
+  background: rgba(102, 126, 234, 0.1);
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+}
+
+.status-indicator {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+}
+
+.status-indicator.open {
+  color: #27ae60;
+  background: rgba(39, 174, 96, 0.1);
+}
+
+.status-indicator.closed {
+  color: #e74c3c;
+  background: rgba(231, 76, 60, 0.1);
+}
+
+.status-indicator.animating {
+  color: #f39c12;
+  background: rgba(243, 156, 18, 0.1);
+}
+
+.status-indicator.idle {
+  color: #7f8c8d;
+  background: rgba(127, 140, 141, 0.1);
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.reset-control {
+  margin-top: auto;
+}
+
+.reset-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.reset-btn {
+  padding: 0.75rem 1rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.stop-btn {
+  background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+  color: white;
+  box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+}
+
+.stop-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(231, 76, 60, 0.4);
+}
+
+.full-reset-btn {
+  background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+  color: white;
+  box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+}
+
+.full-reset-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(52, 152, 219, 0.4);
+}
+
+/* 中间动画区域 */
 .animation-area {
   display: flex;
   justify-content: center;
@@ -121,12 +253,12 @@
 .car-body {
   position: absolute;
   z-index: 1;
-  left: 50px;
-  top: 60px;
+  left: 55px;
+  top: 62px;
 }
 
 .body-image {
-  width: 900px;
+  width: 630px;
   height: auto;
 }
 
@@ -134,32 +266,32 @@
   position: absolute;
   z-index: 2;
   transform-origin: bottom center;
-  left: 800px;
-  top: 221px;
+  left: 580px;
+  top: 175px;
 }
 
 .tailgate-image {
-  width: 108px;
+  width: 76px;
   height: auto;
 }
 
 .tire {
   position: absolute;
   z-index: 3;
-  width: 165px;
-  height: 165px;
+  width: 116px;
+  height: 116px;
 }
 
 .tire-1 {
   /* You can adjust this */
-  left: 175px; 
-  top: 358px;
+  left: 143px;
+  top: 271px;
 }
 
 .tire-2 {
   /* You can adjust this */
-  left: 660px; 
-  top: 358px;
+  left: 482px;
+  top: 271px;
 }
 
 .tire-image {
@@ -172,7 +304,26 @@
   object-fit: contain;
 }
 
+/* 右侧控制面板 */
+.controls-panel {
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 16px;
+  padding: 1.5rem;
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  overflow-y: auto;
+  max-height: 100%;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
 /* 响应式设计 */
+@media (max-width: 1200px) {
+  .main-content {
+    grid-template-columns: 250px 1fr 300px;
+    gap: 1rem;
+  }
+}
+
 @media (max-width: 768px) {
   .header {
     flex-direction: column;
@@ -189,13 +340,18 @@
     gap: 1rem;
   }
   
-  .controls-panel {
-    order: 2;
+  .status-panel {
+    order: 1;
+    max-height: 200px;
   }
   
   .animation-area {
-    order: 1;
+    order: 2;
     min-height: 300px;
+  }
+  
+  .controls-panel {
+    order: 3;
   }
 }
 
