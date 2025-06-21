@@ -34,31 +34,6 @@ const WheelControls = ({
           </div>
         </div>
 
-        <div className="wheel-info">
-          <div className="info-item">
-            <span className="info-icon">🔄</span>
-            <span className="info-text">
-              {currentSpeedKmh > 0 ? '车轮正在旋转' : '车轮已停止'}
-            </span>
-          </div>
-          <div className="info-item">
-            <span className="info-icon">⚡</span>
-            <span className="info-text">当前速度: {currentSpeedKmh.toFixed(1)} km/h</span>
-          </div>
-          <div className="info-item">
-            <span className="info-icon">🌪️</span>
-            <span className="info-text">角速度: {currentAngularVelocity.toFixed(2)} rad/s</span>
-          </div>
-          <div className="info-item">
-            <span className="info-icon">📐</span>
-            <span className="info-text">旋转角度: {currentRotation.toFixed(1)}°</span>
-          </div>
-          <div className="info-item">
-            <span className="info-icon">🚗</span>
-            <span className="info-text">物理引擎：60fps流畅动画</span>
-          </div>
-        </div>
-
         <div className="reset-control">
           <div className="reset-buttons">
             <button 
