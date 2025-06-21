@@ -34,7 +34,8 @@ const AnimationManager = () => {
     isPaused: false,
     currentAction: null,
     actionProgress: 0,
-    loopInfo: { current: 0, max: 0 }
+    loopInfo: { current: 0, max: 0 },
+    isObstacleDetected: false
   });
 
   // 监听尾门状态变化
@@ -129,6 +130,17 @@ const AnimationManager = () => {
                   <span className="status-indicator emergency-process">
                     <span className="status-dot"></span>
                     紧急停止中...
+                  </span>
+                </div>
+              )}
+              
+              {/* 障碍物检测状态显示 */}
+              {tailgateState.isObstacleDetected && (
+                <div className="status-item">
+                  <span className="status-label">检测状态:</span>
+                  <span className="status-indicator obstacle">
+                    <span className="status-dot"></span>
+                    障碍物已检测
                   </span>
                 </div>
               )}

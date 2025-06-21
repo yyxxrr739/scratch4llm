@@ -12,7 +12,10 @@ const ScenarioControls = ({
   onPause,
   onResume,
   onStop,
-  onClear
+  onClear,
+  onObstacleDetected,
+  onObstacleCleared,
+  isObstacleDetected
 }) => {
   const [selectedCategory, setSelectedCategory] = useState('basic');
   const [selectedScenario, setSelectedScenario] = useState('');
@@ -42,6 +45,14 @@ const ScenarioControls = ({
     } else if (selectedScenario) {
       // 否则执行场景
       onExecuteScenario(selectedScenario);
+    }
+  };
+
+  const handleObstacleToggle = () => {
+    if (isObstacleDetected) {
+      onObstacleCleared();
+    } else {
+      onObstacleDetected();
     }
   };
 
@@ -142,6 +153,14 @@ const ScenarioControls = ({
               className="control-btn reset small"
             >
               清空
+            </button>
+            
+            <button
+              onClick={handleObstacleToggle}
+              className={`control-btn ${isObstacleDetected ? 'danger' : 'info'} small`}
+              title={isObstacleDetected ? "清除障碍物检测" : "触发障碍物检测"}
+            >
+              {isObstacleDetected ? '清除障碍物' : '障碍物'}
             </button>
           </div>
         </div>

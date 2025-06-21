@@ -8,6 +8,7 @@ import './TailgateAnimation.css';
 
 const TailgateAnimation = ({ onStateChange }) => {
   const [activeControlTab, setActiveControlTab] = useState('basic');
+  const [isObstacleDetected, setIsObstacleDetected] = useState(false);
   
   // 使用尾门服务Hook
   const {
@@ -54,10 +55,11 @@ const TailgateAnimation = ({ onStateChange }) => {
         isPaused,
         currentAction: orchestratorAction,
         actionProgress,
-        loopInfo
+        loopInfo,
+        isObstacleDetected
       });
     }
-  }, [isOpen, isAnimating, currentAngle, currentSpeed, isEmergencyStopped, status.isEmergencyStopInProcess, isInitialized, isExecuting, isPaused, orchestratorAction, actionProgress, loopInfo, onStateChange]);
+  }, [isOpen, isAnimating, currentAngle, currentSpeed, isEmergencyStopped, status.isEmergencyStopInProcess, isInitialized, isExecuting, isPaused, orchestratorAction, actionProgress, loopInfo, isObstacleDetected, onStateChange]);
 
   // 初始化服务
   useEffect(() => {
@@ -73,6 +75,21 @@ const TailgateAnimation = ({ onStateChange }) => {
       cleanup();
     };
   }, [cleanup]);
+
+  // 障碍物检测事件处理
+  const handleObstacleDetected = () => {
+    setIsObstacleDetected(true);
+    // 触发紧急停止
+    actions.emergencyStop();
+    // 停止编排器的运动序列
+    orchestratorControls.stop();
+  };
+
+  const handleObstacleCleared = () => {
+    setIsObstacleDetected(false);
+    // 重置紧急停止状态
+    actions.resetEmergencyStop();
+  };
 
   // 基础控制事件处理
   const handleOpen = () => {
@@ -195,6 +212,9 @@ const TailgateAnimation = ({ onStateChange }) => {
             onResume={handleOrchestratorResume}
             onStop={handleOrchestratorStop}
             onClear={handleOrchestratorClear}
+            onObstacleDetected={handleObstacleDetected}
+            onObstacleCleared={handleObstacleCleared}
+            isObstacleDetected={isObstacleDetected}
           />
         );
       

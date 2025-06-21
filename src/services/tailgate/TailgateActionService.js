@@ -192,6 +192,11 @@ class TailgateActionService {
 
   // 启动尾门开启
   startOpen(speed = 1) {
+    if (this.isEmergencyStopped) {
+      this.eventService.emit('tailgate:warning', { message: 'Tailgate is in emergency stop state. Please reset emergency stop first.' });
+      return false;
+    }
+
     if (this.isOpen()) {
       this.eventService.emit('tailgate:warning', { message: 'Tailgate is already open' });
       return false;
@@ -211,6 +216,11 @@ class TailgateActionService {
 
   // 启动尾门关闭
   startClose(speed = 1) {
+    if (this.isEmergencyStopped) {
+      this.eventService.emit('tailgate:warning', { message: 'Tailgate is in emergency stop state. Please reset emergency stop first.' });
+      return false;
+    }
+
     if (this.isClosed()) {
       this.eventService.emit('tailgate:warning', { message: 'Tailgate is already closed' });
       return false;
@@ -259,6 +269,11 @@ class TailgateActionService {
 
   // 移动到指定角度
   moveToAngle(angle, speed = 1) {
+    if (this.isEmergencyStopped) {
+      this.eventService.emit('tailgate:warning', { message: 'Tailgate is in emergency stop state. Please reset emergency stop first.' });
+      return false;
+    }
+
     if (angle < this.config.minAngle || angle > this.config.maxAngle) {
       this.eventService.emit('tailgate:error', { 
         message: `Angle must be between ${this.config.minAngle} and ${this.config.maxAngle}` 
@@ -280,6 +295,11 @@ class TailgateActionService {
 
   // 相对角度移动
   moveByAngle(deltaAngle, speed = 1) {
+    if (this.isEmergencyStopped) {
+      this.eventService.emit('tailgate:warning', { message: 'Tailgate is in emergency stop state. Please reset emergency stop first.' });
+      return false;
+    }
+
     const newAngle = this.currentAngle + deltaAngle;
     return this.moveToAngle(newAngle, speed);
   }

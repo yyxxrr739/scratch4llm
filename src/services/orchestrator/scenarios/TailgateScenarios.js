@@ -115,6 +115,21 @@ export const TailgateScenarios = {
     ]
   },
 
+  // 障碍物检测测试场景
+  obstacleDetectionTest: {
+    name: "障碍物检测测试",
+    description: "测试障碍物检测触发紧急停止功能",
+    sequence: [
+      { action: "open", params: { speed: 1 } },
+      { wait: { type: "duration", value: 1000 } }, // 等待尾门开始运动
+      { action: "emergencyStop", params: {} }, // 模拟障碍物检测触发紧急停止
+      { wait: { type: "duration", value: 1500 } }, // 等待紧急停止完成
+      { action: "moveToAngle", params: { angle: 30, speed: 0.8 } }, // 测试重置后是否能正常运动
+      { wait: { type: "duration", value: 1000 } },
+      { action: "close", params: { speed: 1 } }
+    ]
+  },
+
   // 速度变化场景
   speedVariation: {
     name: "速度变化演示",
@@ -185,7 +200,7 @@ export const ScenarioCategories = {
   },
   test: {
     name: "测试场景",
-    scenarios: ["emergencyStopProcessTest", "continuousLoop"]
+    scenarios: ["emergencyStopProcessTest", "continuousLoop", "obstacleDetectionTest"]
   }
 };
 

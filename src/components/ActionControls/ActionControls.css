@@ -149,6 +149,17 @@
   transform: translateY(-1px);
 }
 
+.control-btn.info {
+  background: rgba(23, 162, 184, 0.8);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.control-btn.info:hover:not(:disabled) {
+  background: rgba(19, 132, 150, 0.9);
+  transform: translateY(-1px);
+}
+
 .btn-icon {
   font-size: 16px;
 }
