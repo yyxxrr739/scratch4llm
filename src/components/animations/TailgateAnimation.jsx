@@ -109,6 +109,10 @@ const TailgateAnimation = ({ onStateChange }) => {
     actions.emergencyStop();
   };
 
+  const handleResetEmergencyStop = () => {
+    actions.resetEmergencyStop();
+  };
+
   // 编排器事件处理
   const handleExecuteScenario = async (scenarioId) => {
     await executeScenario(scenarioId, actions);
@@ -145,6 +149,7 @@ const TailgateAnimation = ({ onStateChange }) => {
             isOpen={isOpen}
             isAnimating={isAnimating}
             currentAngle={currentAngle}
+            isEmergencyStopped={isEmergencyStopped}
             onOpen={handleOpen}
             onClose={handleClose}
             onReset={handleReset}
@@ -158,6 +163,7 @@ const TailgateAnimation = ({ onStateChange }) => {
             currentAngle={currentAngle}
             currentSpeed={currentSpeed}
             isEmergencyStopped={isEmergencyStopped}
+            isEmergencyStopInProcess={status.isEmergencyStopInProcess}
             onSpeedChange={handleSpeedChange}
             onMoveToAngle={handleMoveToAngle}
             onMoveByAngle={handleMoveByAngle}
@@ -165,6 +171,7 @@ const TailgateAnimation = ({ onStateChange }) => {
             onResume={handleResume}
             onStop={handleStop}
             onEmergencyStop={handleEmergencyStop}
+            onResetEmergencyStop={handleResetEmergencyStop}
           />
         );
       
@@ -237,11 +244,22 @@ const TailgateAnimation = ({ onStateChange }) => {
           </span>
         </div>
         
+        {/* 紧急停止状态显示 */}
         {isEmergencyStopped && (
           <div className="status-item emergency-stop-status">
-            <span className="status-label">紧急停止:</span>
+            <span className="status-label">尾门状态:</span>
             <span className="status-value emergency-stop">
-              🛑 已激活
+              🛑 紧急停止
+            </span>
+          </div>
+        )}
+        
+        {/* 紧急停止过程中状态显示 */}
+        {status.isEmergencyStopInProcess && (
+          <div className="status-item emergency-stop-process-status">
+            <span className="status-label">尾门状态:</span>
+            <span className="status-value emergency-stop-process">
+              ⚡ 紧急停止中...
             </span>
           </div>
         )}

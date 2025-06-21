@@ -100,29 +100,16 @@ export const TailgateScenarios = {
     ]
   },
 
-  // 紧急停止测试场景
-  emergencyStopTest: {
-    name: "紧急停止测试",
-    description: "测试紧急停止功能",
+  // 紧急停止过程状态测试场景
+  emergencyStopProcessTest: {
+    name: "紧急停止过程状态测试",
+    description: "测试紧急停止过程中的状态显示和视觉提醒",
     sequence: [
-      { action: "open", params: { speed: 0.8 } },
-      { wait: { type: "duration", value: 500 } },
-      { action: "emergencyStop", params: {} },
-      { wait: { type: "duration", value: 1500 } },
-      { action: "close", params: { speed: 1 } }
-    ]
-  },
-
-  // 动态紧急停止测试场景
-  dynamicEmergencyStopTest: {
-    name: "动态紧急停止测试",
-    description: "在尾门运动过程中进行紧急停止测试",
-    sequence: [
-      { action: "open", params: { speed: 1.2 } },
-      { wait: { type: "duration", value: 300 } },
-      { action: "emergencyStop", params: {} },
-      { wait: { type: "duration", value: 2000 } },
-      { action: "moveToAngle", params: { angle: 45, speed: 0.8 } },
+      { action: "open", params: { speed: 1.5 } },
+      { wait: { type: "duration", value: 500 } }, // 在尾门运动过程中执行紧急停止
+      { action: "emergencyStop", params: {} }, // 此时应该显示"紧急停止中..."
+      { wait: { type: "duration", value: 1000 } }, // 等待紧急停止过程完成
+      { action: "moveToAngle", params: { angle: 45, speed: 0.8 } }, // 测试重置后是否能正常运动
       { wait: { type: "duration", value: 1000 } },
       { action: "close", params: { speed: 1 } }
     ]
@@ -198,7 +185,7 @@ export const ScenarioCategories = {
   },
   test: {
     name: "测试场景",
-    scenarios: ["emergencyStopTest", "dynamicEmergencyStopTest", "continuousLoop"]
+    scenarios: ["emergencyStopProcessTest", "continuousLoop"]
   }
 };
 

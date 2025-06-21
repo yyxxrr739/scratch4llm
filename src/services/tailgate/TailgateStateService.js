@@ -14,6 +14,7 @@ class TailgateStateService extends StateService {
       speed: 1,
       targetAngle: 0,
       isEmergencyStopped: false,
+      isEmergencyStopInProcess: false,
       lastUpdateTime: Date.now()
     });
   }
@@ -65,6 +66,14 @@ class TailgateStateService extends StateService {
   updateEmergencyStop(isEmergencyStopped) {
     this.updateState('tailgate', {
       isEmergencyStopped,
+      lastUpdateTime: Date.now()
+    });
+  }
+
+  // 更新紧急停止过程状态
+  updateEmergencyStopProcess(isInProcess) {
+    this.updateState('tailgate', {
+      isEmergencyStopInProcess: isInProcess,
       lastUpdateTime: Date.now()
     });
   }
@@ -123,6 +132,12 @@ class TailgateStateService extends StateService {
     return state ? state.isEmergencyStopped : false;
   }
 
+  // 获取紧急停止过程状态
+  getEmergencyStopProcessStatus() {
+    const state = this.getState('tailgate');
+    return state ? state.isEmergencyStopInProcess : false;
+  }
+
   // 获取完整状态
   getTailgateState() {
     return this.getState('tailgate');
@@ -140,6 +155,7 @@ class TailgateStateService extends StateService {
       speed: 1,
       targetAngle: 0,
       isEmergencyStopped: false,
+      isEmergencyStopInProcess: false,
       lastUpdateTime: Date.now()
     });
   }

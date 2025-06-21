@@ -27,7 +27,8 @@ const AnimationManager = () => {
     isAnimating: false,
     currentAngle: 0,
     currentSpeed: 1,
-    isEmergencyStopped: false
+    isEmergencyStopped: false,
+    isEmergencyStopInProcess: false
   });
 
   // 监听尾门状态变化
@@ -94,6 +95,28 @@ const AnimationManager = () => {
                   {tailgateState.isAnimating ? '进行中' : '空闲'}
                 </span>
               </div>
+              
+              {/* 紧急停止状态显示 */}
+              {tailgateState.isEmergencyStopped && (
+                <div className="status-item">
+                  <span className="status-label">尾门状态:</span>
+                  <span className="status-indicator emergency">
+                    <span className="status-dot"></span>
+                    紧急停止
+                  </span>
+                </div>
+              )}
+              
+              {/* 紧急停止过程中状态显示 */}
+              {tailgateState.isEmergencyStopInProcess && (
+                <div className="status-item">
+                  <span className="status-label">尾门状态:</span>
+                  <span className="status-indicator emergency-process">
+                    <span className="status-dot"></span>
+                    紧急停止中...
+                  </span>
+                </div>
+              )}
             </div>
           </div>
         </div>

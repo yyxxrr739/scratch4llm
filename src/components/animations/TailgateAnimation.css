@@ -171,12 +171,36 @@
   border-left: 3px solid #e74c3c;
 }
 
+.emergency-stop-process-status {
+  background: rgba(231, 76, 60, 0.15);
+  border-radius: 4px;
+  padding: 4px 8px;
+  margin: 4px 0;
+  border-left: 3px solid #e74c3c;
+  animation: emergencyStopProcessBlink 0.8s infinite;
+}
+
 @keyframes emergencyStopBlink {
   0%, 50% {
     opacity: 1;
   }
   51%, 100% {
     opacity: 0.7;
+  }
+}
+
+@keyframes emergencyStopProcessBlink {
+  0%, 30% {
+    background: rgba(231, 76, 60, 0.15);
+    border-left-color: #e74c3c;
+  }
+  31%, 60% {
+    background: rgba(231, 76, 60, 0.25);
+    border-left-color: #ff6b6b;
+  }
+  61%, 100% {
+    background: rgba(231, 76, 60, 0.15);
+    border-left-color: #e74c3c;
   }
 }
 

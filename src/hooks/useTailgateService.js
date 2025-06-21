@@ -99,6 +99,14 @@ export function useTailgateService() {
         actionService.on('tailgate:emergencyStop', ({ angle }) => {
           stateService.updateAnimationState(false, null);
           stateService.updateEmergencyStop(true);
+          stateService.updateEmergencyStopProcess(false);
+          stateService.updateAngle(angle);
+        })
+      );
+
+      unsubscribes.push(
+        actionService.on('tailgate:emergencyStopStarted', ({ angle }) => {
+          stateService.updateEmergencyStopProcess(true);
           stateService.updateAngle(angle);
         })
       );
@@ -222,6 +230,13 @@ export function useTailgateService() {
     emergencyStop: useCallback(() => {
       if (actionServiceRef.current) {
         return actionServiceRef.current.emergencyStop();
+      }
+      return false;
+    }, []),
+
+    resetEmergencyStop: useCallback(() => {
+      if (actionServiceRef.current) {
+        return actionServiceRef.current.resetEmergencyStop();
       }
       return false;
     }, []),

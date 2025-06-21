@@ -4,7 +4,8 @@ import './ActionControls.css';
 const BasicControls = ({ 
   isOpen, 
   isAnimating, 
-  currentAngle, 
+  currentAngle,
+  isEmergencyStopped,
   onOpen, 
   onClose, 
   onReset 
@@ -17,7 +18,7 @@ const BasicControls = ({
         <div className="control-buttons">
           <button 
             onClick={onOpen}
-            disabled={isAnimating || isOpen}
+            disabled={isAnimating || isOpen || isEmergencyStopped}
             className={`control-btn primary ${isOpen ? 'disabled' : ''}`}
           >
             <span className="btn-icon">🚪</span>
@@ -26,7 +27,7 @@ const BasicControls = ({
           
           <button 
             onClick={onClose}
-            disabled={isAnimating || !isOpen}
+            disabled={isAnimating || !isOpen || isEmergencyStopped}
             className={`control-btn secondary ${!isOpen ? 'disabled' : ''}`}
           >
             <span className="btn-icon">🔒</span>
@@ -36,7 +37,7 @@ const BasicControls = ({
           {isOpen && (
             <button 
               onClick={onReset}
-              disabled={isAnimating}
+              disabled={isAnimating || isEmergencyStopped}
               className="control-btn reset"
             >
               <span className="btn-icon">🔄</span>

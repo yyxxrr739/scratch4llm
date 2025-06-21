@@ -151,8 +151,11 @@ class ActionOrchestrator {
         throw new Error(`Failed to execute action: ${actionType}`);
       }
 
-      // 等待动画完成
-      await this.waitForAnimationComplete(service);
+      // 对于紧急停止动作，不等待动画完成，因为它会自己处理停止
+      if (actionType !== 'emergencyStop') {
+        // 等待动画完成
+        await this.waitForAnimationComplete(service);
+      }
     } else {
       console.error('ActionOrchestrator: Service not available or missing start method', { service });
       throw new Error('Service not available or missing start method');

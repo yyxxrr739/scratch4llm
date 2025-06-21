@@ -390,6 +390,11 @@
   animation: blink 0.5s infinite;
 }
 
+.status-indicator.emergency-process .status-dot {
+  background: #e74c3c;
+  animation: emergencyProcessBlink 0.8s infinite;
+}
+
 .status-indicator.executing .status-dot {
   background: #3498db;
   animation: pulse 1s infinite;
@@ -589,19 +594,34 @@
 /* 动画 */
 @keyframes pulse {
   0%, 100% {
-    opacity: 1;
+    transform: scale(1);
   }
   50% {
-    opacity: 0.5;
+    transform: scale(1.1);
   }
 }
 
 @keyframes blink {
-  0%, 100% {
+  0%, 50% {
     opacity: 1;
   }
-  50% {
-    opacity: 0;
+  51%, 100% {
+    opacity: 0.3;
+  }
+}
+
+@keyframes emergencyProcessBlink {
+  0%, 30% {
+    background: #e74c3c;
+    transform: scale(1);
+  }
+  31%, 60% {
+    background: #ff6b6b;
+    transform: scale(1.2);
+  }
+  61%, 100% {
+    background: #e74c3c;
+    transform: scale(1);
   }
 }
 
