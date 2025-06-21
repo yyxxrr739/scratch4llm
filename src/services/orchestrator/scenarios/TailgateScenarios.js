@@ -181,7 +181,13 @@ export const TailgateScenarios = {
       // 最终关闭
       { action: "close", params: { speed: 1 } }
     ]
-  }
+  },
+
+  // 条件控制场景
+  vehicleSpeedControl: vehicleSpeedControlScenario,
+  smartParking: smartParkingScenario,
+  safetyDemo: safetyDemoScenario,
+  dynamicResponse: dynamicResponseScenario
 };
 
 // 场景分类
@@ -201,6 +207,10 @@ export const ScenarioCategories = {
   test: {
     name: "测试场景",
     scenarios: ["emergencyStopProcessTest", "continuousLoop", "obstacleDetectionTest"]
+  },
+  conditional: {
+    name: "条件控制场景",
+    scenarios: ["vehicleSpeedControl", "smartParking", "safetyDemo"]
   }
 };
 
@@ -258,4 +268,99 @@ export function validateScenario(scenario) {
   }
 
   return { valid: true };
-} 
+}
+
+// 外部状态条件示例（需要在实际应用中实现）
+// 这些函数应该从外部状态提供者获取数据
+function getVehicleSpeed() {
+  // 实际应用中应该从物理引擎或传感器获取
+  return 0; // 默认值
+}
+
+function isObstacleDetected() {
+  // 实际应用中应该从传感器获取
+  return false; // 默认值
+}
+
+function getDistanceToObstacle() {
+  // 实际应用中应该从距离传感器获取
+  return 100; // 默认值，单位：厘米
+}
+
+// 条件控制场景示例
+
+// 车速安全控制场景
+export const vehicleSpeedControlScenario = {
+  name: "车速安全控制",
+  description: "根据车速进行安全控制，车速过高时自动关闭尾门",
+  sequence: [
+    // 等待车速安全
+    { wait: { type: "condition", value: (service) => getVehicleSpeed() < 5 } },
+    { action: "open", params: { speed: 1 } },
+    { wait: { type: "duration", value: 2000 } },
+    // 监控车速，如果超过10km/h立即关闭
+    { wait: { type: "condition", value: (service) => getVehicleSpeed() > 10 } },
+    { action: "emergencyStop", params: {} },
+    { action: "close", params: { speed: 1.5 } }
+  ]
+};
+
+// 智能停车场景
+export const smartParkingScenario = {
+  name: "智能停车场景",
+  description: "车辆停车后自动开启尾门，检测到移动时自动关闭",
+  sequence: [
+    // 等待车辆完全停车
+    { wait: { type: "condition", value: (service) => getVehicleSpeed() === 0 } },
+    // 渐进开启
+    { action: "moveToAngle", params: { angle: 30, speed: 0.5 } },
+    { wait: { type: "duration", value: 500 } },
+    { action: "moveToAngle", params: { angle: 60, speed: 0.5 } },
+    { wait: { type: "duration", value: 500 } },
+    { action: "moveToAngle", params: { angle: 95, speed: 0.5 } },
+    { wait: { type: "duration", value: 3000 } },
+    // 如果车速超过5km/h，立即关闭
+    { wait: { type: "condition", value: (service) => getVehicleSpeed() > 5 } },
+    { action: "emergencyStop", params: {} },
+    { action: "close", params: { speed: 1.5 } }
+  ]
+};
+
+// 安全演示场景
+export const safetyDemoScenario = {
+  name: "安全演示场景",
+  description: "演示障碍物检测和安全控制功能",
+  sequence: [
+    // 确保安全条件
+    { wait: { type: "condition", value: (service) => 
+      getVehicleSpeed() < 10 && !isObstacleDetected() && getDistanceToObstacle() > 30 
+    } },
+    // 开始演示
+    { action: "open", params: { speed: 1 } },
+    { wait: { type: "duration", value: 2000 } },
+    // 模拟障碍物检测
+    { wait: { type: "condition", value: (service) => isObstacleDetected() } },
+    { action: "emergencyStop", params: {} },
+    { wait: { type: "duration", value: 1000 } },
+    // 障碍物清除后继续
+    { wait: { type: "condition", value: (service) => !isObstacleDetected() } },
+    { action: "close", params: { speed: 0.8 } }
+  ]
+};
+
+// 动态响应场景
+export const dynamicResponseScenario = {
+  name: "动态响应场景",
+  description: "根据车速动态调整尾门操作",
+  sequence: [
+    // 根据车速调整开启速度
+    { action: "moveToAngle", params: { angle: 45, speed: 0.5 } },
+    { wait: { type: "duration", value: 1000 } },
+    // 如果车速增加，加快关闭
+    { wait: { type: "condition", value: (service) => getVehicleSpeed() > 15 } },
+    { action: "close", params: { speed: 2.0 } },
+    // 如果车速降低，恢复正常速度
+    { wait: { type: "condition", value: (service) => getVehicleSpeed() < 5 } },
+    { action: "moveToAngle", params: { angle: 95, speed: 1.0 } }
+  ]
+}; 
