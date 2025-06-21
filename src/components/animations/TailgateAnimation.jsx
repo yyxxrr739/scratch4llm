@@ -6,7 +6,7 @@ import AdvancedControls from '../ActionControls/AdvancedControls.jsx';
 import ScenarioControls from '../ActionControls/ScenarioControls.jsx';
 import './TailgateAnimation.css';
 
-const TailgateAnimation = () => {
+const TailgateAnimation = ({ onStateChange }) => {
   const [activeControlTab, setActiveControlTab] = useState('basic');
   
   // 使用尾门服务Hook
@@ -38,6 +38,19 @@ const TailgateAnimation = () => {
     executeScenario,
     controls: orchestratorControls
   } = useActionOrchestrator();
+
+  // 向父组件传递状态信息
+  useEffect(() => {
+    if (onStateChange) {
+      onStateChange({
+        isOpen,
+        isAnimating,
+        currentAngle,
+        currentSpeed,
+        isEmergencyStopped
+      });
+    }
+  }, [isOpen, isAnimating, currentAngle, currentSpeed, isEmergencyStopped, onStateChange]);
 
   // 初始化服务
   useEffect(() => {

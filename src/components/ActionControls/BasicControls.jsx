@@ -45,33 +45,6 @@ const BasicControls = ({
           )}
         </div>
       </div>
-
-      <div className="status-section">
-        <h3 className="section-title">状态信息</h3>
-        
-        <div className="status-display">
-          <div className="status-item">
-            <span className="status-label">当前角度:</span>
-            <span className="status-value">{Math.round(currentAngle)}°</span>
-          </div>
-          
-          <div className="status-item">
-            <span className="status-label">状态:</span>
-            <span className={`status-indicator ${isOpen ? 'open' : 'closed'}`}>
-              <span className="status-dot"></span>
-              {isOpen ? '已开启' : '已关闭'}
-            </span>
-          </div>
-          
-          <div className="status-item">
-            <span className="status-label">动画:</span>
-            <span className={`status-indicator ${isAnimating ? 'animating' : 'idle'}`}>
-              <span className="status-dot"></span>
-              {isAnimating ? '进行中' : '空闲'}
-            </span>
-          </div>
-        </div>
-      </div>
     </div>
   );
 };

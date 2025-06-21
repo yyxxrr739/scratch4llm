@@ -17,6 +17,25 @@ const AnimationManager = () => {
     resetPhysics
   } = useWheelPhysicsEngine();
 
+  // 状态信息汇总
+  const [tailgateState, setTailgateState] = useState({
+    isOpen: false,
+    isAnimating: false,
+    currentAngle: 0,
+    currentSpeed: 1,
+    isEmergencyStopped: false
+  });
+
+  // 监听尾门状态变化
+  useEffect(() => {
+    const updateTailgateState = () => {
+      // 这里可以通过事件或其他方式获取尾门状态
+      // 暂时使用默认值，实际应用中需要从TailgateAnimation组件获取
+    };
+    
+    updateTailgateState();
+  }, []);
+
   return (
     <div className="animation-manager">
       <div className="header">
@@ -36,8 +55,9 @@ const AnimationManager = () => {
             currentAngularVelocity={getCurrentAngularVelocity()}
             currentRotation={getCurrentRotation()}
             resetPhysics={resetPhysics}
+            tailgateState={tailgateState}
           />
-          <ActiveComponent />
+          <ActiveComponent onStateChange={setTailgateState} />
         </div>
         
         <div className="animation-area">
