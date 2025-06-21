@@ -224,53 +224,6 @@ const AdvancedControls = ({
           )}
         </div>
       </div>
-
-      {/* 状态显示 */}
-      <div className="status-section">
-        <h3 className="section-title">状态信息</h3>
-        
-        <div className="status-display">
-          <div className="status-item">
-            <span className="status-label">当前角度:</span>
-            <span className="status-value">{Math.round(currentAngle)}°</span>
-          </div>
-          
-          <div className="status-item">
-            <span className="status-label">当前速度:</span>
-            <span className="status-value">{currentSpeed.toFixed(1)}x</span>
-          </div>
-          
-          <div className="status-item">
-            <span className="status-label">动画状态:</span>
-            <span className={`status-indicator ${isAnimating ? 'animating' : 'idle'}`}>
-              <span className="status-dot"></span>
-              {isAnimating ? '进行中' : '空闲'}
-            </span>
-          </div>
-          
-          {/* 紧急停止状态显示 */}
-          {isEmergencyStopped && (
-            <div className="status-item">
-              <span className="status-label">尾门状态:</span>
-              <span className="status-indicator emergency">
-                <span className="status-dot"></span>
-                紧急停止
-              </span>
-            </div>
-          )}
-          
-          {/* 紧急停止过程中状态显示 */}
-          {isEmergencyStopInProcess && (
-            <div className="status-item">
-              <span className="status-label">尾门状态:</span>
-              <span className="status-indicator emergency-process">
-                <span className="status-dot"></span>
-                紧急停止中...
-              </span>
-            </div>
-          )}
-        </div>
-      </div>
     </div>
   );
 };

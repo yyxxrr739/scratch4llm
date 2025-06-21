@@ -16,14 +16,17 @@ const ScenarioControls = ({
 }) => {
   const [selectedCategory, setSelectedCategory] = useState('basic');
   const [selectedScenario, setSelectedScenario] = useState('');
-  const [showDetails, setShowDetails] = useState(false);
 
   const scenarioCategories = getScenariosByCategory();
   const allScenarios = getScenarioList();
 
-  const handleScenarioSelect = (scenarioId) => {
+  const handleCategoryChange = (categoryKey) => {
+    setSelectedCategory(categoryKey);
+    setSelectedScenario(''); // 重置场景选择
+  };
+
+  const handleScenarioChange = (scenarioId) => {
     setSelectedScenario(scenarioId);
-    setShowDetails(true);
   };
 
   const handleExecuteScenario = () => {
@@ -41,86 +44,53 @@ const ScenarioControls = ({
   return (
     <div className="scenario-controls">
       <div className="control-section">
-        <h3 className="section-title">场景控制</h3>
-        
         {/* 场景分类选择 */}
         <div className="control-group">
           <label className="control-label">场景分类</label>
-          <div className="category-selector">
+          <select 
+            value={selectedCategory} 
+            onChange={(e) => handleCategoryChange(e.target.value)}
+            className="scenario-select"
+          >
             {Object.keys(scenarioCategories).map(categoryKey => (
-              <button
-                key={categoryKey}
-                onClick={() => setSelectedCategory(categoryKey)}
-                className={`category-btn ${selectedCategory === categoryKey ? 'active' : ''}`}
-              >
+              <option key={categoryKey} value={categoryKey}>
                 {scenarioCategories[categoryKey].name}
-              </button>
+              </option>
             ))}
-          </div>
+          </select>
         </div>
 
         {/* 场景选择 */}
         <div className="control-group">
           <label className="control-label">选择场景</label>
-          <div className="scenario-list">
+          <select 
+            value={selectedScenario} 
+            onChange={(e) => handleScenarioChange(e.target.value)}
+            className="scenario-select"
+          >
+            <option value="">请选择场景</option>
             {scenarioCategories[selectedCategory]?.scenarios.map(scenario => (
-              <div
-                key={scenario.id}
-                className={`scenario-item ${selectedScenario === scenario.id ? 'selected' : ''}`}
-                onClick={() => handleScenarioSelect(scenario.id)}
-              >
-                <div className="scenario-header">
-                  <span className="scenario-name">{scenario.name}</span>
-                  <span className="scenario-action-count">
-                    {scenario.sequence.length} 个动作
-                  </span>
-                </div>
-                <div className="scenario-description">
-                  {scenario.description}
-                </div>
-              </div>
+              <option key={scenario.id} value={scenario.id}>
+                {scenario.name} ({scenario.sequence.length} 个动作)
+              </option>
             ))}
-          </div>
+          </select>
         </div>
 
-        {/* 场景详情 */}
-        {showDetails && selectedScenarioDetails && (
+        {/* 动作序列 */}
+        {selectedScenarioDetails && (
           <div className="control-group">
-            <label className="control-label">场景详情</label>
-            <div className="scenario-details">
-              <div className="detail-item">
-                <span className="detail-label">名称:</span>
-                <span className="detail-value">{selectedScenarioDetails.name}</span>
-              </div>
-              <div className="detail-item">
-                <span className="detail-label">描述:</span>
-                <span className="detail-value">{selectedScenarioDetails.description}</span>
-              </div>
-              <div className="detail-item">
-                <span className="detail-label">动作数量:</span>
-                <span className="detail-value">{selectedScenarioDetails.sequence.length}</span>
-              </div>
-              {selectedScenarioDetails.loop && (
-                <div className="detail-item">
-                  <span className="detail-label">循环次数:</span>
-                  <span className="detail-value">{selectedScenarioDetails.maxLoops || '无限'}</span>
+            <label className="control-label">动作序列</label>
+            <div className="sequence-list compact">
+              {selectedScenarioDetails.sequence.map((action, index) => (
+                <div key={index} className="sequence-item compact">
+                  <span className="sequence-index compact">{index + 1}.</span>
+                  <span className="sequence-action compact">
+                    {action.action ? `${action.action}${action.params ? ` (${JSON.stringify(action.params)})` : ''}` : 
+                     action.wait ? `等待 ${action.wait.value}ms` : '未知动作'}
+                  </span>
                 </div>
-              )}
-              
-              <div className="action-sequence">
-                <span className="detail-label">动作序列:</span>
-                <div className="sequence-list">
-                  {selectedScenarioDetails.sequence.map((action, index) => (
-                    <div key={index} className="sequence-item">
-                      <span className="sequence-index">{index + 1}.</span>
-                      <span className="sequence-action">
-                        {action.action ? `${action.action}${action.params ? ` (${JSON.stringify(action.params)})` : ''}` : 
-                         action.wait ? `等待 ${action.wait.value}ms` : '未知动作'}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </div>
+              ))}
             </div>
           </div>
         )}
@@ -128,13 +98,11 @@ const ScenarioControls = ({
 
       {/* 执行控制 */}
       <div className="control-section">
-        <h3 className="section-title">执行控制</h3>
-        
         <div className="execution-controls">
           <button
             onClick={handleExecuteScenario}
             disabled={isExecuting || !selectedScenario}
-            className="control-btn primary large"
+            className="control-btn primary small"
           >
             <span className="btn-icon">▶️</span>
             执行场景
@@ -144,7 +112,7 @@ const ScenarioControls = ({
             <button
               onClick={onPause}
               disabled={!isExecuting || isPaused}
-              className="control-btn warning"
+              className="control-btn warning small"
             >
               <span className="btn-icon">⏸️</span>
               暂停
@@ -153,7 +121,7 @@ const ScenarioControls = ({
             <button
               onClick={onResume}
               disabled={!isExecuting || !isPaused}
-              className="control-btn success"
+              className="control-btn success small"
             >
               <span className="btn-icon">▶️</span>
               恢复
@@ -162,7 +130,7 @@ const ScenarioControls = ({
             <button
               onClick={onStop}
               disabled={!isExecuting}
-              className="control-btn secondary"
+              className="control-btn secondary small"
             >
               <span className="btn-icon">⏹️</span>
               停止
@@ -170,7 +138,7 @@ const ScenarioControls = ({
             
             <button
               onClick={onClear}
-              className="control-btn reset"
+              className="control-btn reset small"
             >
               <span className="btn-icon">🗑️</span>
               清空

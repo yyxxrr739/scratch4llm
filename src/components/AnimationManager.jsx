@@ -28,7 +28,13 @@ const AnimationManager = () => {
     currentAngle: 0,
     currentSpeed: 1,
     isEmergencyStopped: false,
-    isEmergencyStopInProcess: false
+    isEmergencyStopInProcess: false,
+    isInitialized: false,
+    isExecuting: false,
+    isPaused: false,
+    currentAction: null,
+    actionProgress: 0,
+    loopInfo: { current: 0, max: 0 }
   });
 
   // 监听尾门状态变化
@@ -96,6 +102,15 @@ const AnimationManager = () => {
                 </span>
               </div>
               
+              {/* 服务状态 */}
+              <div className="status-item">
+                <span className="status-label">服务状态:</span>
+                <span className={`status-indicator ${tailgateState.isInitialized ? 'ready' : 'initializing'}`}>
+                  <span className="status-dot"></span>
+                  {tailgateState.isInitialized ? '就绪' : '初始化中...'}
+                </span>
+              </div>
+              
               {/* 紧急停止状态显示 */}
               {tailgateState.isEmergencyStopped && (
                 <div className="status-item">
@@ -114,6 +129,40 @@ const AnimationManager = () => {
                   <span className="status-indicator emergency-process">
                     <span className="status-dot"></span>
                     紧急停止中...
+                  </span>
+                </div>
+              )}
+              
+              {/* 编排器状态 */}
+              {tailgateState.isExecuting && (
+                <div className="status-item">
+                  <span className="status-label">编排器:</span>
+                  <span className={`status-indicator ${tailgateState.isPaused ? 'paused' : 'executing'}`}>
+                    <span className="status-dot"></span>
+                    {tailgateState.isPaused ? '已暂停' : '执行中'}
+                  </span>
+                </div>
+              )}
+              
+              {/* 当前动作 */}
+              {tailgateState.currentAction && (
+                <div className="status-item">
+                  <span className="status-label">当前动作:</span>
+                  <span className="status-value">
+                    {tailgateState.currentAction.action ? 
+                      `${tailgateState.currentAction.action}${tailgateState.currentAction.params ? ` (${JSON.stringify(tailgateState.currentAction.params)})` : ''}` : 
+                      '无'
+                    }
+                  </span>
+                </div>
+              )}
+              
+              {/* 循环进度 */}
+              {tailgateState.loopInfo.max > 0 && (
+                <div className="status-item">
+                  <span className="status-label">循环进度:</span>
+                  <span className="status-value">
+                    {tailgateState.loopInfo.current} / {tailgateState.loopInfo.max}
                   </span>
                 </div>
               )}

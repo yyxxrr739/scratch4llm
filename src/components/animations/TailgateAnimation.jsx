@@ -47,10 +47,17 @@ const TailgateAnimation = ({ onStateChange }) => {
         isAnimating,
         currentAngle,
         currentSpeed,
-        isEmergencyStopped
+        isEmergencyStopped,
+        isEmergencyStopInProcess: status.isEmergencyStopInProcess,
+        isInitialized,
+        isExecuting,
+        isPaused,
+        currentAction: orchestratorAction,
+        actionProgress,
+        loopInfo
       });
     }
-  }, [isOpen, isAnimating, currentAngle, currentSpeed, isEmergencyStopped, onStateChange]);
+  }, [isOpen, isAnimating, currentAngle, currentSpeed, isEmergencyStopped, status.isEmergencyStopInProcess, isInitialized, isExecuting, isPaused, orchestratorAction, actionProgress, loopInfo, onStateChange]);
 
   // 初始化服务
   useEffect(() => {
@@ -234,45 +241,6 @@ const TailgateAnimation = ({ onStateChange }) => {
           <span className="error-text">{error || orchestratorError}</span>
         </div>
       )}
-
-      {/* 系统状态 */}
-      <div className="system-status">
-        <div className="status-item">
-          <span className="status-label">服务状态:</span>
-          <span className={`status-value ${isInitialized ? 'ready' : 'initializing'}`}>
-            {isInitialized ? '就绪' : '初始化中...'}
-          </span>
-        </div>
-        
-        {/* 紧急停止状态显示 */}
-        {isEmergencyStopped && (
-          <div className="status-item emergency-stop-status">
-            <span className="status-label">尾门状态:</span>
-            <span className="status-value emergency-stop">
-              🛑 紧急停止
-            </span>
-          </div>
-        )}
-        
-        {/* 紧急停止过程中状态显示 */}
-        {status.isEmergencyStopInProcess && (
-          <div className="status-item emergency-stop-process-status">
-            <span className="status-label">尾门状态:</span>
-            <span className="status-value emergency-stop-process">
-              ⚡ 紧急停止中...
-            </span>
-          </div>
-        )}
-        
-        {isExecuting && (
-          <div className="status-item">
-            <span className="status-label">编排器:</span>
-            <span className="status-value executing">
-              {isPaused ? '已暂停' : '执行中'}
-            </span>
-          </div>
-        )}
-      </div>
     </div>
   );
 };
