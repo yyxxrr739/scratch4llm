@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { WHEEL_CONFIG, unitConverters, keyboardHandlers } from '../utils/wheelConfig';
 
 const useWheelPhysicsEngine = () => {
   const [currentSpeedKmh, setCurrentSpeedKmh] = useState(0);
@@ -14,60 +15,14 @@ const useWheelPhysicsEngine = () => {
     isRunning: false
   });
   
-  // 物理参数配置
-  const PHYSICS_CONFIG = {
-    MAX_SPEED_KMH: 30,
-    WHEEL_RADIUS: 0.3, // 米
-    ACCELERATION_RATE: 3, // km/h/s
-    DECELERATION_RATE: 3, // km/h/s
-    FRICTION: 0.1, // 摩擦系数
-    MIN_VELOCITY: 0.01 // 最小速度阈值
-  };
-  
-  // 将角速度转换为km/h
-  const angularVelocityToKmh = useCallback((angularVelocity) => {
-    const linearVelocity = angularVelocity * PHYSICS_CONFIG.WHEEL_RADIUS; // m/s
-    return linearVelocity * 3.6; // 转换为km/h
-  }, []);
-  
-  // 将km/h转换为角速度
-  const kmhToAngularVelocity = useCallback((kmh) => {
-    const linearVelocity = kmh / 3.6; // m/s
-    return linearVelocity / PHYSICS_CONFIG.WHEEL_RADIUS; // rad/s
-  }, []);
-  
   // 处理键盘按下事件
   const handleKeyDown = useCallback((event) => {
-    switch (event.code) {
-      case 'ArrowUp':
-        event.preventDefault();
-        setIsAccelerating(true);
-        setIsDecelerating(false);
-        break;
-      case 'ArrowDown':
-        event.preventDefault();
-        setIsDecelerating(true);
-        setIsAccelerating(false);
-        break;
-      default:
-        break;
-    }
+    keyboardHandlers.handleKeyDown(event, setIsAccelerating, setIsDecelerating);
   }, []);
 
   // 处理键盘释放事件
   const handleKeyUp = useCallback((event) => {
-    switch (event.code) {
-      case 'ArrowUp':
-        event.preventDefault();
-        setIsAccelerating(false);
-        break;
-      case 'ArrowDown':
-        event.preventDefault();
-        setIsDecelerating(false);
-        break;
-      default:
-        break;
-    }
+    keyboardHandlers.handleKeyUp(event, setIsAccelerating, setIsDecelerating);
   }, []);
 
   // 设置键盘事件监听器
@@ -90,7 +45,7 @@ const useWheelPhysicsEngine = () => {
         physicsState.current.lastTime = currentTime;
       }
       
-      const deltaTime = Math.min((currentTime - physicsState.current.lastTime) / 1000, 0.016); // 限制最大时间步长为16ms
+      const deltaTime = Math.min((currentTime - physicsState.current.lastTime) / 1000, WHEEL_CONFIG.PHYSICS_DELTA_TIME);
       physicsState.current.lastTime = currentTime;
       
       // 计算角加速度
@@ -98,16 +53,14 @@ const useWheelPhysicsEngine = () => {
       
       if (isAccelerating) {
         // 加速：将km/h/s转换为rad/s²
-        const linearAcceleration = PHYSICS_CONFIG.ACCELERATION_RATE / 3.6; // m/s²
-        angularAcceleration = linearAcceleration / PHYSICS_CONFIG.WHEEL_RADIUS; // rad/s²
+        angularAcceleration = unitConverters.kmhPerSecondToRadPerSecondSquared(WHEEL_CONFIG.ACCELERATION_RATE);
       } else if (isDecelerating) {
         // 减速：将km/h/s转换为rad/s²
-        const linearDeceleration = PHYSICS_CONFIG.DECELERATION_RATE / 3.6; // m/s²
-        angularAcceleration = -linearDeceleration / PHYSICS_CONFIG.WHEEL_RADIUS; // rad/s²
+        angularAcceleration = -unitConverters.kmhPerSecondToRadPerSecondSquared(WHEEL_CONFIG.DECELERATION_RATE);
       } else {
         // 自然减速（摩擦力）
         if (physicsState.current.angularVelocity > 0) {
-          angularAcceleration = -PHYSICS_CONFIG.FRICTION;
+          angularAcceleration = -WHEEL_CONFIG.FRICTION;
         }
       }
       
@@ -115,11 +68,11 @@ const useWheelPhysicsEngine = () => {
       const newAngularVelocity = physicsState.current.angularVelocity + angularAcceleration * deltaTime;
       
       // 限制最大速度
-      const maxAngularVelocity = kmhToAngularVelocity(PHYSICS_CONFIG.MAX_SPEED_KMH);
+      const maxAngularVelocity = unitConverters.kmhToAngularVelocity(WHEEL_CONFIG.MAX_SPEED_KMH);
       const clampedAngularVelocity = Math.max(0, Math.min(newAngularVelocity, maxAngularVelocity));
       
       // 如果速度很小，停止旋转
-      if (clampedAngularVelocity < PHYSICS_CONFIG.MIN_VELOCITY) {
+      if (clampedAngularVelocity < WHEEL_CONFIG.MIN_VELOCITY) {
         physicsState.current.angularVelocity = 0;
       } else {
         physicsState.current.angularVelocity = clampedAngularVelocity;
@@ -128,7 +81,7 @@ const useWheelPhysicsEngine = () => {
       }
       
       // 更新UI状态
-      const newSpeedKmh = angularVelocityToKmh(physicsState.current.angularVelocity);
+      const newSpeedKmh = unitConverters.angularVelocityToKmh(physicsState.current.angularVelocity);
       setCurrentSpeedKmh(newSpeedKmh);
       
       // 更新车轮的视觉旋转
@@ -146,7 +99,7 @@ const useWheelPhysicsEngine = () => {
         cancelAnimationFrame(animationId);
       }
     };
-  }, [isAccelerating, isDecelerating, angularVelocityToKmh, kmhToAngularVelocity]);
+  }, [isAccelerating, isDecelerating]);
 
   // 更新车轮的视觉旋转
   const updateWheelVisualRotation = useCallback((rotationRad) => {
