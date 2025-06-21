@@ -18,8 +18,7 @@ const AnimationManager = () => {
   const {
     currentSpeedKmh,
     isAccelerating,
-    isDecelerating,
-    resetPhysics
+    isDecelerating
   } = useWheelPhysicsEngine();
 
   // 状态信息汇总
@@ -95,25 +94,6 @@ const AnimationManager = () => {
                   {tailgateState.isAnimating ? '进行中' : '空闲'}
                 </span>
               </div>
-            </div>
-          </div>
-
-          <div className="reset-control">
-            <div className="reset-buttons">
-              <button 
-                className="reset-btn stop-btn"
-                onClick={() => resetPhysics(false)}
-                title="停止运动但保持当前位置"
-              >
-                ⏹️ 停止运动
-              </button>
-              <button 
-                className="reset-btn full-reset-btn"
-                onClick={() => resetPhysics(true)}
-                title="完全重置到初始位置"
-              >
-                🔄 完全重置
-              </button>
             </div>
           </div>
         </div>

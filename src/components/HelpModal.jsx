@@ -52,7 +52,6 @@ const HelpModal = ({ isOpen, onClose }) => {
               <li>平滑的动画效果</li>
               <li>状态实时显示</li>
               <li>紧急停止功能</li>
-              <li>完全重置功能</li>
             </ul>
           </div>
         </div>
