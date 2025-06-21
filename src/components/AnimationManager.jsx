@@ -166,6 +166,36 @@ const AnimationManager = () => {
                   </span>
                 </div>
               )}
+              
+              {/* 执行状态信息 */}
+              {tailgateState.isExecuting && (
+                <>
+                  {/* 执行进度 */}
+                  <div className="status-item">
+                    <span className="status-label">执行进度:</span>
+                    <span className="status-value">{Math.round(tailgateState.actionProgress || 0)}%</span>
+                  </div>
+                  
+                  {/* 进度条 */}
+                  <div className="status-item progress-item">
+                    <div className="progress-bar">
+                      <div 
+                        className="progress-fill" 
+                        style={{ width: `${tailgateState.actionProgress || 0}%` }}
+                      ></div>
+                    </div>
+                  </div>
+                  
+                  {/* 执行状态指示器 */}
+                  <div className="status-item">
+                    <span className="status-label">执行状态:</span>
+                    <span className={`status-indicator ${tailgateState.isPaused ? 'paused' : 'executing'}`}>
+                      <span className="status-dot"></span>
+                      {tailgateState.isPaused ? '已暂停' : '执行中'}
+                    </span>
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </div>

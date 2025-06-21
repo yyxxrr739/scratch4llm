@@ -106,7 +106,7 @@
 }
 
 .section-title {
-  font-size: 1.1rem;
+  font-size: 0.9rem;
   font-weight: 600;
   color: #1a252f;
   margin-bottom: 1rem;
@@ -131,13 +131,13 @@
 }
 
 .status-label {
-  font-size: 0.9rem;
+  font-size: 0.7rem;
   color: #2c3e50;
   font-weight: 500;
 }
 
 .status-value {
-  font-size: 0.9rem;
+  font-size: 0.7rem;
   color: #1a252f;
   font-weight: 600;
   background: rgba(102, 126, 234, 0.1);
@@ -149,7 +149,7 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  font-size: 0.9rem;
+  font-size: 0.7rem;
   font-weight: 600;
   padding: 0.25rem 0.5rem;
   border-radius: 4px;
@@ -186,6 +186,11 @@
   animation: emergencyProcessBlink 0.8s infinite;
 }
 
+.status-indicator.initializing .status-dot {
+  background: #17a2b8;
+  animation: pulse 1s infinite;
+}
+
 .status-dot {
   width: 8px;
   height: 8px;
@@ -193,15 +198,53 @@
   background: currentColor;
 }
 
+/* 进度条样式 */
+.progress-item {
+  padding: 0.25rem 0.5rem !important;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+  transition: width 0.3s ease;
+  border-radius: 3px;
+}
+
 @keyframes emergencyProcessBlink {
   0%, 30% {
     background: rgba(231, 76, 60, 0.15);
   }
   31%, 60% {
-    background: rgba(231, 76, 60, 0.25);
+    background: rgba(231, 76, 60, 0.05);
   }
   61%, 100% {
     background: rgba(231, 76, 60, 0.15);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes blink {
+  0%, 50% {
+    opacity: 1;
+  }
+  51%, 100% {
+    opacity: 0.3;
   }
 }
 

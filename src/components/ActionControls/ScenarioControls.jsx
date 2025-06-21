@@ -146,54 +146,6 @@ const ScenarioControls = ({
           </div>
         </div>
       </div>
-
-      {/* 执行状态 */}
-      {isExecuting && (
-        <div className="status-section">
-          <h3 className="section-title">执行状态</h3>
-          
-          <div className="execution-status">
-            <div className="progress-container">
-              <div className="progress-bar">
-                <div 
-                  className="progress-fill" 
-                  style={{ width: `${actionProgress}%` }}
-                ></div>
-              </div>
-              <span className="progress-text">{Math.round(actionProgress)}%</span>
-            </div>
-            
-            <div className="status-display">
-              <div className="status-item">
-                <span className="status-label">当前动作:</span>
-                <span className="status-value">
-                  {currentAction ? 
-                    `${currentAction.action}${currentAction.params ? ` (${JSON.stringify(currentAction.params)})` : ''}` : 
-                    '无'
-                  }
-                </span>
-              </div>
-              
-              {loopInfo.max > 0 && (
-                <div className="status-item">
-                  <span className="status-label">循环进度:</span>
-                  <span className="status-value">
-                    {loopInfo.current} / {loopInfo.max}
-                  </span>
-                </div>
-              )}
-              
-              <div className="status-item">
-                <span className="status-label">执行状态:</span>
-                <span className={`status-indicator ${isPaused ? 'paused' : 'executing'}`}>
-                  <span className="status-dot"></span>
-                  {isPaused ? '已暂停' : '执行中'}
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
