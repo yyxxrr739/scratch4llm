@@ -35,6 +35,16 @@ const ScenarioControls = ({
     }
   };
 
+  const handleRunResume = () => {
+    if (isExecuting && isPaused) {
+      // 如果正在执行且已暂停，则恢复
+      onResume();
+    } else if (selectedScenario) {
+      // 否则执行场景
+      onExecuteScenario(selectedScenario);
+    }
+  };
+
   const getSelectedScenarioDetails = () => {
     return allScenarios.find(s => s.id === selectedScenario);
   };
@@ -44,37 +54,40 @@ const ScenarioControls = ({
   return (
     <div className="scenario-controls">
       <div className="control-section">
-        {/* 场景分类选择 */}
-        <div className="control-group">
-          <label className="control-label">场景分类</label>
-          <select 
-            value={selectedCategory} 
-            onChange={(e) => handleCategoryChange(e.target.value)}
-            className="scenario-select"
-          >
-            {Object.keys(scenarioCategories).map(categoryKey => (
-              <option key={categoryKey} value={categoryKey}>
-                {scenarioCategories[categoryKey].name}
-              </option>
-            ))}
-          </select>
-        </div>
+        {/* 第一行：场景分类和选择场景 */}
+        <div className="scenario-header-row">
+          {/* 场景分类选择 */}
+          <div className="control-group">
+            <label className="control-label">场景分类</label>
+            <select 
+              value={selectedCategory} 
+              onChange={(e) => handleCategoryChange(e.target.value)}
+              className="scenario-select"
+            >
+              {Object.keys(scenarioCategories).map(categoryKey => (
+                <option key={categoryKey} value={categoryKey}>
+                  {scenarioCategories[categoryKey].name}
+                </option>
+              ))}
+            </select>
+          </div>
 
-        {/* 场景选择 */}
-        <div className="control-group">
-          <label className="control-label">选择场景</label>
-          <select 
-            value={selectedScenario} 
-            onChange={(e) => handleScenarioChange(e.target.value)}
-            className="scenario-select"
-          >
-            <option value="">请选择场景</option>
-            {scenarioCategories[selectedCategory]?.scenarios.map(scenario => (
-              <option key={scenario.id} value={scenario.id}>
-                {scenario.name} ({scenario.sequence.length} 个动作)
-              </option>
-            ))}
-          </select>
+          {/* 场景选择 */}
+          <div className="control-group">
+            <label className="control-label">选择场景</label>
+            <select 
+              value={selectedScenario} 
+              onChange={(e) => handleScenarioChange(e.target.value)}
+              className="scenario-select"
+            >
+              <option value="">请选择场景</option>
+              {scenarioCategories[selectedCategory]?.scenarios.map(scenario => (
+                <option key={scenario.id} value={scenario.id}>
+                  {scenario.name} ({scenario.sequence.length} 个动作)
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
 
         {/* 动作序列 */}
@@ -99,32 +112,21 @@ const ScenarioControls = ({
       {/* 执行控制 */}
       <div className="control-section">
         <div className="execution-controls">
-          <button
-            onClick={handleExecuteScenario}
-            disabled={isExecuting || !selectedScenario}
-            className="control-btn primary small"
-          >
-            <span className="btn-icon">▶️</span>
-            执行场景
-          </button>
-          
           <div className="control-buttons">
+            <button
+              onClick={handleRunResume}
+              disabled={!selectedScenario}
+              className="control-btn primary small"
+            >
+              {isExecuting && isPaused ? '恢复' : '运行'}
+            </button>
+            
             <button
               onClick={onPause}
               disabled={!isExecuting || isPaused}
               className="control-btn warning small"
             >
-              <span className="btn-icon">⏸️</span>
               暂停
-            </button>
-            
-            <button
-              onClick={onResume}
-              disabled={!isExecuting || !isPaused}
-              className="control-btn success small"
-            >
-              <span className="btn-icon">▶️</span>
-              恢复
             </button>
             
             <button
@@ -132,7 +134,6 @@ const ScenarioControls = ({
               disabled={!isExecuting}
               className="control-btn secondary small"
             >
-              <span className="btn-icon">⏹️</span>
               停止
             </button>
             
@@ -140,7 +141,6 @@ const ScenarioControls = ({
               onClick={onClear}
               className="control-btn reset small"
             >
-              <span className="btn-icon">🗑️</span>
               清空
             </button>
           </div>
