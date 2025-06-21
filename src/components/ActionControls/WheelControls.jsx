@@ -13,26 +13,6 @@ const WheelControls = ({
   return (
     <div className="wheel-controls">
       <div className="controls-layout">
-        {/* 控制说明 */}
-        <div className="control-section">
-          <h3 className="section-title compact">控制说明</h3>
-          
-          <div className="key-instructions">
-            <div className="key-item">
-              <span className="key-icon">⬆️</span>
-              <span className="key-text">按住上键：加速，最高30km/h</span>
-            </div>
-            <div className="key-item">
-              <span className="key-icon">⬇️</span>
-              <span className="key-text">按住下键：减速</span>
-            </div>
-            <div className="key-item">
-              <span className="key-icon">🔄</span>
-              <span className="key-text">松开按键：自然减速</span>
-            </div>
-          </div>
-        </div>
-
         {/* 状态信息 */}
         <div className="control-section">
           <h3 className="section-title compact">状态信息</h3>

@@ -1,11 +1,15 @@
 import { useState, useEffect } from "react";
 import TailgateAnimation from "./animations/TailgateAnimation";
 import WheelControls from "./ActionControls/WheelControls";
+import HelpModal from "./HelpModal";
 import useWheelPhysicsEngine from "../hooks/useWheelPhysicsEngine";
 import "./AnimationManager.css";
 
 const AnimationManager = () => {
   const ActiveComponent = TailgateAnimation;
+  
+  // 帮助模态框状态
+  const [isHelpOpen, setIsHelpOpen] = useState(false);
   
   // 使用新的物理引擎hook
   const {
@@ -39,13 +43,23 @@ const AnimationManager = () => {
   return (
     <div className="animation-manager">
       <div className="header">
-        <h1 className="title">
-          <span className="title-icon">🚗</span>
-          汽车尾门动画演示系统
-        </h1>
-        <p className="subtitle">
-          基于原子服务的2D可视化动画系统，展示汽车尾门的复杂动作编排
-        </p>
+        <div className="header-content">
+          <h1 className="title">
+            <span className="title-icon">🚗</span>
+            汽车尾门动画演示系统
+          </h1>
+          <p className="subtitle">
+            基于原子服务的2D可视化动画系统，展示汽车尾门的复杂动作编排
+          </p>
+        </div>
+        <button 
+          className="help-button"
+          onClick={() => setIsHelpOpen(true)}
+          title="查看帮助说明"
+        >
+          <span className="help-button-icon">❓</span>
+          帮助
+        </button>
       </div>
 
       <div className="main-content">
@@ -96,6 +110,11 @@ const AnimationManager = () => {
           </div>
         </div>
       </div>
+
+      <HelpModal 
+        isOpen={isHelpOpen} 
+        onClose={() => setIsHelpOpen(false)} 
+      />
     </div>
   );
 };
