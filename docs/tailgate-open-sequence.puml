@@ -1,0 +1,154 @@
+@startuml 尾门开启序列图
+
+!theme plain
+skinparam backgroundColor #FFFFFF
+skinparam sequenceArrowThickness 2
+skinparam roundcorner 20
+
+title 尾门开启操作 - 完整执行流程
+
+actor "用户" as User
+participant "BasicControls" as Controls
+participant "TailgateAnimation" as Animation
+participant "useTailgateService" as Hook
+participant "TailgateActionService" as ActionService
+participant "AnimationService" as AnimService
+participant "EventService" as EventService
+participant "TailgateStateService" as StateService
+participant "GSAP" as GSAP
+participant "DOM元素" as DOM
+
+== 用户交互阶段 ==
+
+User -> Controls : 点击"开启尾门"按钮
+activate Controls
+
+Controls -> Controls : 检查按钮状态\n(disabled={isAnimating || isOpen})
+Controls -> Animation : handleOpen()
+activate Animation
+
+Animation -> Animation : 检查当前状态\n(isAnimating, isOpen)
+Animation -> Hook : actions.startOpen(currentSpeed)
+activate Hook
+
+== 服务调用阶段 ==
+
+Hook -> ActionService : startOpen(speed)
+activate ActionService
+
+ActionService -> ActionService : 验证状态\n(检查是否已开启、紧急停止等)
+ActionService -> ActionService : 设置目标角度\n(targetAngle = maxAngle = 95°)
+ActionService -> ActionService : 设置当前动作\n(currentAction = 'opening')
+ActionService -> ActionService : 设置速度\n(setSpeed(speed))
+
+ActionService -> EventService : emit('tailgate:opening', {speed, targetAngle})
+activate EventService
+
+== 事件处理阶段 ==
+
+EventService -> StateService : 更新动画状态\n(updateAnimationState(true, 'opening'))
+activate StateService
+StateService -> StateService : 设置isAnimating = true\n设置currentAction = 'opening'
+StateService -> StateService : 更新速度\n(updateSpeed(speed))
+StateService -> StateService : 更新目标角度\n(updateTargetAngle(targetAngle))
+StateService -> Hook : 状态变化通知
+deactivate StateService
+
+EventService -> Hook : 事件通知
+deactivate EventService
+
+== 动画创建阶段 ==
+
+ActionService -> ActionService : createOpenAnimation()
+ActionService -> AnimService : createTimeline('tailgate', options)
+activate AnimService
+
+AnimService -> GSAP : gsap.timeline(options)
+activate GSAP
+GSAP -> GSAP : 创建GSAP时间线\n设置paused=true
+GSAP -> AnimService : 返回时间线对象
+deactivate GSAP
+
+AnimService -> ActionService : 返回时间线
+deactivate AnimService
+
+ActionService -> ActionService : 创建开启动画\n(rotation: 0° → 95°)
+ActionService -> ActionService : 设置缓动函数\n(ease: "power2.out")
+ActionService -> ActionService : 设置动画时长\n(duration: 基于speed计算)
+
+== 动画执行阶段 ==
+
+ActionService -> ActionService : timeline.play()
+ActionService -> ActionService : 设置isAnimating = true
+
+ActionService -> GSAP : 开始执行动画
+activate GSAP
+
+GSAP -> DOM : 应用CSS变换\n(transform: rotate(95deg))
+activate DOM
+DOM -> DOM : 更新尾门元素样式\n(transform: rotate(95deg))
+deactivate DOM
+
+== 动画更新阶段 ==
+
+loop 动画进行中
+    GSAP -> ActionService : 动画更新回调\n(handleAnimationUpdate)
+    ActionService -> ActionService : 计算当前角度\n(currentAngle)
+    ActionService -> ActionService : 计算动画进度\n(progress)
+    
+    ActionService -> EventService : emit('tailgate:angleChanged', {angle, progress})
+    activate EventService
+    
+    EventService -> StateService : 更新角度\n(updateAngle(angle))
+    activate StateService
+    StateService -> StateService : 设置currentAngle = angle
+    StateService -> StateService : 更新动画进度\n(updateAnimationProgress(progress))
+    StateService -> Hook : 状态变化通知
+    deactivate StateService
+    
+    EventService -> Hook : 事件通知
+    deactivate EventService
+    
+    Hook -> Animation : 状态更新\n(onStateChange回调)
+    Animation -> Animation : 更新UI状态显示
+end
+
+== 动画完成阶段 ==
+
+GSAP -> ActionService : 动画完成回调\n(handleAnimationComplete)
+ActionService -> ActionService : 设置isAnimating = false
+ActionService -> ActionService : 设置currentAction = null
+ActionService -> ActionService : 设置currentAngle = 95°
+
+ActionService -> EventService : emit('tailgate:animationComplete', {angle, isOpen, isClosed})
+activate EventService
+
+EventService -> StateService : 更新动画状态\n(updateAnimationState(false, null))
+activate StateService
+StateService -> StateService : 设置isAnimating = false\n设置currentAction = null
+StateService -> StateService : 更新角度\n(updateAngle(95°))
+StateService -> Hook : 状态变化通知
+deactivate StateService
+
+EventService -> Hook : 事件通知
+deactivate EventService
+
+deactivate GSAP
+
+== 状态同步阶段 ==
+
+Hook -> Animation : 最终状态更新
+Animation -> Animation : 更新UI显示\n(角度、状态指示器等)
+Animation -> Animation : 更新按钮状态\n(开启按钮禁用，关闭按钮启用)
+
+Animation -> Controls : 返回控制权
+deactivate Animation
+
+Controls -> User : 显示更新后的UI状态
+deactivate Controls
+
+== 完成 ==
+
+note over User, DOM : 尾门开启完成\n当前角度: 95°\n状态: 已开启\n动画: 空闲
+
+@enduml 

@@ -1,0 +1,144 @@
+@startuml 汽车尾门动画演示系统架构设计
+
+!theme plain
+skinparam backgroundColor #FFFFFF
+skinparam componentStyle rectangle
+
+title 汽车尾门动画演示系统 - 架构设计图
+
+package "前端应用层 (Frontend Layer)" {
+    [index.html] as HTML
+    [App.jsx] as App
+    [main.jsx] as Main
+    [index.css] as GlobalCSS
+}
+
+package "组件层 (Component Layer)" {
+    package "核心组件" {
+        [AnimationManager.jsx] as AnimationManager
+        [HelpModal.jsx] as HelpModal
+    }
+    
+    package "动画组件" {
+        [TailgateAnimation.jsx] as TailgateAnimation
+        [TailgateAnimation.css] as TailgateAnimationCSS
+    }
+    
+    package "控制组件" {
+        [BasicControls.jsx] as BasicControls
+        [AdvancedControls.jsx] as AdvancedControls
+        [ScenarioControls.jsx] as ScenarioControls
+        [WheelControls.jsx] as WheelControls
+    }
+    
+    package "样式文件" {
+        [AnimationManager.css] as AnimationManagerCSS
+        [HelpModal.css] as HelpModalCSS
+    }
+}
+
+package "Hook层 (Hook Layer)" {
+    [useActionOrchestrator.js] as UseActionOrchestrator
+    [useTailgateService.js] as UseTailgateService
+    [useWheelPhysicsEngine.js] as UseWheelPhysicsEngine
+}
+
+package "服务层 (Service Layer)" {
+    package "核心服务 (Core Services)" {
+        [AnimationService.js] as AnimationService
+        [EventService.js] as EventService
+        [StateService.js] as StateService
+    }
+    
+    package "编排服务 (Orchestrator)" {
+        [ActionOrchestrator.js] as ActionOrchestrator
+        package "场景服务" {
+            [TailgateScenarios.js] as TailgateScenarios
+        }
+    }
+    
+    package "尾门服务 (Tailgate Services)" {
+        [TailgateActionService.js] as TailgateActionService
+        [TailgateStateService.js] as TailgateStateService
+    }
+}
+
+package "工具层 (Utility Layer)" {
+    [animationUtils.js] as AnimationUtils
+    [stateUtils.js] as StateUtils
+    [wheelConfig.js] as WheelConfig
+}
+
+package "静态资源 (Static Assets)" {
+    [body.png] as BodyImage
+    [liftgate.png] as LiftgateImage
+    [tire.png] as TireImage
+}
+
+package "构建配置 (Build Config)" {
+    [package.json] as PackageJson
+    [vite.config.js] as ViteConfig
+}
+
+' 依赖关系
+HTML --> Main
+Main --> App
+App --> AnimationManager
+
+' 组件层内部关系
+AnimationManager --> TailgateAnimation
+AnimationManager --> BasicControls
+AnimationManager --> AdvancedControls
+AnimationManager --> ScenarioControls
+AnimationManager --> WheelControls
+AnimationManager --> HelpModal
+
+' Hook层关系
+AnimationManager --> UseWheelPhysicsEngine
+TailgateAnimation --> UseTailgateService
+TailgateAnimation --> UseActionOrchestrator
+
+' 服务层关系
+UseTailgateService --> TailgateActionService
+UseTailgateService --> TailgateStateService
+UseActionOrchestrator --> ActionOrchestrator
+ActionOrchestrator --> EventService
+ActionOrchestrator --> TailgateScenarios
+
+' 核心服务关系
+TailgateActionService --> AnimationService
+TailgateActionService --> EventService
+TailgateStateService --> StateService
+
+' 工具层关系
+AnimationService --> AnimationUtils
+TailgateActionService --> StateUtils
+UseWheelPhysicsEngine --> WheelConfig
+
+' 静态资源关系
+TailgateAnimation --> BodyImage
+TailgateAnimation --> LiftgateImage
+TailgateAnimation --> TireImage
+
+' 样式关系
+AnimationManager --> AnimationManagerCSS
+TailgateAnimation --> TailgateAnimationCSS
+HelpModal --> HelpModalCSS
+App --> GlobalCSS
+
+' 构建配置关系
+Main --> PackageJson
+Main --> ViteConfig
+
+' 定义组件类型
+note right of AnimationManager : 主控制器组件\n管理整体动画状态和用户交互
+note right of TailgateAnimation : 尾门动画组件\n负责尾门的2D动画渲染
+note right of ActionOrchestrator : 动作编排器\n管理复杂的动作序列执行
+note right of TailgateActionService : 尾门动作服务\n提供尾门的具体动作实现
+note right of AnimationService : 动画服务\n基于GSAP的动画引擎
+note right of EventService : 事件服务\n提供事件发布订阅机制
+
+' 技术栈说明
+note bottom of PackageJson : 技术栈:\n- React 18.2.0\n- GSAP 3.12.2\n- Matter.js 0.20.0\n- Vite 5.0.8
+
+@enduml 

@@ -1,0 +1,72 @@
+@startuml 数据流架构图
+
+!theme plain
+skinparam backgroundColor #FFFFFF
+skinparam componentStyle rectangle
+
+title 汽车尾门动画演示系统 - 数据流架构图
+
+actor "用户" as User
+
+package "UI层" {
+    [AnimationManager] as UI
+    [控制组件] as Controls
+    [状态面板] as StatusPanel
+}
+
+package "Hook层" {
+    [useWheelPhysicsEngine] as PhysicsHook
+    [useTailgateService] as TailgateHook
+    [useActionOrchestrator] as OrchestratorHook
+}
+
+package "服务层" {
+    [TailgateActionService] as ActionService
+    [ActionOrchestrator] as Orchestrator
+    [AnimationService] as AnimationService
+    [EventService] as EventService
+}
+
+package "动画引擎" {
+    [GSAP] as GSAP
+    [Matter.js] as MatterJS
+}
+
+package "DOM" {
+    [尾门元素] as TailgateElement
+    [车轮元素] as WheelElement
+}
+
+' 用户交互流
+User --> Controls : 点击控制按钮
+Controls --> OrchestratorHook : 触发动作序列
+OrchestratorHook --> Orchestrator : 执行编排逻辑
+Orchestrator --> ActionService : 调用动作服务
+ActionService --> AnimationService : 创建动画
+AnimationService --> GSAP : 执行动画
+GSAP --> TailgateElement : 更新DOM
+
+' 状态管理流
+ActionService --> EventService : 发布状态事件
+EventService --> TailgateHook : 订阅状态变化
+TailgateHook --> UI : 更新UI状态
+UI --> StatusPanel : 显示状态信息
+
+' 物理模拟流
+User --> Controls : 触发物理操作
+Controls --> PhysicsHook : 调用物理引擎
+PhysicsHook --> MatterJS : 执行物理计算
+MatterJS --> WheelElement : 更新车轮位置
+
+' 事件驱动流
+ActionService --> EventService : 发布事件
+EventService --> UI : 通知UI更新
+EventService --> Controls : 更新控制状态
+
+note right of EventService : 事件类型:\n- tailgate:opening\n- tailgate:closing\n- tailgate:stopped\n- orchestrator:actionCompleted
+
+note bottom of GSAP : 动画特性:\n- 缓动函数\n- 时间线控制\n- 动画暂停/恢复
+
+note bottom of MatterJS : 物理特性:\n- 重力模拟\n- 碰撞检测\n- 速度控制
+
+@enduml 
