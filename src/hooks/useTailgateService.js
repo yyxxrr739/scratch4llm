@@ -104,6 +104,12 @@ export function useTailgateService() {
       );
 
       unsubscribes.push(
+        actionService.on('tailgate:emergencyStopReset', () => {
+          stateService.updateEmergencyStop(false);
+        })
+      );
+
+      unsubscribes.push(
         actionService.on('tailgate:speedChanged', ({ speed }) => {
           stateService.updateSpeed(speed);
         })

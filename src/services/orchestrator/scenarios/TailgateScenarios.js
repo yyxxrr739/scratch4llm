@@ -106,9 +106,24 @@ export const TailgateScenarios = {
     description: "测试紧急停止功能",
     sequence: [
       { action: "open", params: { speed: 0.8 } },
-      { wait: { type: "duration", value: 1000 } },
+      { wait: { type: "duration", value: 500 } },
+      { action: "emergencyStop", params: {} },
+      { wait: { type: "duration", value: 1500 } },
+      { action: "close", params: { speed: 1 } }
+    ]
+  },
+
+  // 动态紧急停止测试场景
+  dynamicEmergencyStopTest: {
+    name: "动态紧急停止测试",
+    description: "在尾门运动过程中进行紧急停止测试",
+    sequence: [
+      { action: "open", params: { speed: 1.2 } },
+      { wait: { type: "duration", value: 300 } },
       { action: "emergencyStop", params: {} },
       { wait: { type: "duration", value: 2000 } },
+      { action: "moveToAngle", params: { angle: 45, speed: 0.8 } },
+      { wait: { type: "duration", value: 1000 } },
       { action: "close", params: { speed: 1 } }
     ]
   },
@@ -183,7 +198,7 @@ export const ScenarioCategories = {
   },
   test: {
     name: "测试场景",
-    scenarios: ["emergencyStopTest", "continuousLoop"]
+    scenarios: ["emergencyStopTest", "dynamicEmergencyStopTest", "continuousLoop"]
   }
 };
 

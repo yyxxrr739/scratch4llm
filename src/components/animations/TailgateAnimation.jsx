@@ -237,6 +237,15 @@ const TailgateAnimation = ({ onStateChange }) => {
           </span>
         </div>
         
+        {isEmergencyStopped && (
+          <div className="status-item emergency-stop-status">
+            <span className="status-label">紧急停止:</span>
+            <span className="status-value emergency-stop">
+              🛑 已激活
+            </span>
+          </div>
+        )}
+        
         {isExecuting && (
           <div className="status-item">
             <span className="status-label">编排器:</span>

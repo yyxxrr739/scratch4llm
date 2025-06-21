@@ -47,12 +47,19 @@ class TailgateActionService {
   start(params = {}) {
     console.log('TailgateActionService: start called', params);
     
-    if (this.isEmergencyStopped) {
-      this.eventService.emit('tailgate:error', { message: 'Emergency stop active' });
-      return false;
-    }
-
     const { action, speed = this.currentSpeed, angle } = params;
+    
+    // 如果是紧急停止动作，直接执行
+    if (action === 'emergencyStop') {
+      console.log('TailgateActionService: Executing emergencyStop action');
+      return this.emergencyStop();
+    }
+    
+    // 对于其他动作，如果处于紧急停止状态，先重置状态
+    if (this.isEmergencyStopped) {
+      console.log('TailgateActionService: Resetting emergency stop state');
+      this.resetEmergencyStop();
+    }
     
     console.log('TailgateActionService: Processing action', { action, speed, angle });
     
@@ -69,6 +76,9 @@ class TailgateActionService {
       case 'moveByAngle':
         console.log('TailgateActionService: Executing moveByAngle action', { angle, speed });
         return this.moveByAngle(angle, speed);
+      case 'emergencyStop':
+        console.log('TailgateActionService: Executing emergencyStop action');
+        return this.emergencyStop();
       default:
         console.error('TailgateActionService: Unknown action', action);
         this.eventService.emit('tailgate:error', { message: 'Unknown action' });
@@ -112,14 +122,26 @@ class TailgateActionService {
   // 紧急停止
   emergencyStop() {
     if (this.timeline) {
+      // 立即停止当前动画
       this.timeline.kill();
       this.isAnimating = false;
       this.currentAction = null;
       this.isEmergencyStopped = true;
+      
+      // 添加紧急停止的视觉反馈
+      this.createEmergencyStopEffect();
+      
       this.eventService.emit('tailgate:emergencyStop', { angle: this.currentAngle });
       return true;
     }
     return false;
+  }
+
+  // 重置紧急停止状态
+  resetEmergencyStop() {
+    this.isEmergencyStopped = false;
+    this.eventService.emit('tailgate:emergencyStopReset');
+    return true;
   }
 
   // 设置速度
@@ -356,6 +378,54 @@ class TailgateActionService {
     }
     this.animationService.cleanup();
     this.eventService.clear();
+  }
+
+  // 创建紧急停止视觉效果
+  createEmergencyStopEffect() {
+    if (!this.element) return;
+    
+    // 创建新的时间线用于紧急停止效果
+    const emergencyTimeline = this.animationService.createTimeline('emergency-stop', {
+      onComplete: () => {
+        // 清理紧急停止效果
+        this.animationService.destroyTimeline('emergency-stop');
+      }
+    });
+    
+    // 添加红色闪烁效果
+    emergencyTimeline.to(this.element, {
+      backgroundColor: 'rgba(255, 0, 0, 0.3)',
+      duration: 0.1,
+      ease: "power2.inOut"
+    })
+    .to(this.element, {
+      backgroundColor: 'transparent',
+      duration: 0.1,
+      ease: "power2.inOut"
+    })
+    .to(this.element, {
+      backgroundColor: 'rgba(255, 0, 0, 0.3)',
+      duration: 0.1,
+      ease: "power2.inOut"
+    })
+    .to(this.element, {
+      backgroundColor: 'transparent',
+      duration: 0.1,
+      ease: "power2.inOut"
+    })
+    .to(this.element, {
+      backgroundColor: 'rgba(255, 0, 0, 0.3)',
+      duration: 0.1,
+      ease: "power2.inOut"
+    })
+    .to(this.element, {
+      backgroundColor: 'transparent',
+      duration: 0.1,
+      ease: "power2.inOut"
+    });
+    
+    // 播放紧急停止效果
+    emergencyTimeline.play();
   }
 }
 
