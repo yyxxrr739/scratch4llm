@@ -102,7 +102,10 @@ const AnimationManager = () => {
                 ) : tailgateState.isAnimating ? (
                   <span className="status-indicator animating">
                     <span className="status-dot"></span>
-                    {tailgateState.isOpen ? '关门中' : '开门中'}
+                    {tailgateState.currentAction && tailgateState.currentAction.action ? 
+                      tailgateState.currentAction.action : 
+                      (tailgateState.isOpen ? '关门中' : '开门中')
+                    }
                   </span>
                 ) : (
                   <span className={`status-indicator ${tailgateState.isOpen ? 'open' : 'closed'}`}>
