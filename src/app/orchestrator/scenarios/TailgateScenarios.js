@@ -121,12 +121,78 @@ export const TailgateScenarios = {
     description: "测试障碍物检测触发紧急停止功能",
     sequence: [
       { action: "open", params: { speed: 1 } },
-      { wait: { type: "duration", value: 1000 } }, // 等待尾门开始运动
-      { action: "emergencyStop", params: {} }, // 模拟障碍物检测触发紧急停止
+      { wait: { type: "duration", value: 2000 } }, // 等待尾门完全开启
+      { action: "close", params: { speed: 0.8 } }, // 开始关门
+      { wait: { type: "duration", value: 100 } }, // 等待关门过程中
+      { action: "simulateObstacle", params: { distance: 25 } }, // 模拟障碍物检测（障碍物按钮按下）
       { wait: { type: "duration", value: 1500 } }, // 等待紧急停止完成
-      { action: "moveToAngle", params: { angle: 30, speed: 0.8 } }, // 测试重置后是否能正常运动
+      { action: "moveToAngle", params: { angle: 45, speed: 0.6 } }, // 测试重置后是否能正常运动到中间位置
       { wait: { type: "duration", value: 1000 } },
+      { action: "close", params: { speed: 1 } } // 最终关闭
+    ]
+  },
+
+  // 高级障碍物检测测试场景
+  advancedObstacleDetectionTest: {
+    name: "高级障碍物检测测试",
+    description: "测试多种障碍物检测情况和恢复过程",
+    sequence: [
+      // 第一阶段：正常开启
+      { action: "open", params: { speed: 1 } },
+      { wait: { type: "duration", value: 2000 } },
+      
+      // 第二阶段：第一次障碍物检测（关门过程中）
+      { action: "close", params: { speed: 0.8 } },
+      { wait: { type: "duration", value: 600 } },
+      { action: "simulateObstacle", params: { distance: 20 } }, // 近距离障碍物
+      { wait: { type: "duration", value: 1200 } }, // 等待紧急停止完成
+      
+      // 第三阶段：障碍物清除后继续关门
+      { action: "close", params: { speed: 0.6 } },
+      { wait: { type: "duration", value: 500 } },
+      
+      // 第四阶段：第二次障碍物检测（开门过程中）
+      { action: "open", params: { speed: 0.8 } },
+      { wait: { type: "duration", value: 700 } },
+      { action: "simulateObstacle", params: { distance: 35 } }, // 中等距离障碍物
+      { wait: { type: "duration", value: 1200 } }, // 等待紧急停止完成
+      
+      // 第五阶段：精确位置控制测试
+      { action: "moveToAngle", params: { angle: 30, speed: 0.5 } },
+      { wait: { type: "duration", value: 800 } },
+      { action: "moveToAngle", params: { angle: 60, speed: 0.5 } },
+      { wait: { type: "duration", value: 800 } },
+      
+      // 第六阶段：最终关闭
       { action: "close", params: { speed: 1 } }
+    ]
+  },
+
+  // 障碍物按钮演示场景
+  obstacleButtonDemo: {
+    name: "障碍物按钮演示",
+    description: "模拟障碍物按钮按下触发的安全保护机制",
+    sequence: [
+      // 第一阶段：正常开启尾门
+      { action: "open", params: { speed: 1 } },
+      { wait: { type: "duration", value: 2500 } }, // 等待完全开启
+      
+      // 第二阶段：开始关门，模拟障碍物按钮按下
+      { action: "close", params: { speed: 0.7 } },
+      { wait: { type: "duration", value: 1000 } }, // 关门过程中
+      { action: "simulateObstacle", params: { distance: 15 } }, // 障碍物按钮按下，检测到近距离障碍物
+      { wait: { type: "duration", value: 1500 } }, // 等待紧急停止完成
+      
+      // 第三阶段：障碍物清除后，重新尝试关门
+      { action: "close", params: { speed: 0.5 } }, // 降低速度重新关门
+      { wait: { type: "duration", value: 800 } },
+      
+      // 第四阶段：再次模拟障碍物按钮按下
+      { action: "simulateObstacle", params: { distance: 10 } }, // 更近距离的障碍物
+      { wait: { type: "duration", value: 1200 } }, // 等待紧急停止完成
+      
+      // 第五阶段：最终安全关闭
+      { action: "close", params: { speed: 0.3 } } // 最慢速度确保安全
     ]
   },
 
@@ -206,8 +272,6 @@ export const TailgateScenarios = {
       { wait: { type: 'duration', value: 1000 } },
       { action: 'simulateObstacle', params: { distance: 30 } },
       { wait: { type: 'duration', value: 2000 } },
-      { action: 'emergencyStop', params: {} },
-      { wait: { type: 'duration', value: 1000 } },
       { action: 'close', params: { speed: 1 } }
     ],
     loop: false,
@@ -277,9 +341,7 @@ export const TailgateScenarios = {
       { action: 'open', params: { speed: 1 } },
       { wait: { type: 'duration', value: 500 } },
       { action: 'simulateObstacle', params: { distance: 20 } },
-      { wait: { type: 'duration', value: 1000 } },
-      { action: 'emergencyStop', params: {} },
-      { wait: { type: 'duration', value: 1000 } },
+      { wait: { type: 'duration', value: 2000 } },
       { action: 'close', params: { speed: 1 } }
     ],
     loop: false,
@@ -303,7 +365,7 @@ export const ScenarioCategories = {
   },
   test: {
     name: "测试场景",
-    scenarios: ["emergencyStopProcessTest", "continuousLoop", "obstacleDetectionTest", "safetyDemo", "faultDemo"]
+    scenarios: ["emergencyStopProcessTest", "continuousLoop", "obstacleDetectionTest", "advancedObstacleDetectionTest", "obstacleButtonDemo", "safetyDemo", "faultDemo"]
   }
 };
 

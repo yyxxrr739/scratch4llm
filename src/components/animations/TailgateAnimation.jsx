@@ -112,6 +112,15 @@ const TailgateAnimation = ({ onStateChange }) => {
             actions.startClose(currentSpeed);
           }
           break;
+        case 'Space':
+          event.preventDefault();
+          // 空格键触发障碍物检测切换
+          if (isObstacleDetected) {
+            handleObstacleCleared();
+          } else {
+            handleObstacleDetected();
+          }
+          break;
         default:
           break;
       }
@@ -121,7 +130,7 @@ const TailgateAnimation = ({ onStateChange }) => {
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [isOpen, isAnimating, isExecuting, isEmergencyStopped, actions, currentSpeed]);
+  }, [isOpen, isAnimating, isExecuting, isEmergencyStopped, actions, currentSpeed, isObstacleDetected]);
 
   // 障碍物检测事件处理
   const handleObstacleDetected = () => {
@@ -232,9 +241,6 @@ const TailgateAnimation = ({ onStateChange }) => {
             onResume={handleOrchestratorResume}
             onStop={handleOrchestratorStop}
             onClear={handleOrchestratorClear}
-            onObstacleDetected={handleObstacleDetected}
-            onObstacleCleared={handleObstacleCleared}
-            isObstacleDetected={isObstacleDetected}
           />
         );
       
