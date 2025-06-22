@@ -100,21 +100,6 @@ export const TailgateScenarios = {
     ]
   },
 
-  // 紧急停止过程状态测试场景
-  emergencyStopProcessTest: {
-    name: "紧急停止过程状态测试",
-    description: "测试紧急停止过程中的状态显示和视觉提醒",
-    sequence: [
-      { action: "open", params: { speed: 1.5 } },
-      { wait: { type: "duration", value: 500 } }, // 在尾门运动过程中执行紧急停止
-      { action: "emergencyStop", params: {} }, // 此时应该显示"紧急停止中..."
-      { wait: { type: "duration", value: 1000 } }, // 等待紧急停止过程完成
-      { action: "moveToAngle", params: { angle: 45, speed: 0.8 } }, // 测试重置后是否能正常运动
-      { wait: { type: "duration", value: 1000 } },
-      { action: "close", params: { speed: 1 } }
-    ]
-  },
-
   // 速度变化场景
   speedVariation: {
     name: "速度变化演示",
@@ -167,37 +152,6 @@ export const TailgateScenarios = {
       { action: "close", params: { speed: 1 } }
     ]
   },
-
-  // 演示场景定义 - 从DummyService迁移过来
-  basicOpenClose: {
-    id: 'basicOpenClose',
-    name: '基础开启关闭演示',
-    description: '演示基本的尾门开启和关闭功能',
-    sequence: [
-      { action: 'open', params: { speed: 1 } },
-      { wait: { type: 'duration', value: 3000 } },
-      { action: 'close', params: { speed: 1 } }
-    ],
-    loop: false,
-    maxLoops: 1
-  },
-  
-  speedDemo: {
-    id: 'speedDemo',
-    name: '速度控制演示',
-    description: '演示不同速度下的运动效果',
-    sequence: [
-      { action: 'open', params: { speed: 0.5 } },
-      { wait: { type: 'duration', value: 2000 } },
-      { action: 'close', params: { speed: 0.5 } },
-      { wait: { type: 'duration', value: 1000 } },
-      { action: 'open', params: { speed: 1.5 } },
-      { wait: { type: 'duration', value: 2000 } },
-      { action: 'close', params: { speed: 1.5 } }
-    ],
-    loop: false,
-    maxLoops: 1
-  },
   
   precisionDemo: {
     id: 'precisionDemo',
@@ -240,7 +194,7 @@ export const TailgateScenarios = {
 export const ScenarioCategories = {
   basic: {
     name: "基础场景",
-    scenarios: ["basicOpenClose", "slowMotion", "quickDemo", "basicOpenClose"]
+    scenarios: ["basicOpenClose", "slowMotion", "quickDemo"]
   },
   advanced: {
     name: "高级场景",
@@ -248,11 +202,11 @@ export const ScenarioCategories = {
   },
   complex: {
     name: "复杂场景",
-    scenarios: ["complexCombination", "speedVariation", "speedDemo", "stressTest"]
+    scenarios: ["complexCombination", "speedVariation", "stressTest"]
   },
   test: {
     name: "测试场景",
-    scenarios: ["emergencyStopProcessTest", "continuousLoop"]
+    scenarios: ["continuousLoop"]
   }
 };
 
