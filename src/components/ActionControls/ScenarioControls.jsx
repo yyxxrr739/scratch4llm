@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { getScenariosByCategory, getScenarioList } from '../../app/orchestrator/scenarios/TailgateScenarios.js';
+import { getScenariosByCategory } from '../../app/orchestrator/scenarios/TailgateScenarios.js';
 import './ActionControls.css';
 
 const ScenarioControls = ({
@@ -18,7 +18,6 @@ const ScenarioControls = ({
   const [selectedScenario, setSelectedScenario] = useState('');
 
   const scenarioCategories = getScenariosByCategory();
-  const allScenarios = getScenarioList();
 
   const handleCategoryChange = (categoryKey) => {
     setSelectedCategory(categoryKey);
@@ -46,7 +45,9 @@ const ScenarioControls = ({
   };
 
   const getSelectedScenarioDetails = () => {
-    return allScenarios.find(s => s.id === selectedScenario);
+    const category = scenarioCategories[selectedCategory];
+    if (!category) return null;
+    return category.scenarios.find(s => s.id === selectedScenario);
   };
 
   const selectedScenarioDetails = getSelectedScenarioDetails();

@@ -68,17 +68,6 @@ export const TailgateScenarios = {
     ]
   },
 
-  // 快速演示场景
-  quickDemo: {
-    name: "快速演示",
-    description: "快速展示尾门功能",
-    sequence: [
-      { action: "open", params: { speed: 1.5 } },
-      { wait: { type: "duration", value: 1000 } },
-      { action: "close", params: { speed: 1.5 } }
-    ]
-  },
-
   // 角度探索场景
   angleExploration: {
     name: "角度探索",
@@ -153,23 +142,6 @@ export const TailgateScenarios = {
     ]
   },
   
-  precisionDemo: {
-    id: 'precisionDemo',
-    name: '精确控制演示',
-    description: '演示精确角度控制功能',
-    sequence: [
-      { action: 'moveToAngle', params: { angle: 30, speed: 0.8 } },
-      { wait: { type: 'duration', value: 1500 } },
-      { action: 'moveToAngle', params: { angle: 60, speed: 0.8 } },
-      { wait: { type: 'duration', value: 1500 } },
-      { action: 'moveToAngle', params: { angle: 90, speed: 0.8 } },
-      { wait: { type: 'duration', value: 1500 } },
-      { action: 'close', params: { speed: 1 } }
-    ],
-    loop: false,
-    maxLoops: 1
-  },
-  
   stressTest: {
     id: 'stressTest',
     name: '压力测试演示',
@@ -194,11 +166,11 @@ export const TailgateScenarios = {
 export const ScenarioCategories = {
   basic: {
     name: "基础场景",
-    scenarios: ["basicOpenClose", "slowMotion", "quickDemo"]
+    scenarios: ["basicOpenClose", "slowMotion"]
   },
   advanced: {
     name: "高级场景",
-    scenarios: ["preciseControl", "progressiveOpen", "angleExploration", "precisionDemo"]
+    scenarios: ["preciseControl", "progressiveOpen", "angleExploration"]
   },
   complex: {
     name: "复杂场景",
@@ -212,10 +184,9 @@ export const ScenarioCategories = {
 
 // 获取场景列表
 export function getScenarioList() {
-  const allScenarios = scenarioManager.getAllScenarios();
-  return Object.keys(allScenarios).map(key => ({
+  return Object.keys(TailgateScenarios).map(key => ({
     id: key,
-    ...allScenarios[key]
+    ...TailgateScenarios[key]
   }));
 }
 
