@@ -26,6 +26,12 @@ class NormalModeController {
       emergencyStopTimeout: 5000 // ms
     };
     
+    // 车速安全状态跟踪
+    this.speedSafetyState = {
+      wasSpeedTooHigh: false,
+      lastSpeedCheck: 0
+    };
+    
     // 初始化事件监听
     this.initEventListeners();
   }
@@ -87,6 +93,12 @@ class NormalModeController {
 
   // 处理输入请求
   handleInputRequest(request) {
+    console.log('处理输入请求:', {
+      requestType: request.type,
+      isActive: this.controlState.isActive,
+      timestamp: Date.now()
+    });
+    
     if (!this.controlState.isActive) {
       this.eventService.emit('controller:warning', {
         message: '控制器未激活，忽略请求',
@@ -141,8 +153,18 @@ class NormalModeController {
 
   // 检查开启前提条件
   checkOpenPrerequisites(systemState) {
+    // 调试信息：显示车速检查过程
+    console.log('车速检查:', {
+      currentSpeed: systemState.vehicle.speed,
+      maxSpeedForOpening: this.safetyConfig.maxVehicleSpeedForOpening,
+      isSpeedSafe: systemState.vehicle.speed <= this.safetyConfig.maxVehicleSpeedForOpening
+    });
+    
     // 检查车速
     if (systemState.vehicle.speed > this.safetyConfig.maxVehicleSpeedForOpening) {
+      // 记录车速过高状态
+      this.speedSafetyState.wasSpeedTooHigh = true;
+      
       this.eventService.emit('controller:warning', {
         message: `车速过高 (${systemState.vehicle.speed} km/h)，无法开启尾门`,
         reason: 'vehicle_speed_too_high'
@@ -356,6 +378,37 @@ class NormalModeController {
   // 处理车速变化
   handleVehicleSpeedChange(change) {
     const newSpeed = change.data.newSpeed;
+    const oldSpeed = change.data.oldSpeed;
+    
+    // 更新车速安全状态
+    const wasTooHigh = this.speedSafetyState.wasSpeedTooHigh;
+    const isNowSafe = newSpeed <= this.safetyConfig.maxVehicleSpeedForOpening;
+    const wasSafe = oldSpeed <= this.safetyConfig.maxVehicleSpeedForOpening;
+    
+    // 如果之前车速过高，现在车速安全了，发出状态变化事件
+    if (wasTooHigh && isNowSafe) {
+      this.speedSafetyState.wasSpeedTooHigh = false;
+      this.eventService.emit('controller:speedSafetyChanged', {
+        isSafe: true,
+        currentSpeed: newSpeed,
+        maxSpeed: this.safetyConfig.maxVehicleSpeedForOpening,
+        message: '车速已降至安全范围，可以开启尾门'
+      });
+    }
+    
+    // 如果车速从安全变为过高，记录状态
+    if (wasSafe && !isNowSafe) {
+      this.speedSafetyState.wasSpeedTooHigh = true;
+      this.eventService.emit('controller:speedSafetyChanged', {
+        isSafe: false,
+        currentSpeed: newSpeed,
+        maxSpeed: this.safetyConfig.maxVehicleSpeedForOpening,
+        message: `车速过高，请等待车速降至${this.safetyConfig.maxVehicleSpeedForOpening} km/h以下`
+      });
+    }
+    
+    // 更新状态
+    this.speedSafetyState.lastSpeedCheck = newSpeed;
     
     // 如果车速过高且尾门正在开启，执行紧急停止
     if (newSpeed > this.safetyConfig.maxVehicleSpeedForOpening && 

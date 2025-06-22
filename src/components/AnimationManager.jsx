@@ -39,6 +39,13 @@ const AnimationManager = () => {
     isObstacleDetected: false
   });
 
+  // 车速安全状态
+  const [speedSafetyStatus, setSpeedSafetyStatus] = useState({
+    isSafe: true,
+    currentSpeed: 0,
+    maxSpeed: 5
+  });
+
   // 监听尾门状态变化
   useEffect(() => {
     const updateTailgateState = () => {
@@ -48,6 +55,23 @@ const AnimationManager = () => {
     
     updateTailgateState();
   }, []);
+
+  // 监听车速变化，更新车速安全状态
+  useEffect(() => {
+    const updateSpeedSafetyStatus = () => {
+      const currentSpeed = currentSpeedKmh;
+      const maxSpeed = 5;
+      const isSafe = currentSpeed <= maxSpeed;
+      
+      setSpeedSafetyStatus({
+        isSafe,
+        currentSpeed,
+        maxSpeed
+      });
+    };
+
+    updateSpeedSafetyStatus();
+  }, [currentSpeedKmh]);
 
   // 模式切换处理函数
   const handleModeToggle = () => {
@@ -86,6 +110,15 @@ const AnimationManager = () => {
               <div className="status-item">
                 <span className="status-label">车速:</span>
                 <span className="status-value">{currentSpeedKmh.toFixed(1)} km/h</span>
+              </div>
+              
+              {/* 车速安全状态 */}
+              <div className="status-item">
+                <span className="status-label">车速安全:</span>
+                <span className={`status-indicator ${speedSafetyStatus.isSafe ? 'safe' : 'unsafe'}`}>
+                  <span className="status-dot"></span>
+                  {speedSafetyStatus.isSafe ? '车速安全' : '车速过高'}
+                </span>
               </div>
               
               {/* 尾门状态 */}

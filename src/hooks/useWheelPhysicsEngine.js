@@ -84,6 +84,9 @@ const useWheelPhysicsEngine = () => {
       const newSpeedKmh = unitConverters.angularVelocityToKmh(physicsState.current.angularVelocity);
       setCurrentSpeedKmh(newSpeedKmh);
       
+      // 将车速设置到全局状态，供其他服务使用
+      window.currentVehicleSpeed = newSpeedKmh;
+      
       // 更新车轮的视觉旋转
       updateWheelVisualRotation(physicsState.current.rotation);
       
@@ -123,6 +126,8 @@ const useWheelPhysicsEngine = () => {
       isRunning: physicsState.current.isRunning
     };
     setCurrentSpeedKmh(0);
+    // 更新全局车速状态
+    window.currentVehicleSpeed = 0;
     // 只有在明确要求时才重置视觉旋转
     if (resetRotation) {
       updateWheelVisualRotation(0);

@@ -266,7 +266,10 @@ export function useTailgateService() {
     // 状态查询
     getStatus: useCallback(() => {
       if (actionServiceRef.current) {
-        return actionServiceRef.current.getStatus();
+        return {
+          ...actionServiceRef.current.getStatus(),
+          actionService: actionServiceRef.current // 返回actionService实例
+        };
       }
       return null;
     }, []),

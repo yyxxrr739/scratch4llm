@@ -59,6 +59,9 @@ class ServiceManager {
       // 启动服务监控
       this.startServiceMonitoring();
       
+      // 激活正常模式控制器
+      this.controllers.normalController.activate();
+      
       this.serviceState.isInitialized = true;
       
       console.log('ServiceManager: 所有服务初始化完成');
@@ -162,6 +165,72 @@ class ServiceManager {
       stateService.updateTemperature(data.data.temperature);
       stateService.updateHumidity(data.data.humidity);
     });
+    
+    // 建立MotionControlService和TailgateActionService的连接
+    // 这需要在TailgateAnimation组件初始化时建立
+    this.setupMotionControlIntegration = (tailgateActionService) => {
+      // MotionControlService的openTailgate -> TailgateActionService的startOpen
+      const originalOpenTailgate = motionService.openTailgate.bind(motionService);
+      motionService.openTailgate = (speed = 1) => {
+        if (tailgateActionService) {
+          const result = tailgateActionService.startOpen(speed);
+          if (result) {
+            // 更新MotionControlService的状态
+            motionService.updateCurrentPosition(tailgateActionService.getCurrentAngle());
+            motionService.setSpeed(speed);
+          }
+          return result;
+        }
+        return originalOpenTailgate(speed);
+      };
+      
+      // MotionControlService的closeTailgate -> TailgateActionService的startClose
+      const originalCloseTailgate = motionService.closeTailgate.bind(motionService);
+      motionService.closeTailgate = (speed = 1) => {
+        if (tailgateActionService) {
+          const result = tailgateActionService.startClose(speed);
+          if (result) {
+            // 更新MotionControlService的状态
+            motionService.updateCurrentPosition(tailgateActionService.getCurrentAngle());
+            motionService.setSpeed(speed);
+          }
+          return result;
+        }
+        return originalCloseTailgate(speed);
+      };
+      
+      // MotionControlService的emergencyStop -> TailgateActionService的emergencyStop
+      const originalEmergencyStop = motionService.emergencyStop.bind(motionService);
+      motionService.emergencyStop = () => {
+        if (tailgateActionService) {
+          const result = tailgateActionService.emergencyStop();
+          if (result) {
+            // 更新MotionControlService的状态
+            motionService.updateCurrentPosition(tailgateActionService.getCurrentAngle());
+          }
+          return result;
+        }
+        return originalEmergencyStop();
+      };
+      
+      // TailgateActionService的角度变化 -> MotionControlService
+      tailgateActionService.on('tailgate:angleChanged', ({ angle }) => {
+        motionService.updateCurrentPosition(angle);
+      });
+      
+      // TailgateActionService的状态变化 -> MotionControlService
+      tailgateActionService.on('tailgate:opening', ({ speed }) => {
+        motionService.setSpeed(speed);
+      });
+      
+      tailgateActionService.on('tailgate:closing', ({ speed }) => {
+        motionService.setSpeed(speed);
+      });
+      
+      tailgateActionService.on('tailgate:emergencyStop', () => {
+        motionService.emergencyStop();
+      });
+    };
   }
 
   // 启动服务监控
@@ -294,7 +363,13 @@ class ServiceManager {
 
   // 模拟输入请求
   simulateInputRequest(requestType, data = {}) {
-    return this.atomicServices.dummyService.simulateInputRequest(requestType, data);
+    // 直接通过InputRequestService创建请求，这样会经过NormalModeController的安全检查
+    const request = this.atomicServices.inputService.createRequest(requestType, data);
+    
+    // 同时也在DummyService中记录，保持兼容性
+    this.atomicServices.dummyService.simulateInputRequest(requestType, data);
+    
+    return request;
   }
 
   // 模拟故障事件

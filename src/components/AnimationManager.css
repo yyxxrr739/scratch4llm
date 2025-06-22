@@ -216,6 +216,17 @@
   animation: obstacleBlink 1s infinite;
 }
 
+.status-indicator.safe {
+  color: #27ae60;
+  background: rgba(39, 174, 96, 0.1);
+}
+
+.status-indicator.unsafe {
+  color: #e74c3c;
+  background: rgba(231, 76, 60, 0.1);
+  animation: emergencyBlink 1s infinite;
+}
+
 .status-indicator.initializing .status-dot {
   background: #17a2b8;
   animation: pulse 1s infinite;

@@ -91,7 +91,7 @@ const TailgateAnimation = ({ onStateChange }) => {
     };
   }, [cleanup]);
 
-  // 键盘控制处理
+  // 键盘控制处理 - 简化为直接调用actions
   useEffect(() => {
     const handleKeyDown = (event) => {
       // 如果正在执行场景或紧急停止，忽略键盘输入

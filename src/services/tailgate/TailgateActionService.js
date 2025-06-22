@@ -202,6 +202,17 @@ class TailgateActionService {
       return false;
     }
 
+    // 简单的车速安全检查
+    const currentVehicleSpeed = window.currentVehicleSpeed || 0;
+    const maxSpeedForOpening = 5; // km/h
+    
+    if (currentVehicleSpeed > maxSpeedForOpening) {
+      this.eventService.emit('tailgate:warning', { 
+        message: `车速过高 (${currentVehicleSpeed.toFixed(1)} km/h)，无法开启尾门。安全车速限制：${maxSpeedForOpening} km/h` 
+      });
+      return false;
+    }
+
     this.setSpeed(speed);
     this.targetAngle = this.config.maxAngle;
     this.currentAction = 'opening';
