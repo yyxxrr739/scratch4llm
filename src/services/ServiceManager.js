@@ -3,8 +3,8 @@ import FaultEventService from './atomic/FaultEventService.js';
 import MotionControlService from './atomic/MotionControlService.js';
 import StateObservationService from './atomic/StateObservationService.js';
 import DummyService from './atomic/DummyService.js';
-import NormalModeController from './controllers/NormalModeController.js';
-import DemoModeController from './controllers/DemoModeController.js';
+import NormalModeController from '../app/controllers/NormalModeController.js';
+import DemoModeController from '../app/controllers/DemoModeController.js';
 import EnhancedActionOrchestrator from './orchestrator/EnhancedActionOrchestrator.js';
 
 class ServiceManager {
