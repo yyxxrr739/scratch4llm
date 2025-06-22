@@ -5,7 +5,7 @@ import StateObservationService from './atomic/StateObservationService.js';
 import DummyService from './atomic/DummyService.js';
 import NormalModeController from '../app/controllers/NormalModeController.js';
 import DemoModeController from '../app/controllers/DemoModeController.js';
-import EnhancedActionOrchestrator from './orchestrator/EnhancedActionOrchestrator.js';
+import EnhancedActionOrchestrator from '../app/orchestrator/EnhancedActionOrchestrator.js';
 
 class ServiceManager {
   constructor() {

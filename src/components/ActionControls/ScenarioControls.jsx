@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { getScenariosByCategory, getScenarioList } from '../../services/orchestrator/scenarios/TailgateScenarios.js';
+import { getScenariosByCategory, getScenarioList } from '../../app/orchestrator/scenarios/TailgateScenarios.js';
 import './ActionControls.css';
 
 const ScenarioControls = ({

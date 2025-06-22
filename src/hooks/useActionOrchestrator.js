@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-import ActionOrchestrator from '../services/orchestrator/ActionOrchestrator.js';
-import { getScenarioConfig, validateScenario } from '../services/orchestrator/scenarios/TailgateScenarios.js';
+import ActionOrchestrator from '../app/orchestrator/ActionOrchestrator.js';
+import { getScenarioConfig, validateScenario } from '../app/orchestrator/scenarios/TailgateScenarios.js';
 
 export function useActionOrchestrator() {
   const [isExecuting, setIsExecuting] = useState(false);

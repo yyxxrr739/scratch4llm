@@ -1,4 +1,4 @@
-import EventService from '../core/EventService.js';
+import EventService from '../../services/core/EventService.js';
 import ActionOrchestrator from './ActionOrchestrator.js';
 
 class EnhancedActionOrchestrator extends ActionOrchestrator {
