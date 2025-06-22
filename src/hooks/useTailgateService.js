@@ -274,6 +274,11 @@ export function useTailgateService() {
       return null;
     }, []),
 
+    // 获取TailgateActionService实例
+    getActionService: useCallback(() => {
+      return actionServiceRef.current;
+    }, []),
+
     isOpen: useCallback(() => {
       if (actionServiceRef.current) {
         return actionServiceRef.current.isOpen();

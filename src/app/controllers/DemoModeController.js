@@ -316,9 +316,15 @@ class DemoModeController {
   simulateObstacleDetection(params) {
     const { distance = 30 } = params;
     
+    // 触发故障服务的障碍物检测事件
     const success = this.faultService.triggerObstacleDetection(distance);
     
     if (success) {
+      // 直接触发MotionControlService的紧急停止
+      if (this.motionService && typeof this.motionService.emergencyStop === 'function') {
+        this.motionService.emergencyStop();
+      }
+      
       this.eventService.emit('demo:actionExecuted', {
         action: 'simulateObstacle',
         params,

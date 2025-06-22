@@ -3,11 +3,13 @@ import { useTailgateService } from '../../hooks/useTailgateService.js';
 import { useActionOrchestrator } from '../../hooks/useActionOrchestrator.js';
 import AdvancedControls from '../ActionControls/AdvancedControls.jsx';
 import ScenarioControls from '../ActionControls/ScenarioControls.jsx';
+import ServiceManager from '../../services/ServiceManager.js';
 import './TailgateAnimation.css';
 
 const TailgateAnimation = ({ onStateChange }) => {
   const [activeControlTab, setActiveControlTab] = useState('advanced');
   const [isObstacleDetected, setIsObstacleDetected] = useState(false);
+  const serviceManagerRef = useRef(null);
   
   // 使用尾门服务Hook
   const {
@@ -38,6 +40,29 @@ const TailgateAnimation = ({ onStateChange }) => {
     executeScenario,
     controls: orchestratorControls
   } = useActionOrchestrator();
+
+  // 初始化ServiceManager
+  useEffect(() => {
+    if (!serviceManagerRef.current) {
+      serviceManagerRef.current = new ServiceManager();
+    }
+  }, []);
+
+  // 初始化服务
+  useEffect(() => {
+    const tailgateElement = document.getElementById('tailgate-element');
+    if (tailgateElement && !isInitialized) {
+      initialize(tailgateElement);
+      
+      // 建立MotionControlService和TailgateActionService的连接
+      if (serviceManagerRef.current && serviceManagerRef.current.setupMotionControlIntegration) {
+        const tailgateActionService = actions.getActionService ? actions.getActionService() : null;
+        if (tailgateActionService) {
+          serviceManagerRef.current.setupMotionControlIntegration(tailgateActionService);
+        }
+      }
+    }
+  }, [isInitialized, initialize, actions]);
 
   // 向父组件传递状态信息
   useEffect(() => {
@@ -75,14 +100,6 @@ const TailgateAnimation = ({ onStateChange }) => {
       });
     }
   }, [isOpen, isAnimating, currentAngle, currentSpeed, isEmergencyStopped, status.isEmergencyStopInProcess, status.currentAction, isInitialized, isExecuting, isPaused, actionProgress, loopInfo, isObstacleDetected, onStateChange]);
-
-  // 初始化服务
-  useEffect(() => {
-    const tailgateElement = document.getElementById('tailgate-element');
-    if (tailgateElement && !isInitialized) {
-      initialize(tailgateElement);
-    }
-  }, [isInitialized, initialize]);
 
   // 组件卸载时清理
   useEffect(() => {
