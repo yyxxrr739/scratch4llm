@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './ActionControls.css';
 
 const BasicControls = ({
@@ -8,12 +8,8 @@ const BasicControls = ({
   isEmergencyStopped,
   onOpen,
   onClose,
-  onStop,
-  onEmergencyStop,
-  onResetEmergencyStop
+  onStop
 }) => {
-  const [isConfirming, setIsConfirming] = useState(false);
-
   const handleOpen = () => {
     if (isOpen) {
       alert('尾门已经处于开启状态');
@@ -28,16 +24,6 @@ const BasicControls = ({
       return;
     }
     onClose();
-  };
-
-  const handleEmergencyStop = () => {
-    if (!isConfirming) {
-      setIsConfirming(true);
-      setTimeout(() => setIsConfirming(false), 3000); // 3秒后重置确认状态
-      return;
-    }
-    onEmergencyStop();
-    setIsConfirming(false);
   };
 
   return (
@@ -85,27 +71,6 @@ const BasicControls = ({
               <span className="btn-icon">⏹️</span>
               停止
             </button>
-            
-            <button 
-              onClick={handleEmergencyStop}
-              disabled={isEmergencyStopped}
-              className={`control-btn danger ${isConfirming ? 'warning' : ''}`}
-              title={isConfirming ? '再次点击确认紧急停止' : '紧急停止'}
-            >
-              <span className="btn-icon">🚨</span>
-              {isConfirming ? '确认紧急停止' : '紧急停止'}
-            </button>
-            
-            {isEmergencyStopped && (
-              <button 
-                onClick={onResetEmergencyStop}
-                className="control-btn reset"
-                title="重置紧急停止状态"
-              >
-                <span className="btn-icon">🔄</span>
-                重置紧急停止
-              </button>
-            )}
           </div>
         </div>
 

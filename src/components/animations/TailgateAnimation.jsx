@@ -111,31 +111,37 @@ const TailgateAnimation = ({ onStateChange }) => {
   // 键盘控制处理 - 简化为直接调用actions
   useEffect(() => {
     const handleKeyDown = (event) => {
-      // 如果正在执行场景或紧急停止，忽略键盘输入
-      if (isExecuting || isEmergencyStopped) {
+      // 如果正在执行场景，忽略键盘输入
+      if (isExecuting) {
         return;
       }
 
       switch (event.code) {
         case 'KeyO':
           event.preventDefault();
-          if (!isOpen && !isAnimating) {
+          if (!isOpen && !isAnimating && !isEmergencyStopped) {
             actions.startOpen(currentSpeed);
           }
           break;
         case 'KeyC':
           event.preventDefault();
-          if (isOpen && !isAnimating) {
+          if (isOpen && !isAnimating && !isEmergencyStopped) {
             actions.startClose(currentSpeed);
           }
           break;
         case 'Space':
           event.preventDefault();
-          // 空格键触发障碍物检测切换
-          if (isObstacleDetected) {
-            handleObstacleCleared();
+          // 空格键统一处理紧急停止状态切换
+          if (isEmergencyStopped) {
+            // 如果处于紧急停止状态，重置紧急停止
+            actions.resetEmergencyStop();
+            setIsObstacleDetected(false);
           } else {
-            handleObstacleDetected();
+            // 如果未处于紧急停止状态，触发紧急停止
+            actions.emergencyStop();
+            setIsObstacleDetected(true);
+            // 停止编排器的运动序列
+            orchestratorControls.stop();
           }
           break;
         default:
@@ -147,22 +153,7 @@ const TailgateAnimation = ({ onStateChange }) => {
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [isOpen, isAnimating, isExecuting, isEmergencyStopped, actions, currentSpeed, isObstacleDetected]);
-
-  // 障碍物检测事件处理
-  const handleObstacleDetected = () => {
-    setIsObstacleDetected(true);
-    // 触发紧急停止
-    actions.emergencyStop();
-    // 停止编排器的运动序列
-    orchestratorControls.stop();
-  };
-
-  const handleObstacleCleared = () => {
-    setIsObstacleDetected(false);
-    // 重置紧急停止状态
-    actions.resetEmergencyStop();
-  };
+  }, [isOpen, isAnimating, isExecuting, isEmergencyStopped, actions, currentSpeed]);
 
   // 高级控制事件处理
   const handleSpeedChange = (speed) => {
@@ -187,14 +178,6 @@ const TailgateAnimation = ({ onStateChange }) => {
 
   const handleStop = () => {
     actions.stop();
-  };
-
-  const handleEmergencyStop = () => {
-    actions.emergencyStop();
-  };
-
-  const handleResetEmergencyStop = () => {
-    actions.resetEmergencyStop();
   };
 
   // 编排器事件处理
@@ -233,15 +216,11 @@ const TailgateAnimation = ({ onStateChange }) => {
             currentAngle={currentAngle}
             currentSpeed={currentSpeed}
             isEmergencyStopped={isEmergencyStopped}
-            isEmergencyStopInProcess={status.isEmergencyStopInProcess}
             onSpeedChange={handleSpeedChange}
             onMoveToAngle={handleMoveToAngle}
-            onMoveByAngle={handleMoveByAngle}
             onPause={handlePause}
             onResume={handleResume}
             onStop={handleStop}
-            onEmergencyStop={handleEmergencyStop}
-            onResetEmergencyStop={handleResetEmergencyStop}
           />
         );
       

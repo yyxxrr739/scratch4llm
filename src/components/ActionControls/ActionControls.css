@@ -944,4 +944,61 @@
   opacity: 0.5;
   cursor: not-allowed;
   transform: none !important;
+}
+
+/* 紧急停止提示样式 */
+.emergency-stop-hint {
+  margin-top: 12px;
+  padding: 8px 12px;
+  background: rgba(255, 193, 7, 0.1);
+  border: 1px solid rgba(255, 193, 7, 0.3);
+  border-radius: 6px;
+  text-align: center;
+}
+
+.hint-text {
+  font-size: 12px;
+  color: #856404;
+  font-weight: 500;
+}
+
+/* 角度控制样式 */
+.angle-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.angle-input-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.angle-input {
+  width: 80px;
+  padding: 6px 8px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #2c3e50;
+  font-size: 12px;
+  text-align: center;
+}
+
+.angle-input:focus {
+  outline: none;
+  border-color: #667eea;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.angle-input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.angle-delta-controls {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
 } 
