@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
 import TailgateAnimation from "./animations/TailgateAnimation";
 import WheelControls from "./ActionControls/WheelControls";
-import AdvancedControls from "./ActionControls/AdvancedControls";
-import ScenarioControls from "./ActionControls/ScenarioControls";
+import ModeToggle from "./ActionControls/ModeToggle";
 import HelpModal from "./HelpModal";
 import useWheelPhysicsEngine from "../hooks/useWheelPhysicsEngine";
 import "./AnimationManager.css";
@@ -12,6 +11,9 @@ const AnimationManager = () => {
   
   // 帮助模态框状态
   const [isHelpOpen, setIsHelpOpen] = useState(false);
+  
+  // 系统模式状态
+  const [isDemoMode, setIsDemoMode] = useState(false);
   
   // 使用新的物理引擎hook
   const {
@@ -47,8 +49,13 @@ const AnimationManager = () => {
     updateTailgateState();
   }, []);
 
+  // 模式切换处理函数
+  const handleModeToggle = () => {
+    setIsDemoMode(!isDemoMode);
+  };
+
   return (
-    <div className="animation-manager">
+    <div className={`animation-manager ${isDemoMode ? 'demo-mode' : 'normal-mode'}`}>
       <div className="header">
         <div className="header-content">
           <h1 className="title">
@@ -248,6 +255,15 @@ const AnimationManager = () => {
 
         {/* 右侧控制面板 */}
         <div className="controls-panel">
+          {/* 模式切换组件 */}
+          <ModeToggle 
+            isDemoMode={isDemoMode}
+            onModeToggle={handleModeToggle}
+            isAnimating={tailgateState.isAnimating}
+            isExecuting={tailgateState.isExecuting}
+          />
+          
+          {/* 原有的动画组件 */}
           <ActiveComponent onStateChange={setTailgateState} />
         </div>
       </div>

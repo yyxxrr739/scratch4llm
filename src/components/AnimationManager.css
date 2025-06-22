@@ -389,14 +389,7 @@
 
 /* 右侧控制面板 */
 .controls-panel {
-  background: rgba(255, 255, 255, 0.25);
-  border-radius: 16px;
-  padding: 1.5rem;
-  backdrop-filter: blur(15px);
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  overflow-y: auto;
-  max-height: 100%;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  /* 样式已在 ActionControls.css 中定义 */
 }
 
 /* 响应式设计 */
