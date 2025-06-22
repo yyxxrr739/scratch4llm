@@ -123,6 +123,13 @@ export function useTailgateService() {
       );
 
       unsubscribes.push(
+        actionService.on('tailgate:emergencyStopAutoReset', ({ message }) => {
+          stateService.updateEmergencyStop(false);
+          console.log('Emergency stop auto reset:', message);
+        })
+      );
+
+      unsubscribes.push(
         actionService.on('tailgate:speedChanged', ({ speed }) => {
           stateService.updateSpeed(speed);
         })

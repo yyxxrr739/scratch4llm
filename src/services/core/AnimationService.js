@@ -30,6 +30,15 @@ class AnimationService {
     }
   }
 
+  // 停止所有时间线
+  stopAllTimelines() {
+    this.timelines.forEach(timeline => {
+      if (timeline && timeline.isActive()) {
+        timeline.kill();
+      }
+    });
+  }
+
   // 创建动画
   createAnimation(id, element, animationConfig) {
     const animation = gsap.to(element, animationConfig);

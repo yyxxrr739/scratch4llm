@@ -44,6 +44,25 @@ const TailgateAnimation = ({ onStateChange }) => {
     controls: orchestratorControls
   } = useActionOrchestrator();
 
+  // 监听紧急停止自动重置事件
+  useEffect(() => {
+    const handleEmergencyStopAutoReset = () => {
+      setIsObstacleDetected(false);
+    };
+
+    // 获取actionService并监听事件
+    const actionService = actions.getActionService ? actions.getActionService() : null;
+    if (actionService) {
+      const unsubscribe = actionService.on('tailgate:emergencyStopAutoReset', handleEmergencyStopAutoReset);
+      
+      return () => {
+        if (unsubscribe && typeof unsubscribe === 'function') {
+          unsubscribe();
+        }
+      };
+    }
+  }, [actions]);
+
   // 初始化ServiceManager
   useEffect(() => {
     if (!serviceManagerRef.current) {
@@ -134,13 +153,9 @@ const TailgateAnimation = ({ onStateChange }) => {
           break;
         case 'Space':
           event.preventDefault();
-          // 空格键统一处理紧急停止状态切换
-          if (isEmergencyStopped) {
-            // 如果处于紧急停止状态，重置紧急停止
-            actions.resetEmergencyStop();
-            setIsObstacleDetected(false);
-          } else {
-            // 如果未处于紧急停止状态，触发紧急停止
+          // 空格键触发紧急停止（仅在未处于紧急停止状态时）
+          if (!isEmergencyStopped) {
+            // 触发紧急停止
             actions.emergencyStop();
             setIsObstacleDetected(true);
             // 停止编排器的运动序列
@@ -169,6 +184,12 @@ const TailgateAnimation = ({ onStateChange }) => {
 
   const handleMoveByAngle = (deltaAngle, speed) => {
     actions.moveByAngle(deltaAngle, speed);
+  };
+
+  // 重置紧急停止
+  const handleResetEmergencyStop = () => {
+    actions.resetEmergencyStop();
+    setIsObstacleDetected(false);
   };
 
   // 编排器事件处理
@@ -210,6 +231,7 @@ const TailgateAnimation = ({ onStateChange }) => {
             isEmergencyStopped={isEmergencyStopped}
             onSpeedChange={handleSpeedChange}
             onMoveToAngle={handleMoveToAngle}
+            onResetEmergencyStop={handleResetEmergencyStop}
           />
         );
       
@@ -263,6 +285,22 @@ const TailgateAnimation = ({ onStateChange }) => {
       {/* 控制内容 */}
       <div className="control-content">
         {renderControlContent()}
+      </div>
+
+      {/* 键盘控制提示 */}
+      <div className="keyboard-hints">
+        <div className="key-hint">
+          <span className="key">O</span>
+          <span className="hint-text">开启尾门</span>
+        </div>
+        <div className="key-hint">
+          <span className="key">C</span>
+          <span className="hint-text">关闭尾门</span>
+        </div>
+        <div className="key-hint emergency-hint">
+          <span className="key">空格</span>
+          <span className="hint-text">紧急停止</span>
+        </div>
       </div>
 
       {/* 错误显示 */}

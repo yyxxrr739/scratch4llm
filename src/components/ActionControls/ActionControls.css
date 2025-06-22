@@ -1001,4 +1001,92 @@
   display: flex;
   gap: 8px;
   justify-content: center;
+}
+
+/* 紧急停止控制区域 */
+.emergency-stop-group {
+  border: 2px solid #e74c3c;
+  background: rgba(231, 76, 60, 0.1);
+  border-radius: 8px;
+  padding: 12px;
+  margin-top: 16px;
+}
+
+.emergency-stop-group .control-label.emergency {
+  color: #e74c3c;
+  font-weight: 700;
+}
+
+.emergency-stop-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.emergency-stop-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: rgba(231, 76, 60, 0.15);
+  border-radius: 6px;
+  border-left: 3px solid #e74c3c;
+}
+
+.emergency-stop-icon {
+  font-size: 16px;
+}
+
+.emergency-stop-text {
+  color: #e74c3c;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.emergency-stop-countdown {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  background: rgba(231, 76, 60, 0.1);
+  border-radius: 6px;
+  border: 1px solid rgba(231, 76, 60, 0.2);
+}
+
+.countdown-text {
+  color: #e74c3c;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.countdown-value {
+  color: #e74c3c;
+  font-size: 14px;
+  font-weight: 700;
+  background: rgba(231, 76, 60, 0.2);
+  padding: 2px 8px;
+  border-radius: 4px;
+  min-width: 30px;
+  text-align: center;
+}
+
+.control-btn.emergency-reset {
+  background: #e74c3c;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.control-btn.emergency-reset:hover {
+  background: #c0392b;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3);
+}
+
+.control-btn.emergency-reset:active {
+  transform: translateY(0);
 } 

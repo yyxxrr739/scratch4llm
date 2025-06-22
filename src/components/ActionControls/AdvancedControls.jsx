@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './ActionControls.css';
 
 const AdvancedControls = ({
@@ -8,9 +8,36 @@ const AdvancedControls = ({
   currentSpeed,
   isEmergencyStopped,
   onSpeedChange,
-  onMoveToAngle
+  onMoveToAngle,
+  onResetEmergencyStop
 }) => {
   const [speed, setSpeed] = useState(currentSpeed);
+  const [emergencyStopCountdown, setEmergencyStopCountdown] = useState(0);
+
+  // 紧急停止倒计时
+  useEffect(() => {
+    let countdown = null;
+    if (isEmergencyStopped) {
+      setEmergencyStopCountdown(3);
+      countdown = setInterval(() => {
+        setEmergencyStopCountdown(prev => {
+          if (prev <= 1) {
+            clearInterval(countdown);
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+    } else {
+      setEmergencyStopCountdown(0);
+    }
+
+    return () => {
+      if (countdown) {
+        clearInterval(countdown);
+      }
+    };
+  }, [isEmergencyStopped]);
 
   const handleSpeedChange = (newSpeed) => {
     setSpeed(newSpeed);
@@ -126,6 +153,31 @@ const AdvancedControls = ({
             </div>
           </div>
         </div>
+
+        {/* 紧急停止控制 */}
+        {isEmergencyStopped && (
+          <div className="control-group emergency-stop-group">
+            <label className="control-label large emergency">紧急停止</label>
+            <div className="emergency-stop-controls">
+              <div className="emergency-stop-status">
+                <span className="emergency-stop-icon">⚠️</span>
+                <span className="emergency-stop-text">系统已紧急停止</span>
+              </div>
+              {emergencyStopCountdown > 0 && (
+                <div className="emergency-stop-countdown">
+                  <span className="countdown-text">自动重置倒计时:</span>
+                  <span className="countdown-value">{emergencyStopCountdown}秒</span>
+                </div>
+              )}
+              <button 
+                onClick={onResetEmergencyStop}
+                className="control-btn emergency-reset"
+              >
+                立即重置
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

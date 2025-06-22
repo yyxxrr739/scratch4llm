@@ -89,8 +89,100 @@ class TailgateActionService {
 
   // 重置紧急停止状态
   resetEmergencyStop() {
+    if (!this.isEmergencyStopped) {
+      this.eventService.emit('tailgate:warning', { message: '系统未处于紧急停止状态' });
+      return false;
+    }
+
     this.isEmergencyStopped = false;
-    this.eventService.emit('tailgate:emergencyStopReset');
+    this.eventService.emit('tailgate:emergencyStopReset', {
+      message: '紧急停止状态已重置',
+      timestamp: Date.now()
+    });
+    return true;
+  }
+
+  // 紧急停止
+  emergencyStop() {
+    console.log('TailgateActionService: emergencyStop called, current state:', {
+      isEmergencyStopped: this.isEmergencyStopped,
+      isAnimating: this.isAnimating,
+      currentAction: this.currentAction,
+      currentAngle: this.currentAngle
+    });
+
+    if (this.isEmergencyStopped) {
+      this.eventService.emit('tailgate:warning', { message: '系统已处于紧急停止状态' });
+      return true;
+    }
+
+    // 记录停止前的状态
+    const previousAction = this.currentAction;
+    const stoppedAngle = this.currentAngle;
+
+    console.log('TailgateActionService: Stopping animation, previous action:', previousAction);
+
+    // 设置紧急停止状态
+    this.isEmergencyStopped = true;
+    this.isAnimating = false;
+    this.isPaused = false;
+    this.currentAction = null;
+
+    // 立即停止所有动画
+    if (this.timeline) {
+      console.log('TailgateActionService: Killing main timeline');
+      // 立即停止主动画时间线
+      this.timeline.kill();
+    }
+
+    // 停止所有其他可能的时间线
+    if (this.animationService) {
+      console.log('TailgateActionService: Stopping all timelines');
+      // 停止所有活跃的时间线
+      this.animationService.stopAllTimelines();
+    }
+
+    // 重新创建时间线以确保状态正确
+    if (this.element) {
+      console.log('TailgateActionService: Recreating timeline');
+      this.timeline = this.animationService.createTimeline('tailgate', {
+        onUpdate: () => this.handleAnimationUpdate(),
+        onComplete: () => this.handleAnimationComplete(),
+        onReverseComplete: () => this.handleAnimationComplete()
+      });
+    }
+
+    // 确保动画状态被正确重置
+    this.isAnimating = false;
+    this.isPaused = false;
+    this.currentAction = null;
+
+    console.log('TailgateActionService: Emergency stop completed, new state:', {
+      isEmergencyStopped: this.isEmergencyStopped,
+      isAnimating: this.isAnimating,
+      currentAction: this.currentAction
+    });
+
+    // 创建紧急停止视觉效果
+    this.createEmergencyStopEffect();
+
+    // 发出紧急停止事件
+    this.eventService.emit('tailgate:emergencyStop', {
+      stoppedAngle: stoppedAngle,
+      reason: 'emergency_stop_triggered',
+      previousAction: previousAction
+    });
+
+    // 延迟重置紧急停止状态（模拟车速降为0的过程）
+    setTimeout(() => {
+      console.log('TailgateActionService: Auto-resetting emergency stop');
+      this.resetEmergencyStop();
+      // 发出状态重置事件，通知UI更新
+      this.eventService.emit('tailgate:emergencyStopAutoReset', {
+        message: '紧急停止状态已自动重置'
+      });
+    }, 3000); // 3秒后自动重置
+
     return true;
   }
 
@@ -125,6 +217,8 @@ class TailgateActionService {
 
   // 启动尾门开启
   startOpen(speed = 1) {
+    console.log('TailgateActionService: startOpen called, speed:', speed);
+    
     if (this.isEmergencyStopped) {
       this.eventService.emit('tailgate:warning', { message: 'Tailgate is in emergency stop state. Please reset emergency stop first.' });
       return false;
@@ -154,12 +248,15 @@ class TailgateActionService {
     this.timeline.play();
     this.isAnimating = true;
     
+    console.log('TailgateActionService: Open animation started');
     this.eventService.emit('tailgate:opening', { speed, targetAngle: this.targetAngle });
     return true;
   }
 
   // 启动尾门关闭
   startClose(speed = 1) {
+    console.log('TailgateActionService: startClose called, speed:', speed);
+    
     if (this.isEmergencyStopped) {
       this.eventService.emit('tailgate:warning', { message: 'Tailgate is in emergency stop state. Please reset emergency stop first.' });
       return false;
@@ -178,6 +275,7 @@ class TailgateActionService {
     this.timeline.play();
     this.isAnimating = true;
     
+    console.log('TailgateActionService: Close animation started');
     this.eventService.emit('tailgate:closing', { speed, targetAngle: this.targetAngle });
     return true;
   }
@@ -291,6 +389,7 @@ class TailgateActionService {
 
   // 创建开启动画
   createOpenAnimation() {
+    console.log('TailgateActionService: Creating open animation');
     this.timeline.clear();
     this.timeline.to(this.element, {
       rotation: -this.config.maxAngle,
@@ -302,6 +401,7 @@ class TailgateActionService {
 
   // 创建关闭动画
   createCloseAnimation() {
+    console.log('TailgateActionService: Creating close animation');
     this.timeline.clear();
     this.timeline.to(this.element, {
       rotation: -this.config.minAngle,
@@ -313,6 +413,7 @@ class TailgateActionService {
 
   // 创建移动到指定角度的动画
   createMoveToAnimation(targetAngle) {
+    console.log('TailgateActionService: Creating moveTo animation, target angle:', targetAngle);
     this.timeline.clear();
     this.timeline.to(this.element, {
       rotation: -targetAngle,
@@ -381,35 +482,53 @@ class TailgateActionService {
       }
     });
     
-    // 添加红色闪烁效果
+    // 添加红色闪烁效果 - 更明显的闪烁
     emergencyTimeline.to(this.element, {
-      backgroundColor: 'rgba(255, 0, 0, 0.3)',
-      duration: 0.1,
+      backgroundColor: 'rgba(255, 0, 0, 0.4)',
+      boxShadow: '0 0 20px rgba(255, 0, 0, 0.6)',
+      duration: 0.2,
       ease: "power2.inOut"
     })
     .to(this.element, {
       backgroundColor: 'transparent',
-      duration: 0.1,
+      boxShadow: 'none',
+      duration: 0.2,
       ease: "power2.inOut"
     })
     .to(this.element, {
-      backgroundColor: 'rgba(255, 0, 0, 0.3)',
-      duration: 0.1,
-      ease: "power2.inOut"
-    })
-    .to(this.element, {
-      backgroundColor: 'transparent',
-      duration: 0.1,
-      ease: "power2.inOut"
-    })
-    .to(this.element, {
-      backgroundColor: 'rgba(255, 0, 0, 0.3)',
-      duration: 0.1,
+      backgroundColor: 'rgba(255, 0, 0, 0.4)',
+      boxShadow: '0 0 20px rgba(255, 0, 0, 0.6)',
+      duration: 0.2,
       ease: "power2.inOut"
     })
     .to(this.element, {
       backgroundColor: 'transparent',
-      duration: 0.1,
+      boxShadow: 'none',
+      duration: 0.2,
+      ease: "power2.inOut"
+    })
+    .to(this.element, {
+      backgroundColor: 'rgba(255, 0, 0, 0.4)',
+      boxShadow: '0 0 20px rgba(255, 0, 0, 0.6)',
+      duration: 0.2,
+      ease: "power2.inOut"
+    })
+    .to(this.element, {
+      backgroundColor: 'transparent',
+      boxShadow: 'none',
+      duration: 0.2,
+      ease: "power2.inOut"
+    })
+    .to(this.element, {
+      backgroundColor: 'rgba(255, 0, 0, 0.4)',
+      boxShadow: '0 0 20px rgba(255, 0, 0, 0.6)',
+      duration: 0.2,
+      ease: "power2.inOut"
+    })
+    .to(this.element, {
+      backgroundColor: 'transparent',
+      boxShadow: 'none',
+      duration: 0.2,
       ease: "power2.inOut"
     });
     
