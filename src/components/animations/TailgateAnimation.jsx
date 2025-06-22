@@ -287,22 +287,6 @@ const TailgateAnimation = ({ onStateChange }) => {
         {renderControlContent()}
       </div>
 
-      {/* 键盘控制提示 */}
-      <div className="keyboard-hints">
-        <div className="key-hint">
-          <span className="key">O</span>
-          <span className="hint-text">开启尾门</span>
-        </div>
-        <div className="key-hint">
-          <span className="key">C</span>
-          <span className="hint-text">关闭尾门</span>
-        </div>
-        <div className="key-hint emergency-hint">
-          <span className="key">空格</span>
-          <span className="hint-text">紧急停止</span>
-        </div>
-      </div>
-
       {/* 错误显示 */}
       {(error || orchestratorError) && (
         <div className="error-message">
