@@ -1,5 +1,6 @@
 import EventService from '../../services/core/EventService.js';
 import StateMachineManager from './StateMachineManager.js';
+import { getScenarioConfig } from '../orchestrator/scenarios/TailgateScenarios.js';
 
 class DemoModeController {
   constructor(dummyService, motionService, stateService, faultService) {
@@ -76,7 +77,7 @@ class DemoModeController {
       return false;
     }
 
-    const scenario = this.dummyService.getScenario(scenarioId);
+    const scenario = getScenarioConfig(scenarioId);
     if (!scenario) {
       this.eventService.emit('demo:error', {
         message: `场景不存在: ${scenarioId}`,

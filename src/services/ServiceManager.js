@@ -6,6 +6,7 @@ import DummyService from './atomic/DummyService.js';
 import NormalModeController from '../app/controllers/NormalModeController.js';
 import DemoModeController from '../app/controllers/DemoModeController.js';
 import EnhancedActionOrchestrator from '../app/orchestrator/EnhancedActionOrchestrator.js';
+import { getScenarioList } from '../app/orchestrator/scenarios/TailgateScenarios.js';
 
 class ServiceManager {
   constructor() {
@@ -358,7 +359,7 @@ class ServiceManager {
 
   // 获取演示场景列表
   getDemoScenarios() {
-    return this.atomicServices.dummyService.getScenarioList();
+    return getScenarioList();
   }
 
   // 模拟输入请求
