@@ -9,6 +9,7 @@ class TailgateStateService extends StateService {
       angle: 0,
       isOpen: false,
       isAnimating: false,
+      isPaused: false,
       currentAction: null,
       animationProgress: 0,
       speed: 1,
@@ -78,6 +79,14 @@ class TailgateStateService extends StateService {
     });
   }
 
+  // 更新暂停状态
+  updatePausedState(isPaused) {
+    this.updateState('tailgate', {
+      isPaused,
+      lastUpdateTime: Date.now()
+    });
+  }
+
   // 获取当前角度
   getCurrentAngle() {
     const state = this.getState('tailgate');
@@ -100,6 +109,12 @@ class TailgateStateService extends StateService {
   getIsAnimating() {
     const state = this.getState('tailgate');
     return state ? state.isAnimating : false;
+  }
+
+  // 获取是否暂停
+  getIsPaused() {
+    const state = this.getState('tailgate');
+    return state ? state.isPaused : false;
   }
 
   // 获取当前动作
@@ -150,6 +165,7 @@ class TailgateStateService extends StateService {
       isOpen: false,
       isClosed: true,
       isAnimating: false,
+      isPaused: false,
       currentAction: null,
       animationProgress: 0,
       speed: 1,

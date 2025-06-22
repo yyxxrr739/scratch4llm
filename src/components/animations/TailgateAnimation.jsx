@@ -29,10 +29,13 @@ const TailgateAnimation = ({ onStateChange }) => {
     isEmergencyStopped
   } = useTailgateService();
 
+  // 从status中获取isPaused状态
+  const isPaused = status.isPaused || false;
+
   // 使用编排器Hook
   const {
     isExecuting,
-    isPaused,
+    isPaused: orchestratorPaused,
     currentAction: orchestratorAction,
     actionProgress,
     loopInfo,
@@ -168,18 +171,6 @@ const TailgateAnimation = ({ onStateChange }) => {
     actions.moveByAngle(deltaAngle, speed);
   };
 
-  const handlePause = () => {
-    actions.pause();
-  };
-
-  const handleResume = () => {
-    actions.resume();
-  };
-
-  const handleStop = () => {
-    actions.stop();
-  };
-
   // 编排器事件处理
   const handleExecuteScenario = async (scenarioId) => {
     await executeScenario(scenarioId, actions);
@@ -213,14 +204,12 @@ const TailgateAnimation = ({ onStateChange }) => {
         return (
           <AdvancedControls
             isAnimating={isAnimating}
+            isPaused={isPaused}
             currentAngle={currentAngle}
             currentSpeed={currentSpeed}
             isEmergencyStopped={isEmergencyStopped}
             onSpeedChange={handleSpeedChange}
             onMoveToAngle={handleMoveToAngle}
-            onPause={handlePause}
-            onResume={handleResume}
-            onStop={handleStop}
           />
         );
       
@@ -228,7 +217,7 @@ const TailgateAnimation = ({ onStateChange }) => {
         return (
           <ScenarioControls
             isExecuting={isExecuting}
-            isPaused={isPaused}
+            isPaused={orchestratorPaused}
             currentAction={orchestratorAction}
             actionProgress={actionProgress}
             loopInfo={loopInfo}

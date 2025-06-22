@@ -9,9 +9,6 @@ const ScenarioControls = ({
   actionProgress,
   loopInfo,
   onExecuteScenario,
-  onPause,
-  onResume,
-  onStop,
   onClear
 }) => {
   const [selectedCategory, setSelectedCategory] = useState('basic');
@@ -30,16 +27,6 @@ const ScenarioControls = ({
 
   const handleExecuteScenario = () => {
     if (selectedScenario) {
-      onExecuteScenario(selectedScenario);
-    }
-  };
-
-  const handleRunResume = () => {
-    if (isExecuting && isPaused) {
-      // 如果正在执行且已暂停，则恢复
-      onResume();
-    } else if (selectedScenario) {
-      // 否则执行场景
       onExecuteScenario(selectedScenario);
     }
   };
@@ -115,29 +102,12 @@ const ScenarioControls = ({
         <div className="execution-controls">
           <div className="control-buttons">
             <button
-              onClick={handleRunResume}
+              onClick={handleExecuteScenario}
               disabled={!selectedScenario}
               className="control-btn primary small"
             >
-              {isExecuting && isPaused ? '恢复' : '运行'}
+              运行
             </button>
-            
-            <button
-              onClick={onPause}
-              disabled={!isExecuting || isPaused}
-              className="control-btn warning small"
-            >
-              暂停
-            </button>
-            
-            <button
-              onClick={onStop}
-              disabled={!isExecuting}
-              className="control-btn secondary small"
-            >
-              停止
-            </button>
-            
             <button
               onClick={onClear}
               className="control-btn reset small"

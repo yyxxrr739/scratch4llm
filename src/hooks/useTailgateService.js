@@ -70,6 +70,7 @@ export function useTailgateService() {
       unsubscribes.push(
         actionService.on('tailgate:animationComplete', ({ angle, isOpen, isClosed }) => {
           stateService.updateAnimationState(false, null);
+          stateService.updatePausedState(false);
           stateService.updateAngle(angle);
         })
       );
@@ -77,6 +78,7 @@ export function useTailgateService() {
       unsubscribes.push(
         actionService.on('tailgate:stopped', ({ angle }) => {
           stateService.updateAnimationState(false, null);
+          stateService.updatePausedState(false);
           stateService.updateAngle(angle);
         })
       );
@@ -84,6 +86,7 @@ export function useTailgateService() {
       unsubscribes.push(
         actionService.on('tailgate:paused', ({ angle }) => {
           stateService.updateAnimationState(false, 'paused');
+          stateService.updatePausedState(true);
           stateService.updateAngle(angle);
         })
       );
@@ -91,6 +94,7 @@ export function useTailgateService() {
       unsubscribes.push(
         actionService.on('tailgate:resumed', ({ angle }) => {
           stateService.updateAnimationState(true, 'resumed');
+          stateService.updatePausedState(false);
           stateService.updateAngle(angle);
         })
       );
@@ -98,6 +102,7 @@ export function useTailgateService() {
       unsubscribes.push(
         actionService.on('tailgate:emergencyStop', ({ angle }) => {
           stateService.updateAnimationState(false, null);
+          stateService.updatePausedState(false);
           stateService.updateEmergencyStop(true);
           stateService.updateEmergencyStopProcess(false);
           stateService.updateAngle(angle);

@@ -3,14 +3,12 @@ import './ActionControls.css';
 
 const AdvancedControls = ({
   isAnimating,
+  isPaused,
   currentAngle,
   currentSpeed,
   isEmergencyStopped,
   onSpeedChange,
-  onMoveToAngle,
-  onPause,
-  onResume,
-  onStop
+  onMoveToAngle
 }) => {
   const [speed, setSpeed] = useState(currentSpeed);
 
@@ -125,37 +123,6 @@ const AdvancedControls = ({
                   90°
                 </button>
               </div>
-            </div>
-          </div>
-        </div>
-
-        {/* 执行控制 */}
-        <div className="control-section">
-          <div className="execution-controls">
-            <div className="control-buttons">
-              <button 
-                onClick={onPause}
-                disabled={!isAnimating || isEmergencyStopped}
-                className="control-btn warning small"
-              >
-                暂停
-              </button>
-              
-              <button 
-                onClick={onResume}
-                disabled={isAnimating || isEmergencyStopped}
-                className="control-btn success small"
-              >
-                恢复
-              </button>
-              
-              <button 
-                onClick={onStop}
-                disabled={!isAnimating || isEmergencyStopped}
-                className="control-btn secondary small"
-              >
-                停止
-              </button>
             </div>
           </div>
         </div>

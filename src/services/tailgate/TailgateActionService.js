@@ -8,6 +8,7 @@ class TailgateActionService {
     
     this.currentAction = null;
     this.isAnimating = false;
+    this.isPaused = false;
     this.currentSpeed = 1;
     this.targetAngle = 0;
     this.isEmergencyStopped = false;
@@ -86,75 +87,6 @@ class TailgateActionService {
     }
   }
 
-  // 停止动作
-  stop() {
-    if (this.timeline && this.isAnimating) {
-      this.timeline.pause();
-      this.isAnimating = false;
-      this.currentAction = null;
-      this.eventService.emit('tailgate:stopped', { angle: this.currentAngle });
-      return true;
-    }
-    return false;
-  }
-
-  // 暂停动作
-  pause() {
-    if (this.timeline && this.isAnimating) {
-      this.timeline.pause();
-      this.eventService.emit('tailgate:paused', { angle: this.currentAngle });
-      return true;
-    }
-    return false;
-  }
-
-  // 恢复动作
-  resume() {
-    if (this.timeline && !this.isAnimating) {
-      this.timeline.resume();
-      this.isAnimating = true;
-      this.eventService.emit('tailgate:resumed', { angle: this.currentAngle });
-      return true;
-    }
-    return false;
-  }
-
-  // 紧急停止
-  emergencyStop() {
-    if (!this.timeline || !this.isAnimating) {
-      // 如果尾门已经静止，不执行紧急停止，但返回true避免编排器报错
-      this.eventService.emit('tailgate:warning', { 
-        message: '尾门已经静止，无需紧急停止' 
-      });
-      return true; // 改为返回true，避免编排器报错
-    }
-    
-    // 设置紧急停止状态
-    this.isEmergencyStopped = true;
-    this.currentAction = 'emergencyStopping';
-    
-    // 发出紧急停止开始事件
-    this.eventService.emit('tailgate:emergencyStopStarted', { angle: this.currentAngle });
-    
-    // 实现快速减速停止逻辑（比软停止更快）
-    this.timeline.timeScale(0.2); // 减速到20%的速度
-    
-    // 在较短时间内完全停止
-    setTimeout(() => {
-      this.timeline.kill();
-      this.isAnimating = false;
-      this.currentAction = null;
-      
-      // 保持紧急停止状态，不重置
-      this.eventService.emit('tailgate:emergencyStop', { angle: this.currentAngle });
-    }, 300); // 300ms后完全停止，比软停止的500ms更快
-    
-    // 添加紧急停止的视觉反馈
-    this.createEmergencyStopEffect();
-    
-    return true;
-  }
-
   // 重置紧急停止状态
   resetEmergencyStop() {
     this.isEmergencyStopped = false;
@@ -184,7 +116,8 @@ class TailgateActionService {
       currentSpeed: this.currentSpeed,
       isEmergencyStopped: this.isEmergencyStopped,
       isOpen: this.isOpen(),
-      isClosed: this.isClosed()
+      isClosed: this.isClosed(),
+      isPaused: this.isPaused
     };
   }
 
@@ -318,15 +251,17 @@ class TailgateActionService {
   // 软停止（减速停止）
   softStop() {
     if (this.timeline && this.isAnimating) {
-      // 实现减速停止逻辑
-      this.timeline.timeScale(0.5);
+      this.timeline.timeScale(0.5); // 软停止减速
       setTimeout(() => {
-        this.stop();
-      }, 500);
-      this.eventService.emit('tailgate:softStop', { angle: this.currentAngle });
-      return true;
+        if (this.timeline) {
+          this.timeline.kill();
+          this.isAnimating = false;
+          this.isPaused = false;
+          this.currentAction = null;
+          this.eventService.emit('tailgate:softStopped', { angle: this.currentAngle });
+        }
+      }, 500); // 500ms后完全停止
     }
-    return false;
   }
 
   // 状态查询方法
@@ -405,6 +340,7 @@ class TailgateActionService {
   // 处理动画完成
   handleAnimationComplete() {
     this.isAnimating = false;
+    this.isPaused = false;
     this.currentAction = null;
     
     // 只有在非紧急停止状态下才重置紧急停止状态
