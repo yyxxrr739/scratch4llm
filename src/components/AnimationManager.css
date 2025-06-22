@@ -23,26 +23,28 @@
 }
 
 .help-button {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border: none;
-  border-radius: 12px;
-  padding: 0.75rem 1.25rem;
-  color: white;
-  font-size: 0.95rem;
+  background: rgba(255, 255, 255, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 4ch;
+  padding: 0.1875rem;
+  color: #2c3e50;
+  font-size: 0.2375rem;
   font-weight: 600;
   cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
-  min-width: 80px;
   justify-content: center;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  width: 20px;
+  height: 20px;
+  backdrop-filter: blur(10px);
 }
 
 .help-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+  transform: translateY(-1px);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+  background: rgba(255, 255, 255, 0.4);
 }
 
 .help-button:active {
@@ -50,7 +52,7 @@
 }
 
 .help-button-icon {
-  font-size: 1.1rem;
+  font-size: 0.275rem;
 }
 
 .title {
@@ -390,45 +392,6 @@
 /* 右侧控制面板 */
 .controls-panel {
   /* 样式已在 ActionControls.css 中定义 */
-}
-
-/* 响应式设计 */
-@media (max-width: 1200px) {
-  .main-content {
-    grid-template-columns: 250px 1fr 300px;
-    gap: 1rem;
-  }
-}
-
-@media (max-width: 768px) {
-  .header {
-    flex-direction: column;
-    align-items: center;
-    gap: 1rem;
-  }
-  
-  .help-button {
-    align-self: flex-end;
-  }
-  
-  .main-content {
-    grid-template-columns: 1fr;
-    gap: 1rem;
-  }
-  
-  .status-panel {
-    order: 1;
-    max-height: 200px;
-  }
-  
-  .animation-area {
-    order: 2;
-    min-height: 300px;
-  }
-  
-  .controls-panel {
-    order: 3;
-  }
 }
 
 /* 删除不需要的样式 */

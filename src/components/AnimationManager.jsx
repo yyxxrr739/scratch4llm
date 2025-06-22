@@ -72,7 +72,6 @@ const AnimationManager = () => {
           title="查看帮助说明"
         >
           <span className="help-button-icon">❓</span>
-          帮助
         </button>
       </div>
 

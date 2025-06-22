@@ -204,23 +204,6 @@
   }
 }
 
-/* 响应式设计 */
-@media (max-width: 768px) {
-  .control-tabs {
-    flex-direction: column;
-  }
-  
-  .control-tab {
-    flex-direction: row;
-    justify-content: center;
-    gap: 8px;
-  }
-  
-  .tab-name {
-    font-size: 14px;
-  }
-}
-
 /* 键盘控制提示 */
 .keyboard-hints {
   display: flex;

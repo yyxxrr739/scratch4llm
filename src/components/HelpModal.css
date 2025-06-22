@@ -155,24 +155,4 @@
   color: #27ae60;
   font-weight: bold;
   font-size: 1rem;
-}
-
-/* 响应式设计 */
-@media (max-width: 768px) {
-  .help-modal {
-    width: 95%;
-    margin: 1rem;
-  }
-  
-  .help-modal-header {
-    padding: 1rem 1.5rem;
-  }
-  
-  .help-modal-content {
-    padding: 1.5rem;
-  }
-  
-  .help-modal-title {
-    font-size: 1.25rem;
-  }
 } 
