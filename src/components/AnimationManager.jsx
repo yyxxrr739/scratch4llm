@@ -91,7 +91,7 @@ const AnimationManager = () => {
         />
         
         {/* 渲染基础控制组件 */}
-        <ActiveComponent onStateChange={setTailgateState} />
+        <ActiveComponent onStateChange={setTailgateState} isDemoMode={isDemoMode} />
       </div>
     );
   };

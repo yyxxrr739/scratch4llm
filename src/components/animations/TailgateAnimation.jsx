@@ -6,7 +6,7 @@ import ScenarioControls from '../ActionControls/ScenarioControls.jsx';
 import ServiceManager from '../../services/ServiceManager.js';
 import './TailgateAnimation.css';
 
-const TailgateAnimation = ({ onStateChange }) => {
+const TailgateAnimation = ({ onStateChange, isDemoMode = false }) => {
   const [activeControlTab, setActiveControlTab] = useState('advanced');
   const [isObstacleDetected, setIsObstacleDetected] = useState(false);
   const serviceManagerRef = useRef(null);
@@ -268,24 +268,29 @@ const TailgateAnimation = ({ onStateChange }) => {
 
   return (
     <div className="tailgate-controls">
-      {/* 控制标签页 */}
-      <div className="control-tabs">
-        {controlTabs.map(tab => (
-          <button
-            key={tab.id}
-            onClick={() => setActiveControlTab(tab.id)}
-            className={`control-tab ${activeControlTab === tab.id ? 'active' : ''}`}
-          >
-            <span className="tab-icon">{tab.icon}</span>
-            <span className="tab-name">{tab.name}</span>
-          </button>
-        ))}
-      </div>
+      {/* 仅在演示模式下显示控制标签页 */}
+      {isDemoMode && (
+        <>
+          {/* 控制标签页 */}
+          <div className="control-tabs">
+            {controlTabs.map(tab => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveControlTab(tab.id)}
+                className={`control-tab ${activeControlTab === tab.id ? 'active' : ''}`}
+              >
+                <span className="tab-icon">{tab.icon}</span>
+                <span className="tab-name">{tab.name}</span>
+              </button>
+            ))}
+          </div>
 
-      {/* 控制内容 */}
-      <div className="control-content">
-        {renderControlContent()}
-      </div>
+          {/* 控制内容 */}
+          <div className="control-content">
+            {renderControlContent()}
+          </div>
+        </>
+      )}
 
       {/* 错误显示 */}
       {(error || orchestratorError) && (
