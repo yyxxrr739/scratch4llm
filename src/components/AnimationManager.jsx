@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import TailgateAnimation from "./animations/TailgateAnimation";
 import WheelControls from "./ActionControls/WheelControls";
+import ConfigurableControls from "./ActionControls/ConfigurableControls";
 import ModeToggle from "./ActionControls/ModeToggle";
 import HelpModal from "./HelpModal";
 import useWheelPhysicsEngine from "../hooks/useWheelPhysicsEngine";
@@ -14,6 +15,9 @@ const AnimationManager = () => {
   
   // 系统模式状态
   const [isDemoMode, setIsDemoMode] = useState(false);
+  
+  // 控制模式状态 - 新增
+  const [controlMode, setControlMode] = useState('basic'); // 'basic' | 'configurable'
   
   // 使用新的物理引擎hook
   const {
@@ -78,6 +82,58 @@ const AnimationManager = () => {
     setIsDemoMode(!isDemoMode);
   };
 
+  // 控制模式切换处理函数 - 新增
+  const handleControlModeToggle = () => {
+    setControlMode(controlMode === 'basic' ? 'configurable' : 'basic');
+  };
+
+  // 渲染控制面板
+  const renderControlPanel = () => {
+    return (
+      <div className="controls-panel">
+        {/* 模式切换组件 */}
+        <ModeToggle 
+          isDemoMode={isDemoMode}
+          onModeToggle={handleModeToggle}
+          isAnimating={tailgateState.isAnimating}
+          isExecuting={tailgateState.isExecuting}
+        />
+        
+        {/* 控制模式切换 - 新增 */}
+        <div className="control-mode-toggle">
+          <div className="toggle-header">
+            <h3>控制模式</h3>
+            <button 
+              className={`mode-switch-btn ${controlMode === 'configurable' ? 'active' : ''}`}
+              onClick={handleControlModeToggle}
+              title={`切换到${controlMode === 'basic' ? '配置驱动' : '基础'}控制模式`}
+            >
+              <span className="mode-icon">
+                {controlMode === 'basic' ? '⚙️' : '🎮'}
+              </span>
+              <span className="mode-text">
+                {controlMode === 'basic' ? '配置驱动' : '基础控制'}
+              </span>
+            </button>
+          </div>
+          <div className="mode-description">
+            {controlMode === 'basic' 
+              ? '使用基础的控制按钮进行尾门操作'
+              : '使用配置化的动作序列进行复杂的尾门控制'
+            }
+          </div>
+        </div>
+        
+        {/* 根据控制模式渲染不同的控制组件 */}
+        {controlMode === 'basic' ? (
+          <ActiveComponent onStateChange={setTailgateState} />
+        ) : (
+          <ConfigurableControls />
+        )}
+      </div>
+    );
+  };
+
   return (
     <div className={`animation-manager ${isDemoMode ? 'demo-mode' : 'normal-mode'}`}>
       <div className="header">
@@ -85,9 +141,17 @@ const AnimationManager = () => {
           <h1 className="title">
             <span className="title-icon">🚗</span>
             汽车尾门动画演示系统
+            {controlMode === 'configurable' && (
+              <span className="config-badge">配置驱动模式</span>
+            )}
           </h1>
           <p className="subtitle">
             基于原子服务的2D可视化动画系统，展示汽车尾门的复杂动作编排
+            {controlMode === 'configurable' && (
+              <span className="config-subtitle">
+                - 支持配置化的动作序列和事件驱动架构
+              </span>
+            )}
           </p>
         </div>
         <button 
@@ -286,18 +350,7 @@ const AnimationManager = () => {
         </div>
 
         {/* 右侧控制面板 */}
-        <div className="controls-panel">
-          {/* 模式切换组件 */}
-          <ModeToggle 
-            isDemoMode={isDemoMode}
-            onModeToggle={handleModeToggle}
-            isAnimating={tailgateState.isAnimating}
-            isExecuting={tailgateState.isExecuting}
-          />
-          
-          {/* 原有的动画组件 */}
-          <ActiveComponent onStateChange={setTailgateState} />
-        </div>
+        {renderControlPanel()}
       </div>
 
       <HelpModal 
