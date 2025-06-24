@@ -34,7 +34,7 @@ const ModeToggle = ({
               className={`control-btn mode-btn ${!isDemoMode ? 'active' : 'inactive'}`}
               title={isAnimating || isExecuting ? t('executingOperationCannotSwitch') : t('switchToNormalMode')}
             >
-              <span className="btn-icon">🚗</span>
+              <span className="btn-icon"></span>
               {t('normalMode')}
             </button>
             
@@ -44,7 +44,7 @@ const ModeToggle = ({
               className={`control-btn mode-btn ${isDemoMode ? 'active' : 'inactive'}`}
               title={isAnimating || isExecuting ? t('executingOperationCannotSwitch') : t('switchToDemoMode')}
             >
-              <span className="btn-icon">🎬</span>
+              <span className="btn-icon"></span>
               {t('demoMode')}
             </button>
           </div>

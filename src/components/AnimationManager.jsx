@@ -186,10 +186,10 @@ const AnimationManager = () => {
               
               {/* 服务状态 */}
               <div className="status-item">
-                <span className="status-label">服务状态:</span>
+                <span className="status-label">Service Status:</span>
                 <span className={`status-indicator ${tailgateState.isInitialized ? 'ready' : 'initializing'}`}>
                   <span className="status-dot"></span>
-                  {tailgateState.isInitialized ? '就绪' : '初始化中...'}
+                  {tailgateState.isInitialized ? 'Ready' : 'Initializing...'}
                 </span>
               </div>
               
@@ -218,7 +218,7 @@ const AnimationManager = () => {
               {/* 当前动作 */}
               {tailgateState.currentAction && (
                 <div className="status-item">
-                  <span className="status-label">当前动作:</span>
+                  <span className="status-label">Current Action:</span>
                   <span className="status-value">
                     {tailgateState.currentAction.action ? 
                       `${tailgateState.currentAction.action}${tailgateState.currentAction.params ? ` (${JSON.stringify(tailgateState.currentAction.params)})` : ''}` : 
