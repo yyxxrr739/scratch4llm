@@ -93,7 +93,7 @@ const AdvancedControls = ({
           <label className="control-label large">角度控制</label>
           <div className="angle-controls">
             <div className="angle-input-group">
-              <label className="control-label">目标角度:</label>
+              <label className="control-label"></label>
               <input
                 type="number"
                 min="0"
