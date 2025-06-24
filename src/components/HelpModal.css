@@ -155,4 +155,28 @@
   color: #27ae60;
   font-weight: bold;
   font-size: 1rem;
+}
+
+.author-info {
+  padding: 1rem;
+  background: rgba(155, 89, 182, 0.1);
+  border-radius: 8px;
+  border-left: 4px solid #9b59b6;
+}
+
+.author-name {
+  margin: 0 0 0.5rem 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.author-email {
+  margin: 0;
+  font-size: 0.92rem;
+  color: #34495e;
+  font-family: 'Courier New', monospace;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 } 

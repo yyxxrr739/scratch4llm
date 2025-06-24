@@ -20,6 +20,14 @@ const HelpModal = ({ isOpen, onClose }) => {
         
         <div className="help-modal-content">
           <div className="help-section">
+            <h3 className="help-section-title">{t('author')}</h3>
+            <div className="author-info">
+              <p className="author-name">{t('authorName')}</p>
+              <p className="author-email">{t('authorEmail')}</p>
+            </div>
+          </div>
+
+          <div className="help-section">
             <h3 className="help-section-title">{t('speedControl')}</h3>
             
             <div className="key-instructions">

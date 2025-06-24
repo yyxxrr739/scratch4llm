@@ -65,6 +65,9 @@ export const i18n = {
     smoothAnimation: "平滑的动画效果",
     realTimeStatus: "状态实时显示",
     emergencyStop: "紧急停止功能",
+    author: "作者信息",
+    authorName: "余希瑞",
+    authorEmail: "邮箱：xirui.yu@continental-corporation.com",
     
     // 需求面板
     requirements: "需求规范",
@@ -156,6 +159,9 @@ export const i18n = {
     smoothAnimation: "Smooth animation effects",
     realTimeStatus: "Real-time status display",
     emergencyStop: "Emergency stop function",
+    author: "Author Information",
+    authorName: "Xirui Yu",
+    authorEmail: "Email: xirui.yu@continental-corporation.com",
     
     // 需求面板
     requirements: "Requirements",
