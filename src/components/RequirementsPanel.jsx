@@ -1,8 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import ServiceManager from '../services/ServiceManager.js';
 import './RequirementsPanel.css';
 
 const RequirementsPanel = ({ isDemoMode = false }) => {
   const [selectedRequirement, setSelectedRequirement] = useState(null);
+  const [visibleRequirements, setVisibleRequirements] = useState([]);
+  const serviceManagerRef = useRef(null);
 
   // 需求数据
   const requirements = [
@@ -72,6 +75,68 @@ const RequirementsPanel = ({ isDemoMode = false }) => {
     }
   ];
 
+  // 动作类型到需求ID的映射
+  const actionToRequirementMap = {
+    'open': 'Req_1',
+    'close': 'Req_2',
+    'emergency_stop': 'Req_3'
+  };
+
+  // 初始化ServiceManager并监听事件
+  useEffect(() => {
+    if (isDemoMode) return;
+
+    // 初始化ServiceManager
+    if (!serviceManagerRef.current) {
+      serviceManagerRef.current = new ServiceManager();
+    }
+
+    // 获取正常模式控制器
+    const normalController = serviceManagerRef.current.getService('normalController');
+    
+    if (normalController) {
+      // 监听动作执行事件
+      const unsubscribe = normalController.on('controller:actionExecuted', (eventData) => {
+        const { action } = eventData;
+        const requirementId = actionToRequirementMap[action];
+        
+        if (requirementId) {
+          // 查找对应的需求
+          const requirement = requirements.find(req => req.id === requirementId);
+          if (requirement) {
+            // 添加时间戳用于排序
+            const requirementWithTimestamp = {
+              ...requirement,
+              timestamp: Date.now(),
+              eventData
+            };
+            
+            setVisibleRequirements(prev => {
+              // 检查是否已经存在相同的需求ID
+              const existingIndex = prev.findIndex(req => req.id === requirementId);
+              if (existingIndex !== -1) {
+                // 如果已存在，更新为最新的事件
+                const updated = [...prev];
+                updated[existingIndex] = requirementWithTimestamp;
+                return updated;
+              } else {
+                // 如果不存在，添加到列表末尾
+                return [...prev, requirementWithTimestamp];
+              }
+            });
+          }
+        }
+      });
+
+      // 清理函数
+      return () => {
+        if (unsubscribe && typeof unsubscribe === 'function') {
+          unsubscribe();
+        }
+      };
+    }
+  }, [isDemoMode]);
+
   const handleRequirementClick = (requirement) => {
     setSelectedRequirement(requirement);
   };
@@ -95,16 +160,22 @@ const RequirementsPanel = ({ isDemoMode = false }) => {
     <div className="requirements-panel">
       <h3 className="requirements-title">需求规范</h3>
       <div className="requirements-buttons">
-        {requirements.map((req) => (
-          <button
-            key={req.id}
-            className="requirement-button"
-            onClick={() => handleRequirementClick(req)}
-            title={`点击查看${req.title}详细描述`}
-          >
-            {req.id}
-          </button>
-        ))}
+        {visibleRequirements.length === 0 ? (
+          <div className="no-requirements-message">
+            等待动作执行...
+          </div>
+        ) : (
+          visibleRequirements.map((req) => (
+            <button
+              key={`${req.id}-${req.timestamp}`}
+              className="requirement-button"
+              onClick={() => handleRequirementClick(req)}
+              title={`点击查看${req.title}详细描述`}
+            >
+              {req.id}
+            </button>
+          ))
+        )}
       </div>
 
       {/* 需求详情弹窗 */}
@@ -130,6 +201,25 @@ const RequirementsPanel = ({ isDemoMode = false }) => {
                   </div>
                 ))}
               </div>
+              {/* 显示触发事件信息 */}
+              {selectedRequirement.eventData && (
+                <div className="event-info">
+                  <h4>触发事件</h4>
+                  <div className="event-details">
+                    <div className="detail-line">
+                      动作类型: {selectedRequirement.eventData.action}
+                    </div>
+                    <div className="detail-line">
+                      执行时间: {new Date(selectedRequirement.eventData.timestamp).toLocaleString()}
+                    </div>
+                    {selectedRequirement.eventData.request && (
+                      <div className="detail-line">
+                        请求类型: {selectedRequirement.eventData.request.type}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>
