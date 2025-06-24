@@ -39,8 +39,6 @@ export function useConfigurableActionEngine(tailgateService) {
         setCurrentStep(null);
         setError(null);
         setExecutionLog([]);
-        
-        console.log('useConfigurableActionEngine: 配置执行开始', config.name);
       })
     );
 
@@ -85,8 +83,6 @@ export function useConfigurableActionEngine(tailgateService) {
           result: result,
           timestamp: Date.now()
         }]);
-        
-        console.log('useConfigurableActionEngine: 配置执行完成', config.name);
       })
     );
 
@@ -102,8 +98,6 @@ export function useConfigurableActionEngine(tailgateService) {
           error: error,
           timestamp: Date.now()
         }]);
-        
-        console.error('useConfigurableActionEngine: 配置执行错误', error);
       })
     );
 
@@ -130,8 +124,6 @@ export function useConfigurableActionEngine(tailgateService) {
           result: result,
           timestamp: timestamp
         }]);
-        
-        console.log('useConfigurableActionEngine: 监控触发', monitor.id);
       })
     );
 
@@ -157,7 +149,6 @@ export function useConfigurableActionEngine(tailgateService) {
     }
 
     try {
-      console.log('useConfigurableActionEngine: 执行配置', config.id);
       const result = await engineRef.current.executeConfig(config, context);
       return result;
     } catch (error) {

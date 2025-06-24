@@ -49,7 +49,6 @@ class ActionOrchestrator {
 
   // 执行动作序列
   async executeSequence(service, options = {}) {
-    console.log('ActionOrchestrator: executeSequence called', { service, options });
     
     if (this.isExecuting) {
       this.eventService.emit('orchestrator:error', { message: 'Sequence already executing' });
@@ -60,8 +59,6 @@ class ActionOrchestrator {
       this.eventService.emit('orchestrator:warning', { message: 'No actions in queue' });
       return false;
     }
-
-    console.log('ActionOrchestrator: Starting sequence execution', { queueLength: this.actionQueue.length });
 
     this.isExecuting = true;
     this.currentSequence = {
@@ -138,14 +135,10 @@ class ActionOrchestrator {
   async executeAction(service, action) {
     const { action: actionType, params = {}, wait } = action;
     
-    console.log('ActionOrchestrator: executeAction', { actionType, params, wait, service });
 
     // 执行动作
     if (service && typeof service.start === 'function') {
-      console.log('ActionOrchestrator: Calling service.start', { actionType, params });
       const result = service.start({ action: actionType, ...params });
-      
-      console.log('ActionOrchestrator: service.start result', result);
       
       if (!result) {
         throw new Error(`Failed to execute action: ${actionType}`);
@@ -163,7 +156,6 @@ class ActionOrchestrator {
 
     // 处理等待
     if (wait) {
-      console.log('ActionOrchestrator: Handling wait', wait);
       await this.handleWait(wait, service);
     }
   }
@@ -186,7 +178,6 @@ class ActionOrchestrator {
           // 检查服务是否还在动画中
           if (service && typeof service.getStatus === 'function') {
             const status = service.getStatus();
-            console.log('ActionOrchestrator: Animation status', status);
             
             if (!status.isAnimating) {
               clearTimeout(timeout);

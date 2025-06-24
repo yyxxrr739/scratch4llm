@@ -103,7 +103,7 @@ export function useActionOrchestrator() {
 
     unsubscribes.push(
       orchestrator.on('orchestrator:warning', ({ message }) => {
-        console.warn('Orchestrator warning:', message);
+        // 警告信息处理
       })
     );
 
@@ -120,7 +120,6 @@ export function useActionOrchestrator() {
 
   // 执行预设场景
   const executeScenario = useCallback(async (scenarioId, service) => {
-    console.log('useActionOrchestrator: executeScenario called', { scenarioId, service });
     
     if (!orchestratorRef.current) {
       setError('Orchestrator not initialized');
@@ -133,15 +132,11 @@ export function useActionOrchestrator() {
       return false;
     }
 
-    console.log('useActionOrchestrator: Found scenario', scenario);
-
     const validation = validateScenario(scenario);
     if (!validation.valid) {
       setError(`Invalid scenario: ${validation.error}`);
       return false;
     }
-
-    console.log('useActionOrchestrator: Scenario validated, adding actions to queue');
 
     // 清空队列并添加场景动作
     orchestratorRef.current.clearQueue();
@@ -155,8 +150,6 @@ export function useActionOrchestrator() {
         orchestratorRef.current.addActions(scenario.sequence);
       }
     }
-
-    console.log('useActionOrchestrator: Executing sequence with service', service);
 
     // 执行序列
     return await orchestratorRef.current.executeSequence(service);

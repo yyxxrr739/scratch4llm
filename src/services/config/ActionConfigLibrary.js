@@ -473,7 +473,6 @@ class ActionConfigLibrary {
     }
     
     this.configs.set(config.id, config);
-    console.log(`ActionConfigLibrary: 添加配置 ${config.id}`);
   }
   
   // 获取配置
@@ -619,7 +618,6 @@ class ActionConfigLibrary {
   removeConfig(id) {
     if (this.configs.has(id)) {
       this.configs.delete(id);
-      console.log(`ActionConfigLibrary: 删除配置 ${id}`);
       return true;
     }
     return false;
@@ -639,7 +637,6 @@ class ActionConfigLibrary {
     }
     
     this.configs.set(id, updatedConfig);
-    console.log(`ActionConfigLibrary: 更新配置 ${id}`);
     return updatedConfig;
   }
   

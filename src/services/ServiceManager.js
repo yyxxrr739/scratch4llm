@@ -65,7 +65,6 @@ class ServiceManager {
       
       this.serviceState.isInitialized = true;
       
-      console.log('ServiceManager: 所有服务初始化完成');
     } catch (error) {
       console.error('ServiceManager: 服务初始化失败', error);
       throw error;
@@ -295,8 +294,6 @@ class ServiceManager {
     }
     
     this.serviceState.currentMode = mode;
-    
-    console.log(`ServiceManager: 模式切换 ${oldMode} -> ${mode}`);
   }
 
   // 获取当前模式
@@ -412,8 +409,6 @@ class ServiceManager {
 
   // 销毁所有服务
   destroy() {
-    console.log('ServiceManager: 开始销毁所有服务');
-    
     // 销毁原子服务
     Object.values(this.atomicServices).forEach(service => {
       if (service && typeof service.destroy === 'function') {
@@ -439,8 +434,6 @@ class ServiceManager {
     this.serviceState.isInitialized = false;
     this.serviceState.activeServices.clear();
     this.serviceState.serviceHealth.clear();
-    
-    console.log('ServiceManager: 所有服务已销毁');
   }
 }
 

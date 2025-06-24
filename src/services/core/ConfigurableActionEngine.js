@@ -17,7 +17,6 @@ class ConfigurableActionEngine {
   
   // 执行配置化的动作
   async executeConfig(config, context = {}) {
-    console.log(`ConfigurableActionEngine: 执行动作配置: ${config.name}`, config);
     
     if (this.isExecuting) {
       throw new Error('已有动作正在执行中');
@@ -141,7 +140,6 @@ class ConfigurableActionEngine {
   
   // 检查前置条件
   async checkPreconditions(preconditions) {
-    console.log('ConfigurableActionEngine: 检查前置条件', preconditions);
     
     for (const condition of preconditions) {
       const result = await this.conditionEvaluator.evaluate(condition);
@@ -160,7 +158,6 @@ class ConfigurableActionEngine {
   
   // 处理前置条件失败
   handlePreconditionFailure(result) {
-    console.warn('ConfigurableActionEngine: 前置条件检查失败', result);
     
     this.eventService.emit('config:preconditionFailed', {
       failedCondition: result.failedCondition,
@@ -177,13 +174,11 @@ class ConfigurableActionEngine {
   
   // 执行步骤
   async executeSteps(steps, context) {
-    console.log('ConfigurableActionEngine: 执行步骤', steps);
     
     for (let i = 0; i < steps.length; i++) {
       const step = steps[i];
       
       if (!this.isExecuting) {
-        console.log('ConfigurableActionEngine: 执行被中断');
         break;
       }
       
@@ -214,7 +209,6 @@ class ConfigurableActionEngine {
   
   // 执行单个步骤
   async executeStep(step, context) {
-    console.log('ConfigurableActionEngine: 执行步骤', step);
     
     switch (step.type) {
       case 'action':
@@ -231,29 +225,24 @@ class ConfigurableActionEngine {
   // 处理等待步骤
   async handleWait(step) {
     if (step.duration) {
-      console.log(`ConfigurableActionEngine: 等待 ${step.duration}ms`);
       await new Promise(resolve => setTimeout(resolve, step.duration));
     } else if (step.condition) {
-      console.log('ConfigurableActionEngine: 等待条件满足', step.condition);
       await this.conditionEvaluator.waitForCondition(step.condition, step.timeout || 30000);
     }
   }
   
   // 启动监控
   startMonitors(monitors) {
-    console.log('ConfigurableActionEngine: 启动监控', monitors);
     this.monitorManager.startMonitors(monitors, this.eventService);
   }
   
   // 停止监控
   stopMonitors() {
-    console.log('ConfigurableActionEngine: 停止监控');
     this.monitorManager.stopMonitors();
   }
   
   // 执行后置动作
   async executePostActions(postActions) {
-    console.log('ConfigurableActionEngine: 执行后置动作', postActions);
     
     for (const action of postActions) {
       try {
@@ -267,7 +256,6 @@ class ConfigurableActionEngine {
   
   // 停止执行
   stop() {
-    console.log('ConfigurableActionEngine: 停止执行');
     this.isExecuting = false;
     this.stopMonitors();
     this.eventService.emit('config:executionStopped');
@@ -275,13 +263,11 @@ class ConfigurableActionEngine {
   
   // 暂停执行
   pause() {
-    console.log('ConfigurableActionEngine: 暂停执行');
     this.eventService.emit('config:executionPaused');
   }
   
   // 恢复执行
   resume() {
-    console.log('ConfigurableActionEngine: 恢复执行');
     this.eventService.emit('config:executionResumed');
   }
   

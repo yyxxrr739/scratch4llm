@@ -7,7 +7,6 @@ class ConditionEvaluator {
   
   // 评估条件
   async evaluate(condition) {
-    console.log('ConditionEvaluator: 评估条件', condition);
     
     if (!condition || !condition.type) {
       return { success: false, error: '条件配置无效' };
@@ -24,14 +23,6 @@ class ConditionEvaluator {
       const operator = condition.operator || '==';
       
       const result = this.compareValues(actualValue, operator, expectedValue);
-      
-      console.log('ConditionEvaluator: 条件评估结果', {
-        condition,
-        actualValue,
-        expectedValue,
-        operator,
-        result
-      });
       
       return {
         success: result,
@@ -97,14 +88,12 @@ class ConditionEvaluator {
         }
         return false;
       default:
-        console.warn(`未知的比较操作符: ${operator}`);
         return false;
     }
   }
   
   // 等待条件满足
   async waitForCondition(condition, timeout = 30000) {
-    console.log('ConditionEvaluator: 等待条件满足', condition, '超时:', timeout);
     
     const startTime = Date.now();
     
@@ -114,7 +103,6 @@ class ConditionEvaluator {
           const result = await this.evaluate(condition);
           
           if (result.success) {
-            console.log('ConditionEvaluator: 条件已满足', condition);
             resolve(result);
             return;
           }
@@ -138,7 +126,6 @@ class ConditionEvaluator {
   
   // 评估复合条件
   async evaluateCompositeCondition(conditions, logic = 'AND') {
-    console.log('ConditionEvaluator: 评估复合条件', conditions, logic);
     
     const results = [];
     

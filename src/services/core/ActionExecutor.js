@@ -15,7 +15,6 @@ class ActionExecutor {
   
   // 执行动作
   async execute(action, params = {}, context = {}) {
-    console.log('ActionExecutor: 执行动作', { action, params, context });
     
     if (!action) {
       throw new Error('动作名称不能为空');
@@ -83,7 +82,6 @@ class ActionExecutor {
   
   // 执行开门动作
   async executeOpen(params, context) {
-    console.log('ActionExecutor: 执行开门动作', params);
     
     if (!this.tailgateService) {
       throw new Error('尾门服务未初始化');
@@ -102,7 +100,6 @@ class ActionExecutor {
   
   // 执行关门动作
   async executeClose(params, context) {
-    console.log('ActionExecutor: 执行关门动作', params);
     
     if (!this.tailgateService) {
       throw new Error('尾门服务未初始化');
@@ -121,7 +118,6 @@ class ActionExecutor {
   
   // 执行移动到指定角度
   async executeMoveToAngle(params, context) {
-    console.log('ActionExecutor: 执行移动到指定角度', params);
     
     if (!this.tailgateService) {
       throw new Error('尾门服务未初始化');
@@ -150,7 +146,6 @@ class ActionExecutor {
   
   // 执行相对角度移动
   async executeMoveByAngle(params, context) {
-    console.log('ActionExecutor: 执行相对角度移动', params);
     
     if (!this.tailgateService) {
       throw new Error('尾门服务未初始化');
@@ -179,7 +174,6 @@ class ActionExecutor {
   
   // 执行紧急停止
   async executeEmergencyStop(params, context) {
-    console.log('ActionExecutor: 执行紧急停止', params);
     
     if (!this.tailgateService) {
       throw new Error('尾门服务未初始化');
@@ -196,7 +190,6 @@ class ActionExecutor {
   
   // 执行等待
   async executeWait(params, context) {
-    console.log('ActionExecutor: 执行等待', params);
     
     const { duration, condition } = params;
     
@@ -223,8 +216,6 @@ class ActionExecutor {
   
   // 执行状态更新
   async executeUpdateStatus(params, context) {
-    console.log('ActionExecutor: 执行状态更新', params);
-    
     const { state, data } = params;
     
     if (!state) {
@@ -271,8 +262,6 @@ class ActionExecutor {
   
   // 执行设置速度
   async executeSetSpeed(params, context) {
-    console.log('ActionExecutor: 执行设置速度', params);
-    
     if (!this.tailgateService) {
       throw new Error('尾门服务未初始化');
     }
@@ -295,8 +284,6 @@ class ActionExecutor {
   
   // 执行暂停
   async executePause(params, context) {
-    console.log('ActionExecutor: 执行暂停', params);
-    
     if (!this.tailgateService) {
       throw new Error('尾门服务未初始化');
     }
@@ -314,8 +301,6 @@ class ActionExecutor {
   
   // 执行恢复
   async executeResume(params, context) {
-    console.log('ActionExecutor: 执行恢复', params);
-    
     if (!this.tailgateService) {
       throw new Error('尾门服务未初始化');
     }

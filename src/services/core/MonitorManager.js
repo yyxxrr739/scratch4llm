@@ -15,7 +15,6 @@ class MonitorManager {
   
   // 启动监控
   startMonitors(monitors, eventService) {
-    console.log('MonitorManager: 启动监控', monitors);
     
     this.eventService = eventService;
     
@@ -31,11 +30,8 @@ class MonitorManager {
   // 启动单个监控
   startMonitor(monitor) {
     if (!monitor.id) {
-      console.warn('MonitorManager: 监控缺少ID，跳过', monitor);
       return;
     }
-    
-    console.log('MonitorManager: 启动监控', monitor.id, monitor);
     
     const intervalId = setInterval(async () => {
       try {
@@ -63,7 +59,6 @@ class MonitorManager {
   
   // 停止监控
   stopMonitors() {
-    console.log('MonitorManager: 停止所有监控');
     
     this.activeMonitors.forEach((monitorInfo, monitorId) => {
       clearInterval(monitorInfo.intervalId);
@@ -84,7 +79,6 @@ class MonitorManager {
       this.eventService?.emit('monitor:stopped', { 
         monitor: monitorInfo.monitor 
       });
-      console.log('MonitorManager: 停止监控', monitorId);
     }
   }
   
@@ -102,7 +96,6 @@ class MonitorManager {
   
   // 处理监控触发
   handleMonitorTrigger(monitor, result) {
-    console.log('MonitorManager: 监控触发', monitor.id, result);
     
     this.eventService?.emit('monitor:triggered', { 
       monitor, 
@@ -134,7 +127,6 @@ class MonitorManager {
   
   // 执行紧急停止
   executeEmergencyStop(monitor, result) {
-    console.log('MonitorManager: 执行紧急停止', monitor.id);
     
     this.eventService?.emit('monitor:emergencyStop', {
       monitor,
@@ -148,7 +140,6 @@ class MonitorManager {
   
   // 执行暂停
   executePause(monitor, result) {
-    console.log('MonitorManager: 执行暂停', monitor.id);
     
     this.eventService?.emit('monitor:pause', {
       monitor,
@@ -159,7 +150,6 @@ class MonitorManager {
   
   // 执行中止
   executeAbort(monitor, result) {
-    console.log('MonitorManager: 执行中止', monitor.id);
     
     this.eventService?.emit('monitor:abort', {
       monitor,
@@ -170,7 +160,6 @@ class MonitorManager {
   
   // 执行日志记录
   executeLog(monitor, result) {
-    console.log('MonitorManager: 执行日志记录', monitor.id);
     
     const logMessage = monitor.logMessage || `监控${monitor.id}触发`;
     
@@ -184,7 +173,6 @@ class MonitorManager {
   
   // 执行自定义动作
   executeCustomAction(monitor, result) {
-    console.log('MonitorManager: 执行自定义动作', monitor.id);
     
     if (monitor.customAction && typeof window[monitor.customAction] === 'function') {
       try {

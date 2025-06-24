@@ -125,7 +125,6 @@ export function useTailgateService() {
       unsubscribes.push(
         actionService.on('tailgate:emergencyStopAutoReset', ({ message }) => {
           stateService.updateEmergencyStop(false);
-          console.log('Emergency stop auto reset:', message);
         })
       );
 
@@ -143,7 +142,7 @@ export function useTailgateService() {
 
       unsubscribes.push(
         actionService.on('tailgate:warning', ({ message }) => {
-          console.warn('Tailgate warning:', message);
+          // 警告信息处理
         })
       );
 

@@ -379,7 +379,7 @@ export class StateObserver {
         try {
           callback(value, oldValue, this.state);
         } catch (error) {
-          console.error('State observer callback error:', error);
+          // 状态观察器回调错误处理
         }
       });
     }

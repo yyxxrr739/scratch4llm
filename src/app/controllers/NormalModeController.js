@@ -93,11 +93,6 @@ class NormalModeController {
 
   // 处理输入请求
   handleInputRequest(request) {
-    console.log('处理输入请求:', {
-      requestType: request.type,
-      isActive: this.controlState.isActive,
-      timestamp: Date.now()
-    });
     
     if (!this.controlState.isActive) {
       this.eventService.emit('controller:warning', {
@@ -153,13 +148,6 @@ class NormalModeController {
 
   // 检查开启前提条件
   checkOpenPrerequisites(systemState) {
-    // 调试信息：显示车速检查过程
-    console.log('车速检查:', {
-      currentSpeed: systemState.vehicle.speed,
-      maxSpeedForOpening: this.safetyConfig.maxVehicleSpeedForOpening,
-      isSpeedSafe: systemState.vehicle.speed <= this.safetyConfig.maxVehicleSpeedForOpening
-    });
-    
     // 检查车速
     if (systemState.vehicle.speed > this.safetyConfig.maxVehicleSpeedForOpening) {
       // 记录车速过高状态
