@@ -3,7 +3,7 @@ export const i18n = {
   zh: {
     // 标题和描述
     title: "汽车尾门动画系统",
-    subtitle: "基于原子服务的2D可视化动画系统，展示汽车尾门的复杂动作编排",
+    subtitle: "可视化您的想法",
     
     // 帮助按钮
     helpButton: "查看帮助说明",
@@ -92,7 +92,7 @@ export const i18n = {
   en: {
     // 标题和描述
     title: "Vehicle Tailgate Animation System",
-    subtitle: "2D visualization animation system based on atomic services, demonstrating complex action orchestration of vehicle tailgate",
+    subtitle: "Visualize Your Idea",
     
     // 帮助按钮
     helpButton: "View Help",

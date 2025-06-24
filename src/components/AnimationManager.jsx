@@ -103,7 +103,7 @@ const AnimationManager = () => {
       <div className="header">
         <div className="header-content">
           <h1 className="title">
-            <span className="title-icon">🚗</span>
+            <span className="title-icon"></span>
             {t('title')}
           </h1>
           <p className="subtitle">
