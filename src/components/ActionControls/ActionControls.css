@@ -392,14 +392,14 @@
 
 /* 状态标签 - 如"当前角度"、"当前速度"、"状态"等标签 */
 .status-label {
-  font-size: 11px;
+  font-size: 15px;
   font-weight: 500;
   color: #2c3e50;
 }
 
 /* 状态值 - 显示具体的状态数值或文字 */
 .status-value {
-  font-size: 11px;
+  font-size: 15px;
   font-weight: 600;
   color: #667eea;
   background: rgba(102, 126, 234, 0.1);
@@ -413,7 +413,7 @@
   display: flex;
   align-items: center;
   gap: 4px;
-  font-size: 11px;
+  font-size: 15px;
   font-weight: 500;
 }
 

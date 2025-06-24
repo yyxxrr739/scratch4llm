@@ -161,13 +161,13 @@
 }
 
 .status-label {
-  font-size: 0.7rem;
+  font-size: 0.9rem;
   color: #2c3e50;
   font-weight: 500;
 }
 
 .status-value {
-  font-size: 0.7rem;
+  font-size: 0.9rem;
   color: #1a252f;
   font-weight: 600;
   background: rgba(102, 126, 234, 0.1);
@@ -179,7 +179,7 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  font-size: 0.7rem;
+  font-size: 0.9rem;
   font-weight: 600;
   padding: 0.25rem 0.5rem;
   border-radius: 4px;
@@ -378,7 +378,7 @@
   position: absolute;
   z-index: 1;
   left: 55px;
-  top: 62px;
+  top: 92px;
 }
 
 .body-image {
@@ -391,7 +391,7 @@
   z-index: 2;
   transform-origin: bottom center;
   left: 580px;
-  top: 175px;
+  top: 205px;
 }
 
 .tailgate-image {
@@ -409,13 +409,13 @@
 .tire-1 {
   /* You can adjust this */
   left: 143px;
-  top: 271px;
+  top: 301px;
 }
 
 .tire-2 {
   /* You can adjust this */
   left: 482px;
-  top: 271px;
+  top: 301px;
 }
 
 .tire-image {
