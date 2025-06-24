@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useConfigurableActionEngine } from '../../hooks/useConfigurableActionEngine.js';
 import { useTailgateService } from '../../hooks/useTailgateService.js';
+import { t } from '../../config/i18n';
 import './ActionControls.css';
 
 const ConfigurableControls = () => {
@@ -204,128 +205,108 @@ const ConfigurableControls = () => {
 
   return (
     <div className="configurable-controls">
-      {/* 搜索栏 */}
-      <div className="search-section">
-        <input
-          type="text"
-          placeholder="搜索配置..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          className="search-input"
-        />
-        {searchQuery && searchResults.length > 0 && (
-          <div className="search-results">
-            {searchResults.map(config => (
-              <div
-                key={config.id}
-                className="search-result-item"
-                onClick={() => {
-                  setSelectedConfig(config.id);
-                  setShowConfigDetails(true);
-                  setSearchQuery('');
-                }}
+      <div className="control-section">
+        <h3 className="section-title">
+          <span className="btn-icon">⚙️</span>
+          {t('configurableControls')}
+        </h3>
+        
+        {/* 分类选择 */}
+        <div className="control-group">
+          <label className="control-label">配置分类</label>
+          <div className="category-buttons">
+            {categories.map(category => (
+              <button
+                key={category.key}
+                onClick={() => handleCategoryChange(category.key)}
+                className={`category-btn ${selectedCategory === category.key ? 'active' : ''}`}
               >
-                <span className="result-name">{config.name}</span>
-                <span className="result-category">{config.category}</span>
-              </div>
+                {category.name}
+              </button>
             ))}
           </div>
-        )}
-      </div>
-
-      {/* 分类和配置选择 */}
-      <div className="selection-section">
-        <div className="category-selector">
-          <label>配置分类:</label>
-          <select
-            value={selectedCategory}
-            onChange={(e) => handleCategoryChange(e.target.value)}
-            className="category-select"
-          >
-            {categories.map(category => (
-              <option key={category.name} value={category.name}>
-                {category.name} ({category.configs?.length || 0})
-              </option>
-            ))}
-          </select>
         </div>
 
-        <div className="config-selector">
-          <label>选择配置:</label>
-          <select
-            value={selectedConfig}
-            onChange={(e) => handleConfigSelect(e.target.value)}
-            className="config-select"
-          >
-            <option value="">请选择配置</option>
+        {/* 配置选择 */}
+        <div className="control-group">
+          <label className="control-label">选择配置</label>
+          <div className="config-list">
             {configs.map(config => (
-              <option key={config.id} value={config.id}>
-                {config.name} ({config.steps.length} 步骤)
-              </option>
+              <button
+                key={config.id}
+                onClick={() => handleConfigSelect(config.id)}
+                className={`config-btn ${selectedConfig === config.id ? 'active' : ''}`}
+              >
+                <span className="config-name">{config.name}</span>
+                <span className="config-desc">{config.description}</span>
+              </button>
             ))}
-          </select>
+          </div>
         </div>
-      </div>
 
-      {/* 配置详情 */}
-      {showConfigDetails && selectedConfigData && (
-        <div className="config-details-section">
-          {renderConfigDetails(selectedConfigData)}
-        </div>
-      )}
+        {/* 配置详情 */}
+        {showConfigDetails && selectedConfigData && (
+          <div className="control-group">
+            <label className="control-label">配置详情</label>
+            <div className="config-details-container">
+              {renderConfigDetails(selectedConfigData)}
+            </div>
+          </div>
+        )}
 
-      {/* 执行控制 */}
-      <div className="execution-controls">
-        <div className="control-buttons">
-          <button
-            onClick={handleExecuteConfig}
-            disabled={!canExecute || !selectedConfig}
-            className="control-btn primary"
-          >
-            {isExecuting ? '执行中...' : '执行配置'}
-          </button>
-          
-          {canStop && (
+        {/* 执行控制 */}
+        <div className="execution-controls">
+          <div className="control-buttons">
             <button
-              onClick={handleStopExecution}
-              className="control-btn stop"
+              onClick={handleExecuteConfig}
+              disabled={!canExecute || !selectedConfig}
+              className="control-btn primary"
             >
-              停止执行
+              {isExecuting ? t('executing') : t('executeConfig')}
             </button>
+            
+            {canStop && (
+              <button
+                onClick={handleStopExecution}
+                className="control-btn stop"
+              >
+                {t('stopExecution')}
+              </button>
+            )}
+          </div>
+
+          {/* 执行进度 */}
+          {isExecuting && (
+            <div className="execution-progress">
+              <div className="progress-bar">
+                <div 
+                  className="progress-fill" 
+                  style={{ width: `${progress}%` }}
+                ></div>
+              </div>
+              <span className="progress-text">{Math.round(progress)}%</span>
+            </div>
+          )}
+
+          {/* 当前步骤 */}
+          {currentStep && (
+            <div className="current-step">
+              {renderStepInfo(currentStep)}
+            </div>
+          )}
+
+          {/* 错误信息 */}
+          {hasError && (
+            <div className="error-message">
+              <span className="error-text">{error}</span>
+              <button onClick={handleClearError} className="error-clear">×</button>
+            </div>
           )}
         </div>
 
-        {/* 执行进度 */}
-        {isExecuting && (
-          <div className="execution-progress">
-            <div className="progress-bar">
-              <div 
-                className="progress-fill" 
-                style={{ width: `${progress}%` }}
-              ></div>
-            </div>
-            <span className="progress-text">{Math.round(progress)}%</span>
-          </div>
-        )}
-
-        {/* 当前步骤 */}
-        {currentStep && (
-          <div className="current-step">
-            {renderStepInfo(currentStep)}
-          </div>
-        )}
-
-        {/* 错误信息 */}
-        {hasError && (
-          <div className="error-message">
-            <span className="error-text">{error}</span>
-            <button onClick={handleClearError} className="error-clear">×</button>
-          </div>
-        )}
+        {/* 执行日志 */}
+        {renderExecutionLog()}
       </div>
-
-      {/* 执行日志 */}
-      {renderExecutionLog()}
     </div>
   );
 };

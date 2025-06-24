@@ -1,4 +1,5 @@
 import React from 'react';
+import { t } from '../../config/i18n';
 import './ActionControls.css';
 
 const BasicControls = ({
@@ -12,7 +13,7 @@ const BasicControls = ({
 }) => {
   const handleOpen = () => {
     if (isOpen) {
-      alert('尾门已经处于开启状态');
+      alert(t('tailgateAlreadyOpen'));
       return;
     }
     onOpen();
@@ -20,7 +21,7 @@ const BasicControls = ({
 
   const handleClose = () => {
     if (!isOpen) {
-      alert('尾门已经处于关闭状态');
+      alert(t('tailgateAlreadyClosed'));
       return;
     }
     onClose();
@@ -31,76 +32,76 @@ const BasicControls = ({
       <div className="control-section">
         <h3 className="section-title">
           <span className="btn-icon">🚗</span>
-          基础控制
+          {t('basicControls')}
         </h3>
         
         <div className="control-group">
-          <label className="control-label large">尾门操作</label>
+          <label className="control-label large">{t('tailgateOperation')}</label>
           <div className="control-buttons">
             <button 
               onClick={handleOpen}
               disabled={isAnimating || isEmergencyStopped || isOpen}
               className="control-btn primary large"
-              title={isOpen ? '尾门已开启' : '开启尾门'}
+              title={isOpen ? t('tailgateAlreadyOpen') : t('openTailgate')}
             >
               <span className="btn-icon">🔓</span>
-              开启尾门
+              {t('openTailgate')}
             </button>
             
             <button 
               onClick={handleClose}
               disabled={isAnimating || isEmergencyStopped || !isOpen}
               className="control-btn secondary large"
-              title={!isOpen ? '尾门已关闭' : '关闭尾门'}
+              title={!isOpen ? t('tailgateAlreadyClosed') : t('closeTailgate')}
             >
               <span className="btn-icon">🔒</span>
-              关闭尾门
+              {t('closeTailgate')}
             </button>
           </div>
         </div>
 
         <div className="control-group">
-          <label className="control-label large">安全控制</label>
+          <label className="control-label large">{t('safetyControl')}</label>
           <div className="control-buttons">
             <button 
               onClick={onStop}
               disabled={!isAnimating || isEmergencyStopped}
               className="control-btn warning"
-              title="停止当前动作"
+              title={t('stopCurrentAction')}
             >
               <span className="btn-icon">⏹️</span>
-              停止
+              {t('stop')}
             </button>
           </div>
         </div>
 
         <div className="control-group">
-          <label className="control-label large">状态信息</label>
+          <label className="control-label large">{t('statusInfo')}</label>
           <div className="status-display">
             <div className="status-item">
-              <span className="status-label">当前角度:</span>
+              <span className="status-label">{t('currentAngle')}:</span>
               <span className="status-value">{Math.round(currentAngle || 0)}°</span>
             </div>
             <div className="status-item">
-              <span className="status-label">尾门状态:</span>
+              <span className="status-label">{t('tailgateStatus')}:</span>
               <span className={`status-indicator ${isOpen ? 'open' : 'closed'}`}>
                 <span className="status-dot"></span>
-                {isOpen ? '已开启' : '已关闭'}
+                {isOpen ? t('open') : t('closed')}
               </span>
             </div>
             <div className="status-item">
-              <span className="status-label">运行状态:</span>
+              <span className="status-label">{t('runningStatus')}:</span>
               <span className={`status-indicator ${isAnimating ? 'animating' : 'idle'}`}>
                 <span className="status-dot"></span>
-                {isAnimating ? '运行中' : '空闲'}
+                {isAnimating ? t('running') : t('idle')}
               </span>
             </div>
             {isEmergencyStopped && (
               <div className="status-item">
-                <span className="status-label">安全状态:</span>
+                <span className="status-label">{t('safetyStatus')}:</span>
                 <span className="status-indicator emergency">
                   <span className="status-dot"></span>
-                  紧急停止激活
+                  {t('emergencyStop')}
                 </span>
               </div>
             )}

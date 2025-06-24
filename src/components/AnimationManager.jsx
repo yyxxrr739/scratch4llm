@@ -3,7 +3,9 @@ import TailgateAnimation from "./animations/TailgateAnimation";
 import WheelControls from "./ActionControls/WheelControls";
 import ModeToggle from "./ActionControls/ModeToggle";
 import HelpModal from "./HelpModal";
+import LanguageToggle from "./LanguageToggle";
 import useWheelPhysicsEngine from "../hooks/useWheelPhysicsEngine";
+import { t } from "../config/i18n";
 import "./AnimationManager.css";
 
 const AnimationManager = () => {
@@ -102,54 +104,57 @@ const AnimationManager = () => {
         <div className="header-content">
           <h1 className="title">
             <span className="title-icon">🚗</span>
-            汽车尾门动画演示系统
+            {t('title')}
           </h1>
           <p className="subtitle">
-            基于原子服务的2D可视化动画系统，展示汽车尾门的复杂动作编排
+            {t('subtitle')}
           </p>
         </div>
-        <button 
-          className="help-button"
-          onClick={() => setIsHelpOpen(true)}
-          title="查看帮助说明"
-        >
-          <span className="help-button-icon">❓</span>
-        </button>
+        <div className="header-buttons">
+          <LanguageToggle />
+          <button 
+            className="help-button"
+            onClick={() => setIsHelpOpen(true)}
+            title={t('helpButton')}
+          >
+            <span className="help-button-icon">❓</span>
+          </button>
+        </div>
       </div>
 
       <div className="main-content">
         {/* 左侧状态信息栏 */}
         <div className="status-panel">
           <div className="status-section">
-            <h3 className="section-title">状态信息</h3>
+            <h3 className="section-title">{t('statusInfo')}</h3>
             
             <div className="status-display">
               {/* 车辆状态 */}
               <div className="status-item">
-                <span className="status-label">车速:</span>
+                <span className="status-label">{t('speed')}:</span>
                 <span className="status-value">{currentSpeedKmh.toFixed(1)} km/h</span>
               </div>
               
               {/* 车速安全状态 */}
               <div className="status-item">
-                <span className="status-label">车速安全:</span>
+                <span className="status-label">{t('speedSafety')}:</span>
                 <span className={`status-indicator ${speedSafetyStatus.isSafe ? 'safe' : 'unsafe'}`}>
                   <span className="status-dot"></span>
-                  {speedSafetyStatus.isSafe ? '车速安全' : '车速过高'}
+                  {speedSafetyStatus.isSafe ? t('safe') : t('unsafe')}
                 </span>
               </div>
               
               {/* 尾门状态 */}
               <div className="status-item">
-                <span className="status-label">尾门角度:</span>
+                <span className="status-label">{t('currentAngle')}:</span>
                 <span className="status-value">{Math.round(tailgateState.currentAngle || 0)}°</span>
               </div>
               <div className="status-item">
-                <span className="status-label">尾门状态:</span>
+                <span className="status-label">{t('tailgateStatus')}:</span>
                 {tailgateState.isEmergencyStopped ? (
                   <span className="status-indicator emergency">
                     <span className="status-dot"></span>
-                    紧急停止
+                    {t('emergencyStop')}
                   </span>
                 ) : tailgateState.isEmergencyStopInProcess ? (
                   <span className="status-indicator emergency-process">
@@ -161,21 +166,21 @@ const AnimationManager = () => {
                     <span className="status-dot"></span>
                     {tailgateState.currentAction && tailgateState.currentAction.action ? 
                       tailgateState.currentAction.action : 
-                      (tailgateState.isOpen ? '关门中' : '开门中')
+                      (tailgateState.isOpen ? t('closing') : t('opening'))
                     }
                   </span>
                 ) : (
                   <span className={`status-indicator ${tailgateState.isOpen ? 'open' : 'closed'}`}>
                     <span className="status-dot"></span>
-                    {tailgateState.isOpen ? '已开启' : '已关闭'}
+                    {tailgateState.isOpen ? t('open') : t('closed')}
                   </span>
                 )}
               </div>
               <div className="status-item">
-                <span className="status-label">动画:</span>
+                <span className="status-label">{t('runningStatus')}:</span>
                 <span className={`status-indicator ${tailgateState.isAnimating ? 'animating' : 'idle'}`}>
                   <span className="status-dot"></span>
-                  {tailgateState.isAnimating ? '进行中' : '空闲'}
+                  {tailgateState.isAnimating ? t('running') : t('idle')}
                 </span>
               </div>
               

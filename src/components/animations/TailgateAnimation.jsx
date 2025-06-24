@@ -1,6 +1,7 @@
 import React, { useRef, useEffect, useState, useCallback } from 'react';
 import { useTailgateService } from '../../hooks/useTailgateService.js';
 import { useActionOrchestrator } from '../../hooks/useActionOrchestrator.js';
+import { t } from '../../config/i18n';
 import AdvancedControls from '../ActionControls/AdvancedControls.jsx';
 import ScenarioControls from '../ActionControls/ScenarioControls.jsx';
 import ServiceManager from '../../services/ServiceManager.js';
@@ -94,15 +95,15 @@ const TailgateAnimation = ({ onStateChange, isDemoMode = false }) => {
       let currentActionType = null;
       if (isAnimating) {
         if (status.currentAction === 'opening') {
-          currentActionType = '开门中';
+          currentActionType = t('opening');
         } else if (status.currentAction === 'closing') {
-          currentActionType = '关门中';
+          currentActionType = t('closing');
         } else if (status.currentAction === 'moving') {
-          currentActionType = '移动中';
+          currentActionType = t('moving');
         } else if (status.currentAction === 'paused') {
-          currentActionType = '已暂停';
+          currentActionType = t('paused');
         } else if (status.currentAction === 'resumed') {
-          currentActionType = '恢复中';
+          currentActionType = t('resuming');
         }
       }
 

@@ -1,4 +1,5 @@
 import React from 'react';
+import { t } from '../config/i18n';
 import './HelpModal.css';
 
 const HelpModal = ({ isOpen, onClose }) => {
@@ -10,7 +11,7 @@ const HelpModal = ({ isOpen, onClose }) => {
         <div className="help-modal-header">
           <h2 className="help-modal-title">
             <span className="help-icon">❓</span>
-            帮助说明
+            {t('helpTitle')}
           </h2>
           <button className="help-modal-close" onClick={onClose}>
             ✕
@@ -19,51 +20,50 @@ const HelpModal = ({ isOpen, onClose }) => {
         
         <div className="help-modal-content">
           <div className="help-section">
-            <h3 className="help-section-title">车速控制</h3>
+            <h3 className="help-section-title">{t('speedControl')}</h3>
             
             <div className="key-instructions">
               <div className="key-item">
                 <span className="key-icon">⬆️</span>
-                <span className="key-text">按住上键：加速，最高30km/h</span>
+                <span className="key-text">{t('speedControlUp')}</span>
               </div>
               <div className="key-item">
                 <span className="key-icon">⬇️</span>
-                <span className="key-text">按住下键：减速</span>
+                <span className="key-text">{t('speedControlDown')}</span>
               </div>
               <div className="key-item">
                 <span className="key-icon">🔄</span>
-                <span className="key-text">松开按键：自然减速</span>
+                <span className="key-text">{t('speedControlRelease')}</span>
               </div>
             </div>
 
-            <h4 className="help-subsection-title">尾门控制</h4>
+            <h4 className="help-subsection-title">{t('tailgateControl')}</h4>
             <div className="key-instructions">
               <div className="key-item">
                 <span className="key-icon">O</span>
-                <span className="key-text">开启尾门</span>
+                <span className="key-text">{t('tailgateControlOpen')}</span>
               </div>
               <div className="key-item">
                 <span className="key-icon">C</span>
-                <span className="key-text">关闭尾门</span>
+                <span className="key-text">{t('tailgateControlClose')}</span>
               </div>
             </div>
           </div>
 
           <div className="help-section">
-            <h3 className="help-section-title">系统说明</h3>
+            <h3 className="help-section-title">{t('systemDescription')}</h3>
             <p className="help-text">
-              这是一个基于原子服务的2D可视化动画系统，展示汽车尾门的复杂动作编排。
-              系统使用物理引擎模拟真实的车辆运动，包括加速、减速和自然减速等效果。
+              {t('systemDescriptionText')}
             </p>
           </div>
 
           <div className="help-section">
-            <h3 className="help-section-title">功能特性</h3>
+            <h3 className="help-section-title">{t('features')}</h3>
             <ul className="help-features">
-              <li>实时物理模拟</li>
-              <li>平滑的动画效果</li>
-              <li>状态实时显示</li>
-              <li>紧急停止功能</li>
+              <li>{t('realTimePhysics')}</li>
+              <li>{t('smoothAnimation')}</li>
+              <li>{t('realTimeStatus')}</li>
+              <li>{t('emergencyStop')}</li>
             </ul>
           </div>
         </div>

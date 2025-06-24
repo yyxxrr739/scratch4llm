@@ -1,0 +1,38 @@
+.language-toggle-button {
+  background: rgba(255, 255, 255, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 4ch;
+  padding: 0.1875rem 0.5rem;
+  color: #2c3e50;
+  font-size: 0.2375rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+  min-width: 50px;
+  height: 20px;
+}
+
+.language-toggle-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.language-toggle-button:active {
+  transform: translateY(0);
+}
+
+.language-icon {
+  font-size: 0.75rem;
+}
+
+.language-text {
+  font-size: 0.55rem;
+  font-weight: 600;
+} 

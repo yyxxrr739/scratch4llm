@@ -1,4 +1,5 @@
 import React from 'react';
+import { t } from '../../config/i18n';
 import './ActionControls.css';
 
 const ModeToggle = ({ 
@@ -10,7 +11,7 @@ const ModeToggle = ({
   const handleModeToggle = (targetMode) => {
     // 如果正在执行动画或场景，不允许切换模式
     if (isAnimating || isExecuting) {
-      alert('当前正在执行操作，请等待完成后再切换模式');
+      alert(t('executingOperation'));
       return;
     }
     
@@ -31,20 +32,20 @@ const ModeToggle = ({
               onClick={() => handleModeToggle(false)}
               disabled={isAnimating || isExecuting}
               className={`control-btn mode-btn ${!isDemoMode ? 'active' : 'inactive'}`}
-              title={isAnimating || isExecuting ? '正在执行操作，无法切换模式' : '切换到正常模式'}
+              title={isAnimating || isExecuting ? t('executingOperationCannotSwitch') : t('switchToNormalMode')}
             >
               <span className="btn-icon">🚗</span>
-              正常模式
+              {t('normalMode')}
             </button>
             
             <button
               onClick={() => handleModeToggle(true)}
               disabled={isAnimating || isExecuting}
               className={`control-btn mode-btn ${isDemoMode ? 'active' : 'inactive'}`}
-              title={isAnimating || isExecuting ? '正在执行操作，无法切换模式' : '切换到演示模式'}
+              title={isAnimating || isExecuting ? t('executingOperationCannotSwitch') : t('switchToDemoMode')}
             >
               <span className="btn-icon">🎬</span>
-              演示模式
+              {t('demoMode')}
             </button>
           </div>
         </div>

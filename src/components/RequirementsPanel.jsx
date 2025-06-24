@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import ServiceManager from '../services/ServiceManager.js';
+import { t } from '../config/i18n';
 import './RequirementsPanel.css';
 
 const RequirementsPanel = ({ isDemoMode = false }) => {
@@ -158,11 +159,11 @@ const RequirementsPanel = ({ isDemoMode = false }) => {
 
   return (
     <div className="requirements-panel">
-      <h3 className="requirements-title">需求规范</h3>
+      <h3 className="requirements-title">{t('requirements')}</h3>
       <div className="requirements-buttons">
         {visibleRequirements.length === 0 ? (
           <div className="no-requirements-message">
-            等待动作执行...
+            {t('waitingForAction')}
           </div>
         ) : (
           visibleRequirements.map((req) => (
@@ -170,7 +171,7 @@ const RequirementsPanel = ({ isDemoMode = false }) => {
               key={`${req.id}-${req.timestamp}`}
               className="requirement-button"
               onClick={() => handleRequirementClick(req)}
-              title={`点击查看${req.title}详细描述`}
+              title={`${t('clickToViewDetails')} ${req.title}`}
             >
               {req.id}
             </button>
