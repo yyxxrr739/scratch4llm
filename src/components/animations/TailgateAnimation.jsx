@@ -217,7 +217,7 @@ const TailgateAnimation = ({ onStateChange, isDemoMode = false }) => {
 
   // 控制标签页
   const controlTabs = [
-    { id: 'advanced', name: '高级控制', icon: '⚙️' },
+    { id: 'advanced', name: '位置控制', icon: '⚙️' },
     { id: 'scenario', name: '场景控制', icon: '🎬' }
   ];
 
