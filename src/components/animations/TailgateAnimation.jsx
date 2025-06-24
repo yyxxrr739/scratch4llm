@@ -1,9 +1,10 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState, useCallback } from 'react';
 import { useTailgateService } from '../../hooks/useTailgateService.js';
 import { useActionOrchestrator } from '../../hooks/useActionOrchestrator.js';
 import AdvancedControls from '../ActionControls/AdvancedControls.jsx';
 import ScenarioControls from '../ActionControls/ScenarioControls.jsx';
 import ServiceManager from '../../services/ServiceManager.js';
+import RequirementsPanel from '../RequirementsPanel.jsx';
 import './TailgateAnimation.css';
 
 const TailgateAnimation = ({ onStateChange, isDemoMode = false }) => {
@@ -290,6 +291,13 @@ const TailgateAnimation = ({ onStateChange, isDemoMode = false }) => {
             {renderControlContent()}
           </div>
         </>
+      )}
+
+      {/* 在正常模式下显示需求面板 */}
+      {!isDemoMode && (
+        <div className="control-content">
+          <RequirementsPanel isDemoMode={isDemoMode} />
+        </div>
       )}
 
       {/* 错误显示 */}
