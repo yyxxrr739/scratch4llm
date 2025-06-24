@@ -48,6 +48,14 @@ const HelpModal = ({ isOpen, onClose }) => {
                 <span className="key-text">{t('tailgateControlClose')}</span>
               </div>
             </div>
+
+            <h4 className="help-subsection-title">{t('emergencyControl')}</h4>
+            <div className="key-instructions">
+              <div className="key-item">
+                <span className="key-icon">␣</span>
+                <span className="key-text">{t('emergencyControlSpace')}</span>
+              </div>
+            </div>
           </div>
 
           <div className="help-section">
